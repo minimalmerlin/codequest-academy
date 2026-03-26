@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import {
   addProfile,
+  DEFAULT_PROFILE,
   getActiveProfileId,
   getProfilesSnapshot,
   initializeProfiles,
@@ -16,10 +17,10 @@ function useProfilesStore() {
   const profiles = useSyncExternalStore(
     subscribeProfiles,
     getProfilesSnapshot,
-    () => [],
+    () => [DEFAULT_PROFILE],
   );
 
-  const activeId = typeof window === "undefined" ? "kid-1" : getActiveProfileId();
+  const activeId = typeof window === "undefined" ? DEFAULT_PROFILE.id : getActiveProfileId();
 
   useEffect(() => initializeProfiles(), []);
 

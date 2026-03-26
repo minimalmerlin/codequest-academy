@@ -13,7 +13,7 @@ const ACTIVE_PROFILE_KEY = "codequest_active_profile_v1";
 
 const listeners = new Set<() => void>();
 
-const DEFAULT_PROFILE: KidProfile = {
+export const DEFAULT_PROFILE: KidProfile = {
   id: "kid-1",
   name: "Kind 1",
   createdAt: "init",

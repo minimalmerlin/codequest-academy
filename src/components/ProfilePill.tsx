@@ -4,6 +4,7 @@ import { useEffect, useSyncExternalStore } from "react";
 import {
   addProfile,
   attachProfilesStorageListener,
+  DEFAULT_PROFILE,
   deleteProfile,
   getActiveProfileId,
   getProfilesSnapshot,
@@ -17,9 +18,9 @@ function useProfiles() {
   const profiles = useSyncExternalStore(
     subscribeProfiles,
     getProfilesSnapshot,
-    () => [],
+    () => [DEFAULT_PROFILE],
   );
-  const activeId = typeof window === "undefined" ? "kid-1" : getActiveProfileId();
+  const activeId = typeof window === "undefined" ? DEFAULT_PROFILE.id : getActiveProfileId();
 
   useEffect(() => attachProfilesStorageListener(), []);
   useEffect(() => initializeProfiles(), []);
