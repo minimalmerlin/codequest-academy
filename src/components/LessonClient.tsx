@@ -1,12 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ExerciseCheck, Lesson } from "@/lib/curriculum";
 import { Markdown } from "@/components/Markdown";
 import { CodeEditor } from "@/components/CodeEditor";
 import { SandboxRunner } from "@/components/SandboxRunner";
 import { PythonRunner } from "@/components/PythonRunner";
 import { useProgress } from "@/lib/progress";
+import { dbRecordAttempt } from "@/lib/db";
+import { getActiveProfileId } from "@/lib/profiles";
+import { useAdaptiveLearning } from "@/lib/adaptive";
+import { AdaptivePanel } from "@/components/AdaptivePanel";
+import { PracticeGenerator } from "@/components/PracticeGenerator";
 
 type CheckState =
   | { status: "idle" }
@@ -32,6 +37,12 @@ function checkContains(code: string, check: Extract<ExerciseCheck, { kind: "cont
 export function LessonClient({ lesson }: { lesson: Lesson }) {
   const { completeLesson, isLessonCompleted } = useProgress();
   const alreadyDone = isLessonCompleted(lesson.id);
+  const { getDifficulty } = useAdaptiveLearning();
+  const lessonDifficulty = getDifficulty(lesson.id);
+
+  // ML: track time spent and attempt count for adaptive learning
+  const startedAtRef = useRef<number>(Date.now());
+  const attemptCountRef = useRef<number>(0);
 
   const [code, setCode] = useState(lesson.exercise.starterCode);
   const [runSignal, setRunSignal] = useState(0);
@@ -103,7 +114,10 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
   function checkNow() {
     const check = lesson.exercise.check;
     if (check.kind === "contains") {
+      attemptCountRef.current += 1;
       const res = validateFromOutputs();
+      const timeSpent = Math.round((Date.now() - startedAtRef.current) / 1000);
+      void dbRecordAttempt(getActiveProfileId(), lesson.id, lesson.trackId, res.ok, timeSpent, attemptCountRef.current);
       if (res.ok) {
         setCheckState({ status: "passed" });
         completeLesson(lesson);
@@ -113,6 +127,7 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
       return;
     }
 
+    attemptCountRef.current += 1;
     setCheckState({ status: "running" });
     setPendingCheck(true);
     setLastJsDone(false);
@@ -130,6 +145,8 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
     if (kind === "js_console_includes" && !lastJsDone) return;
     if (kind === "python_stdout_includes" && !lastPyDone) return;
     const res = validateFromOutputs();
+    const timeSpent = Math.round((Date.now() - startedAtRef.current) / 1000);
+    void dbRecordAttempt(getActiveProfileId(), lesson.id, lesson.trackId, res.ok, timeSpent, attemptCountRef.current);
     if (res.ok) {
       setCheckState({ status: "passed" });
       setPendingCheck(false);
@@ -249,8 +266,11 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
         ) : null}
         {checkState.status === "passed" ? (
           <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-100">
-            Geschafft! Du bekommst {lesson.xp} XP.
+            Geschafft! Du bekommst {lesson.xp} XP. 🎉
           </div>
+        ) : null}
+        {checkState.status === "passed" && lessonDifficulty && lessonDifficulty.label !== "leicht" ? (
+          <PracticeGenerator lesson={lesson} difficulty={lessonDifficulty.label} />
         ) : null}
         {checkState.status === "running" ? (
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-zinc-200">
@@ -290,5 +310,6 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
         ) : null}
       </div>
     </div>
+    {checkState.status === "passed" ? <AdaptivePanel /> : null}
   );
 }

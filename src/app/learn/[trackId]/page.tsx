@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { TrackId } from "@/lib/curriculum";
 import { getTrack, TRACKS } from "@/lib/curriculum";
 import { LessonStatusPill } from "@/components/LessonStatusPill";
+import { LessonDifficultyBadge } from "@/components/LessonDifficultyBadge";
 import { TrackProgress } from "@/components/TrackProgress";
 
 export function generateStaticParams() {
@@ -57,7 +58,10 @@ export default async function TrackPage({
                 </div>
                 <div className="mt-1 text-sm text-zinc-300">{l.summary}</div>
               </div>
-              <LessonStatusPill lessonId={l.id} />
+              <div className="flex items-center gap-2 shrink-0">
+                <LessonDifficultyBadge lessonId={l.id} />
+                <LessonStatusPill lessonId={l.id} />
+              </div>
             </div>
           </Link>
         ))}
