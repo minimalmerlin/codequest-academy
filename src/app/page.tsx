@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { TRACKS } from "@/lib/curriculum";
 import { TrackProgress } from "@/components/TrackProgress";
+import { StartPanel } from "@/components/StartPanel";
 
 export default function Home() {
   return (
     <div className="code-panel">
       <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+        <div className="mb-10">
+          <StartPanel />
+        </div>
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div>
             <p className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-zinc-200">
