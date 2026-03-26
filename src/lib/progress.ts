@@ -58,14 +58,20 @@ function dayDiff(a: string, b: string): number {
 
 const listeners = new Set<() => void>();
 
+let progressCache: StoredProgress | null = null;
+
 function emit() {
+  progressCache = null;
   for (const l of listeners) l();
 }
 
 function readProgress(): StoredProgress {
   if (typeof window === "undefined") return DEFAULT_PROGRESS;
-  const profileId = getActiveProfileId();
-  return safeParse(safeStorage.getItem(`${STORAGE_KEY}:${profileId}`));
+  if (progressCache === null) {
+    const profileId = getActiveProfileId();
+    progressCache = safeParse(safeStorage.getItem(`${STORAGE_KEY}:${profileId}`));
+  }
+  return progressCache;
 }
 
 function writeProgress(next: StoredProgress) {
@@ -87,9 +93,7 @@ export function useProgress() {
     };
   }, []);
 
-  const snapshot = useCallback(() => readProgress(), []);
-
-  const progress = useSyncExternalStore(subscribe, snapshot, () => DEFAULT_PROGRESS);
+  const progress = useSyncExternalStore(subscribe, readProgress, () => DEFAULT_PROGRESS);
 
   const level = useMemo(() => Math.floor(progress.xp / 200) + 1, [progress.xp]);
 

@@ -19,7 +19,10 @@ export const DEFAULT_PROFILE: KidProfile = {
   createdAt: "init",
 };
 
+let profilesCache: KidProfile[] | null = null;
+
 function emit() {
+  profilesCache = null;
   for (const l of listeners) l();
 }
 
@@ -72,8 +75,9 @@ export function subscribeProfiles(cb: () => void) {
 }
 
 export function getProfilesSnapshot() {
-  if (typeof window === "undefined") return [] as KidProfile[];
-  return readProfiles();
+  if (typeof window === "undefined") return [DEFAULT_PROFILE] as KidProfile[];
+  if (profilesCache === null) profilesCache = readProfiles();
+  return profilesCache;
 }
 
 export function getActiveProfileId() {
