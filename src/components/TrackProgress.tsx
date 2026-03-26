@@ -18,7 +18,7 @@ export function TrackProgress({ trackId }: { trackId: TrackId }) {
       </div>
       <div className="mt-2 h-2 w-full rounded-full bg-white/10">
         <div
-          className="h-2 rounded-full bg-indigo-400"
+          className={`h-2 rounded-full ${trackId === "js" ? "bg-amber-400" : trackId === "python" ? "bg-emerald-400" : trackId === "ki" ? "bg-violet-400" : "bg-indigo-400"}`}
           style={{ width: `${pct}%` }}
         />
       </div>

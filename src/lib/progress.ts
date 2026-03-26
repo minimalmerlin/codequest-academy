@@ -59,16 +59,20 @@ function dayDiff(a: string, b: string): number {
 const listeners = new Set<() => void>();
 
 let progressCache: StoredProgress | null = null;
+let progressCacheProfileId: string | null = null;
 
 function emit() {
   progressCache = null;
+  progressCacheProfileId = null;
   for (const l of listeners) l();
 }
 
 function readProgress(): StoredProgress {
   if (typeof window === "undefined") return DEFAULT_PROGRESS;
-  if (progressCache === null) {
-    const profileId = getActiveProfileId();
+  const profileId = getActiveProfileId();
+  // Invalidate cache on profile switch
+  if (progressCache === null || progressCacheProfileId !== profileId) {
+    progressCacheProfileId = profileId;
     progressCache = safeParse(safeStorage.getItem(`${STORAGE_KEY}:${profileId}`));
   }
   return progressCache;
@@ -145,6 +149,7 @@ export function useProgress() {
       web: false,
       js: false,
       python: false,
+      ki: false,
     };
     for (const track of TRACKS) {
       result[track.id] =

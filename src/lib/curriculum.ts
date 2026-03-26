@@ -1,4 +1,4 @@
-export type TrackId = "web" | "js" | "python";
+export type TrackId = "web" | "js" | "python" | "ki";
 export type ExerciseLanguage = "html" | "javascript" | "python";
 
 export type ExerciseCheck =
@@ -42,7 +42,7 @@ export type Track = {
   title: string;
   emoji: string;
   description: string;
-  color: "indigo" | "emerald" | "amber";
+  color: "indigo" | "emerald" | "amber" | "violet";
   recommendedAge: string;
   lessons: Lesson[];
 };
@@ -830,6 +830,1198 @@ Kein eigenes Bild? Nutze: \`https://picsum.photos/seed/mich/300/300\``,
         hintMd: "Kein Bild? Nutze `https://picsum.photos/seed/mich/300/300` als `src`.",
       },
     },
+    // ═══ KAPITEL 3: LAYOUT-MAGIE ═══
+    {
+      id: "web-11",
+      trackId: "web",
+      title: "🏗️ CSS Grid – Die Schatzkammer",
+      summary: "Ordne deine Schätze in einem perfekten Raster!",
+      minutes: 20,
+      xp: 75,
+      contentMd: `# Die Schatzkammer des Grid-Meisters
+
+> *"Tiefer im Schloss entdeckst du die legendäre Schatzkammer. Hier liegen hunderte von Schätzen – aber alles ist durcheinander! Der alte Grid-Meister flüstert dir das Geheimnis zu..."*
+
+## CSS Grid – Das perfekte Raster
+
+Mit **CSS Grid** kannst du Elemente in Zeilen **und** Spalten gleichzeitig anordnen!
+
+\`\`\`css
+.schatzkammer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* 3 gleiche Spalten */
+  gap: 16px;
+}
+\`\`\`
+
+## Nützliche Grid-Eigenschaften
+
+| Eigenschaft | Was es macht |
+|-------------|-------------|
+| \`grid-template-columns: repeat(3, 1fr)\` | 3 gleiche Spalten |
+| \`grid-template-rows: 200px auto\` | Zeilen definieren |
+| \`gap: 16px\` | Abstand zwischen Feldern |
+| \`grid-column: span 2\` | Element über 2 Spalten |
+
+> 💡 \`fr\` = **fr**action – ein Bruchteil des verfügbaren Platzes!`,
+      exercise: {
+        language: "html",
+        title: "Ordne die Schatzkammer",
+        instructionsMd: `*"Der Grid-Meister übergibt dir seine Kräfte. Ordne die 6 Schätze in einem 3×2-Raster!"*
+
+**Deine Aufgabe:**
+1. Nutze \`display: grid\` im Container
+2. Setze \`grid-template-columns\` auf 3 gleiche Spalten
+3. Füge einen \`gap\` zwischen den Schätzen ein`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; padding: 20px; }
+  .kammer {
+    /* Grid hier */
+  }
+  .schatz {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 24px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+</style>
+
+<div class="kammer">
+  <div class="schatz">💎</div>
+  <div class="schatz">🥇</div>
+  <div class="schatz">💍</div>
+  <div class="schatz">🗡️</div>
+  <div class="schatz">🛡️</div>
+  <div class="schatz">📜</div>
+</div>
+`,
+        check: { kind: "contains", needles: ["display: grid", "grid-template-columns"] },
+        hintMd: "`.kammer { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }`",
+        solutionCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; padding: 20px; }
+  .kammer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 500px;
+  }
+  .schatz {
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 32px;
+    background: rgba(255,200,0,0.1);
+    border: 1px solid rgba(255,200,0,0.3);
+  }
+</style>
+<div class="kammer">
+  <div class="schatz">💎</div>
+  <div class="schatz">🥇</div>
+  <div class="schatz">💍</div>
+  <div class="schatz">🗡️</div>
+  <div class="schatz">🛡️</div>
+  <div class="schatz">📜</div>
+</div>`,
+      },
+    },
+    {
+      id: "web-12",
+      trackId: "web",
+      title: "📱 Responsive Design – Magie für alle Geräte",
+      summary: "Deine Seite soll auf Handy und PC gleich gut aussehen!",
+      minutes: 20,
+      xp: 75,
+      contentMd: `# Responsive – Die Verwandlungs-Magie
+
+> *"Du hast eine wunderbare Webseite gebaut. Aber als du sie auf dem Handy deines Freundes öffnest – Katastrophe! Alles sieht komisch aus. Du brauchst die Verwandlungs-Magie: Responsive Design!"*
+
+## Media Queries – Verschiedene Regeln für verschiedene Größen
+
+\`\`\`css
+/* Standard: Handy-First */
+.container {
+  grid-template-columns: 1fr; /* 1 Spalte auf Handy */
+}
+
+/* Tablet (ab 768px) */
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: 1fr 1fr; /* 2 Spalten */
+  }
+}
+
+/* Desktop (ab 1024px) */
+@media (min-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr); /* 3 Spalten */
+  }
+}
+\`\`\`
+
+## Viewport Meta-Tag
+
+Unverzichtbar in jeder HTML-Seite:
+\`\`\`html
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+\`\`\`
+
+> 📱 Ohne diesen Tag ignoriert das Handy dein responsive CSS!`,
+      exercise: {
+        language: "html",
+        title: "Responsive Karten-Layout",
+        instructionsMd: `*"Brich den Verwandlungs-Fluch! Baue ein Layout, das sich anpasst."*
+
+**Deine Aufgabe:**
+1. Füge den \`<meta name="viewport"...>\` Tag ein
+2. Auf kleinen Bildschirmen: 1 Karte pro Zeile
+3. Auf großen Bildschirmen (ab 768px): 3 Karten nebeneinander`,
+        starterCode: `<!DOCTYPE html>
+<html>
+<head>
+  <!-- Viewport Meta-Tag hier -->
+  <style>
+    body { background: #0f0f1a; color: white; font-family: Arial; padding: 20px; }
+    .grid { display: grid; gap: 16px; }
+    /* Media Query hier */
+    .card { padding: 20px; background: rgba(124,58,237,0.2); border-radius: 12px; border: 1px solid rgba(124,58,237,0.4); }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div class="card">🌐 HTML</div>
+    <div class="card">🎨 CSS</div>
+    <div class="card">⚡ JavaScript</div>
+  </div>
+</body>
+</html>`,
+        check: { kind: "contains", needles: ["viewport", "@media", "min-width"] },
+        hintMd: "`@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }`",
+      },
+    },
+    {
+      id: "web-13",
+      trackId: "web",
+      title: "🎨 CSS Variablen – Das Zauberbuch",
+      summary: "Definiere Farben einmal und nutze sie überall!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# Das Zauberbuch der CSS-Variablen
+
+> *"Der Hofmagier zeigt dir sein wertvollstes Buch: Das Zauberbuch der Variablen. 'Schreibe einen Zauber einmal auf,' sagt er, 'und du kannst ihn überall benutzen. Ändere ihn einmal – und alles ändert sich!'"*
+
+## CSS Custom Properties (Variablen)
+
+\`\`\`css
+:root {
+  --primary: #7c3aed;
+  --secondary: #e94560;
+  --bg: #0f0f1a;
+  --text: #f0f0ff;
+  --radius: 12px;
+}
+
+.button {
+  background: var(--primary);
+  color: var(--text);
+  border-radius: var(--radius);
+}
+
+.alert {
+  background: var(--secondary);
+  border-radius: var(--radius);
+}
+\`\`\`
+
+## Warum ist das super?
+
+Wenn du die Farbe ändern willst, änderst du sie nur **an einer Stelle** – und alles im Design passt sich an!
+
+> 💡 Variablen beginnen immer mit \`--\` und werden mit \`var(--name)\` benutzt!`,
+      exercise: {
+        language: "html",
+        title: "Baue mit Variablen",
+        instructionsMd: `*"Schreibe dein eigenes Zauberbuch! Definiere Farb-Variablen und nutze sie überall."*
+
+**Deine Aufgabe:**
+1. Definiere in \`:root\`: \`--primary\`, \`--bg\`, \`--text\`
+2. Nutze \`var(--primary)\` als Hintergrund eines Buttons
+3. Nutze \`var(--bg)\` für den Body-Hintergrund`,
+        starterCode: `<style>
+  :root {
+    /* Deine Variablen hier */
+  }
+
+  body {
+    /* background: var(...) */
+    font-family: Arial;
+    padding: 30px;
+  }
+
+  .btn {
+    /* background: var(...) */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+
+<button class="btn">🧙 Zauber aktivieren!</button>
+`,
+        check: { kind: "contains", needles: [":root", "--", "var("] },
+        hintMd: "`:root { --primary: #7c3aed; --bg: #0f0f1a; --text: white; }`",
+      },
+    },
+    {
+      id: "web-14",
+      trackId: "web",
+      title: "🧩 Pseudo-Klassen – Lebendige Elemente",
+      summary: "Reagiere auf Hover, Focus und mehr mit CSS!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# Pseudo-Klassen – Wenn Elemente lebendig werden
+
+> *"Die Schlosstore öffnen sich, wenn du näher kommst. Die Fackeln leuchten heller, wenn du sie berührst. Das ist die Magie der Pseudo-Klassen – Elemente reagieren auf deine Aktionen!"*
+
+## Die wichtigsten Pseudo-Klassen
+
+\`\`\`css
+/* Wenn die Maus drüber ist */
+button:hover {
+  background: hotpink;
+  transform: scale(1.05);
+}
+
+/* Wenn ein Eingabefeld aktiv ist */
+input:focus {
+  border-color: #7c3aed;
+  outline: none;
+}
+
+/* Jedes zweite Element */
+li:nth-child(even) {
+  background: rgba(255,255,255,0.05);
+}
+
+/* Erstes Element */
+li:first-child { border-radius: 8px 8px 0 0; }
+
+/* Letztes Element */
+li:last-child { border-radius: 0 0 8px 8px; }
+\`\`\`
+
+## Transitions für sanfte Übergänge
+
+\`\`\`css
+button {
+  transition: all 0.2s ease;
+}
+\`\`\`
+
+> ✨ \`transition\` macht den Wechsel sanft statt abrupt!`,
+      exercise: {
+        language: "html",
+        title: "Magische Menü-Liste",
+        instructionsMd: `*"Bringe deine Liste zum Leben! Jedes Item soll sich beim Hover verändern."*
+
+**Deine Aufgabe:**
+1. Baue eine \`<ul>\` mit 4 Einträgen
+2. Bei \`:hover\` soll sich Farbe und Hintergrund ändern
+3. Nutze \`transition\` für sanfte Übergänge
+4. \`:nth-child(even)\` soll einen anderen Hintergrund haben`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; padding: 30px; }
+  ul { list-style: none; padding: 0; max-width: 300px; }
+  li {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    /* transition hier */
+  }
+  /* :hover hier */
+  /* :nth-child(even) hier */
+</style>
+
+<ul>
+  <li>🗡️ Schwert des Lichts</li>
+  <li>🛡️ Schild der Wahrheit</li>
+  <li>🏹 Bogen der Stille</li>
+  <li>📜 Karte des Wissens</li>
+</ul>
+`,
+        check: { kind: "contains", needles: [":hover", "transition", "nth-child"] },
+        hintMd: "`li:hover { background: rgba(124,58,237,0.3); color: #a78bfa; }`\n`li:nth-child(even) { background: rgba(255,255,255,0.03); }`",
+      },
+    },
+    {
+      id: "web-15",
+      trackId: "web",
+      title: "🌐 JavaScript im HTML – Dein erstes Skript",
+      summary: "Verbinde HTML und JavaScript für interaktive Seiten!",
+      minutes: 18,
+      xp: 75,
+      contentMd: `# JavaScript betritt das Schloss
+
+> *"Du hast das Schloss wunderschön gebaut. Aber es ist still – keine Bewegung, keine Reaktion. Dann erscheint ein Bote mit einer Schriftrolle: 'Willst du dein Schloss lebendig machen? Dann lerne JavaScript!'"*
+
+## Script-Tag in HTML
+
+\`\`\`html
+<button id="tor">🏰 Tor öffnen</button>
+<p id="status">Das Tor ist geschlossen.</p>
+
+<script>
+  const btn = document.getElementById("tor");
+  const status = document.getElementById("status");
+
+  btn.addEventListener("click", function() {
+    status.textContent = "Das Tor ist offen! 🎉";
+    status.style.color = "lime";
+  });
+</script>
+\`\`\`
+
+## Die Brücke: document
+
+\`document\` ist das Werkzeug, mit dem JavaScript auf HTML zugreift:
+
+| Methode | Was sie macht |
+|---------|-------------|
+| \`document.getElementById("id")\` | Element per ID finden |
+| \`element.textContent = "..."\` | Text ändern |
+| \`element.style.color = "red"\` | CSS ändern |
+| \`element.classList.add("klasse")\` | CSS-Klasse hinzufügen |`,
+      exercise: {
+        language: "html",
+        title: "Das lebendige Schloss",
+        instructionsMd: `*"Bringe dein erstes Element zum Leben mit JavaScript!"*
+
+**Deine Aufgabe:**
+1. Füge einen Button und eine \`<p>\` Nachricht ein
+2. Per \`getElementById\` beide finden
+3. Beim Klick: ändere den Text der Nachricht
+4. Ändere auch die Farbe!`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; text-align: center; padding: 60px; }
+  button { padding: 14px 28px; font-size: 18px; border-radius: 12px; border: none; background: #7c3aed; color: white; cursor: pointer; }
+  #nachricht { font-size: 24px; margin-top: 30px; }
+</style>
+
+<button id="btn">🏰 Klick mich!</button>
+<p id="nachricht">Noch nichts passiert...</p>
+
+<script>
+  // Dein JavaScript hier
+</script>
+`,
+        check: { kind: "contains", needles: ["getElementById", "addEventListener", "textContent"] },
+        hintMd: "`document.getElementById(\"btn\").addEventListener(\"click\", function() { document.getElementById(\"nachricht\").textContent = \"Es ist Magie! ✨\"; });`",
+      },
+    },
+    {
+      id: "web-16",
+      trackId: "web",
+      title: "📋 Projekt: To-Do Burg",
+      summary: "Baue eine interaktive To-Do Liste mit HTML, CSS und JavaScript!",
+      minutes: 35,
+      xp: 110,
+      contentMd: `# 🏰 Projekt: Die To-Do Burg
+
+> *"Das Königreich ist in Gefahr! Es gibt so viele Aufgaben zu erledigen, aber niemand behält den Überblick. Du wirst eine To-Do Burg bauen – ein magisches System, das alle Aufgaben verwaltet!"*
+
+## Was du baust
+
+Eine To-Do Liste mit:
+- ✅ Aufgaben hinzufügen (Eingabefeld + Button)
+- ✅ Aufgaben abhaken (durchstreichen)
+- ✅ Aufgaben löschen
+- ✅ Schickes Design
+
+## Wichtige JavaScript-Konzepte
+
+\`\`\`js
+// Neues Element erstellen
+const li = document.createElement("li");
+li.textContent = eingabe.value;
+liste.appendChild(li);
+
+// Klick-Event auf dynamisch erstellte Elemente
+li.addEventListener("click", function() {
+  li.style.textDecoration = "line-through";
+});
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Baue die To-Do Burg!",
+        instructionsMd: `*"Das Königreich wartet auf deinen Helden! Baue die To-Do Burg."*
+
+**Deine Aufgabe:**
+1. Eingabefeld + Button zum Hinzufügen
+2. Aufgaben erscheinen als Liste (\`<li>\`)
+3. Klick auf Aufgabe = durchgestrichen
+4. Löschen-Button bei jeder Aufgabe
+
+**Tipp:** Nutze \`document.createElement\` und \`appendChild\``,
+        starterCode: `<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0f0f1a; color: white; font-family: Arial; max-width: 500px; margin: 40px auto; padding: 20px; }
+  h1 { font-size: 2rem; margin-bottom: 20px; }
+  .eingabe { display: flex; gap: 8px; margin-bottom: 20px; }
+  input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; font-size: 16px; }
+  button { padding: 12px 20px; border-radius: 8px; border: none; background: #7c3aed; color: white; cursor: pointer; font-size: 16px; }
+  #liste { list-style: none; }
+  #liste li { display: flex; justify-content: space-between; align-items: center; padding: 14px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+  #liste li.fertig { text-decoration: line-through; opacity: 0.5; }
+  .del { background: #e94560; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: none; color: white; cursor: pointer; }
+</style>
+
+<h1>🏰 To-Do Burg</h1>
+<div class="eingabe">
+  <input id="eingabe" placeholder="Neue Aufgabe..." />
+  <button id="add">+ Hinzufügen</button>
+</div>
+<ul id="liste"></ul>
+
+<script>
+  // Dein Code hier
+</script>
+`,
+        check: { kind: "contains", needles: ["createElement", "appendChild", "addEventListener"] },
+        hintMd: "```js\ndocument.getElementById('add').addEventListener('click', function() {\n  const text = document.getElementById('eingabe').value;\n  if (!text) return;\n  const li = document.createElement('li');\n  li.textContent = text;\n  li.addEventListener('click', () => li.classList.toggle('fertig'));\n  document.getElementById('liste').appendChild(li);\n});\n```",
+      },
+    },
+    {
+      id: "web-17",
+      trackId: "web",
+      title: "💾 localStorage – Der Gedächtnis-Zauber",
+      summary: "Speichere Daten im Browser – auch nach dem Neuladen!",
+      minutes: 20,
+      xp: 80,
+      contentMd: `# Der Gedächtnis-Zauber: localStorage
+
+> *"Deine To-Do Burg ist großartig – aber wenn du die Seite neu lädst, sind alle Aufgaben weg! Der weise Archivar zeigt dir den Gedächtnis-Zauber: localStorage. Damit erinnert sich der Browser an alles!"*
+
+## localStorage – Daten behalten
+
+\`\`\`js
+// Speichern
+localStorage.setItem("name", "Mila");
+localStorage.setItem("punkte", "1500");
+
+// Lesen
+const name = localStorage.getItem("name");    // "Mila"
+const punkte = localStorage.getItem("punkte"); // "1500" (immer ein String!)
+
+// Löschen
+localStorage.removeItem("name");
+
+// Alles löschen
+localStorage.clear();
+\`\`\`
+
+## Objekte speichern (mit JSON)
+
+\`\`\`js
+const held = { name: "Aria", level: 7 };
+
+// Speichern (in String umwandeln)
+localStorage.setItem("held", JSON.stringify(held));
+
+// Lesen (zurück zu Objekt)
+const geladen = JSON.parse(localStorage.getItem("held"));
+console.log(geladen.name); // "Aria"
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Name merken",
+        instructionsMd: `*"Lerne den Gedächtnis-Zauber! Der Browser soll deinen Namen nicht vergessen."*
+
+**Deine Aufgabe:**
+1. Ein Eingabefeld für den Namen + Speicher-Button
+2. Beim Klick: Name in \`localStorage\` speichern
+3. Beim Laden der Seite: gespeicherten Namen anzeigen`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; text-align: center; padding: 60px; }
+  input { padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; font-size: 16px; margin-right: 8px; }
+  button { padding: 12px 20px; border-radius: 8px; border: none; background: #7c3aed; color: white; cursor: pointer; font-size: 16px; }
+  #anzeige { font-size: 28px; margin-top: 30px; color: #a78bfa; }
+</style>
+
+<h2>🧙 Gedächtnis-Zauber</h2>
+<input id="nameEingabe" placeholder="Dein Name..." />
+<button id="speichern">💾 Merken!</button>
+<p id="anzeige">Kein Name gespeichert.</p>
+
+<script>
+  // Beim Laden: prüfen ob Name vorhanden
+  const gespeichert = localStorage.getItem("heldenname");
+  if (gespeichert) {
+    document.getElementById("anzeige").textContent = "Willkommen zurück, " + gespeichert + "! 👋";
+  }
+
+  // Speichern beim Klick
+  // Dein Code hier
+</script>
+`,
+        check: { kind: "contains", needles: ["localStorage.setItem", "localStorage.getItem"] },
+        hintMd: "`localStorage.setItem(\"heldenname\", document.getElementById(\"nameEingabe\").value);`",
+      },
+    },
+    {
+      id: "web-18",
+      trackId: "web",
+      title: "🌈 Gradient & Schatten",
+      summary: "Mache dein Design mit Verläufen und Schatten professionell!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# Verläufe und Schatten – Profi-Design
+
+> *"Du hast die Grundfähigkeiten gemeistert. Nun zeigt dir die Hofmalerin, wie man Seiten wirklich beeindruckend macht: mit Verläufen und Licht-Schatten!"*
+
+## Gradienten (Verläufe)
+
+\`\`\`css
+/* Linearer Verlauf */
+.hero {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Radialer Verlauf */
+.glow {
+  background: radial-gradient(circle, #7c3aed, #1e1e3f);
+}
+
+/* Mehrere Farben */
+.regenbogen {
+  background: linear-gradient(90deg, #ff0080, #ff8c00, #ffe100, #00ff80);
+}
+\`\`\`
+
+## Box-Shadow (Schatten)
+
+\`\`\`css
+.card {
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+  /* x  y  blur  farbe */
+}
+
+/* Neon-Glow Effekt */
+.neon {
+  box-shadow:
+    0 0 10px #7c3aed,
+    0 0 20px #7c3aed,
+    0 0 40px #7c3aed;
+}
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Neon-Helden-Karte",
+        instructionsMd: `*"Baue eine Helden-Karte mit Verlauf-Hintergrund und Neon-Glow!"*
+
+**Deine Aufgabe:**
+1. Eine Karte mit \`linear-gradient\` Hintergrund
+2. \`box-shadow\` für einen Glow-Effekt
+3. Helden-Info: Name, Klasse, Level`,
+        starterCode: `<style>
+  body { background: #050510; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: Arial; }
+  .helden-karte {
+    padding: 30px;
+    border-radius: 20px;
+    width: 280px;
+    text-align: center;
+    color: white;
+    /* Gradient + Shadow hier */
+  }
+  .name { font-size: 28px; font-weight: bold; }
+  .klasse { color: rgba(255,255,255,0.7); margin: 8px 0; }
+  .level { font-size: 40px; font-weight: bold; color: #fbbf24; }
+</style>
+
+<div class="helden-karte">
+  <div style="font-size: 64px">⚔️</div>
+  <div class="name">Aria</div>
+  <div class="klasse">Kriegerin des Lichts</div>
+  <div class="level">Lvl 42</div>
+</div>
+`,
+        check: { kind: "contains", needles: ["linear-gradient", "box-shadow"] },
+        hintMd: "`background: linear-gradient(135deg, #1a1a3e, #7c3aed);`\n`box-shadow: 0 0 30px rgba(124,58,237,0.6);`",
+      },
+    },
+    {
+      id: "web-19",
+      trackId: "web",
+      title: "🔄 CSS Transform – Drehen & Vergrößern",
+      summary: "Drehe, skaliere und verschiebe Elemente mit CSS!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# Transform – Die Verwandlungs-Kunst
+
+> *"Der Zauberer der Formen tritt vor dich: 'Ich kann alles drehen, vergrößern, verschieben! Lerne meine Kunst, junger Code-Held.'"*
+
+## CSS Transform-Funktionen
+
+\`\`\`css
+/* Drehen */
+.karte:hover { transform: rotate(5deg); }
+
+/* Vergrößern/Verkleinern */
+.btn:hover { transform: scale(1.1); }
+
+/* Verschieben */
+.icon { transform: translateX(10px) translateY(-5px); }
+
+/* Kombinieren */
+.epic:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+\`\`\`
+
+## Mit Transition kombinieren
+
+\`\`\`css
+.karte {
+  transition: transform 0.3s ease;
+}
+.karte:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+\`\`\`
+
+## Perspektive (3D!)
+
+\`\`\`css
+.container { perspective: 1000px; }
+.card:hover {
+  transform: rotateY(20deg);
+}
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Helden-Karten mit Transform",
+        instructionsMd: `*"Baue 3 Helden-Karten. Beim Hover sollen sie sich drehen und vergrößern!"*
+
+**Deine Aufgabe:**
+1. 3 Karten mit Helden-Icons
+2. \`:hover\` mit \`transform: scale() rotate()\`
+3. \`transition\` für sanfte Bewegung`,
+        starterCode: `<style>
+  body { background: #0f0f1a; display: flex; gap: 20px; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: Arial; }
+  .karte {
+    padding: 30px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    /* transition hier */
+  }
+  /* hover transform hier */
+  .emoji { font-size: 48px; }
+  .name { font-weight: bold; margin-top: 8px; }
+</style>
+
+<div class="karte"><div class="emoji">⚔️</div><div class="name">Krieger</div></div>
+<div class="karte"><div class="emoji">🧙</div><div class="name">Magier</div></div>
+<div class="karte"><div class="emoji">🏹</div><div class="name">Bogenschütze</div></div>
+`,
+        check: { kind: "contains", needles: ["transform", "transition", ":hover"] },
+        hintMd: "`.karte { transition: transform 0.3s ease; }`\n`.karte:hover { transform: scale(1.1) rotate(-3deg); }`",
+      },
+    },
+    {
+      id: "web-20",
+      trackId: "web",
+      title: "🗺️ Tabellen – Die Karte des Reiches",
+      summary: "Strukturiere Daten in übersichtlichen Tabellen!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# Tabellen – Geordnetes Wissen
+
+> *"Der Kartograph des Reiches braucht deine Hilfe! Er muss eine Übersicht aller Helden und ihrer Stärken erstellen. 'Nur HTML-Tabellen können so viele Daten ordentlich darstellen!'"*
+
+## HTML-Tabellen-Struktur
+
+\`\`\`html
+<table>
+  <thead>
+    <tr>
+      <th>Held</th>
+      <th>Level</th>
+      <th>Klasse</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Aria</td>
+      <td>42</td>
+      <td>Kriegerin</td>
+    </tr>
+    <tr>
+      <td>Zara</td>
+      <td>38</td>
+      <td>Magierin</td>
+    </tr>
+  </tbody>
+</table>
+\`\`\`
+
+| Tag | Bedeutung |
+|-----|-----------|
+| \`<table>\` | Die Tabelle |
+| \`<thead>\` | Kopfbereich |
+| \`<tbody>\` | Datenbereich |
+| \`<tr>\` | Zeile (table row) |
+| \`<th>\` | Kopfzelle (fett) |
+| \`<td>\` | Datenzelle |`,
+      exercise: {
+        language: "html",
+        title: "Die Helden-Tabelle",
+        instructionsMd: `*"Erstelle die Tabelle für den Kartographen!"*
+
+**Deine Aufgabe:**
+Baue eine Tabelle mit 3 Spalten (Name, Level, Klasse) und mindestens **3 Helden-Zeilen**. Style sie mit CSS!`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; padding: 30px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: rgba(124,58,237,0.3); padding: 12px 16px; text-align: left; }
+  td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  tr:hover td { background: rgba(255,255,255,0.05); }
+</style>
+
+<!-- Tabelle hier -->
+`,
+        check: { kind: "contains", needles: ["<table", "<thead", "<tr", "<th", "<td"] },
+        hintMd: "Struktur: `<table><thead><tr><th>Name</th>...</tr></thead><tbody><tr><td>Aria</td>...</tr></tbody></table>`",
+      },
+    },
+    {
+      id: "web-21",
+      trackId: "web",
+      title: "🖌️ Dark Mode & Themes",
+      summary: "Wechsle zwischen Light und Dark Mode per JavaScript!",
+      minutes: 22,
+      xp: 85,
+      contentMd: `# Dark Mode – Die Wächter des Lichts und der Dunkelheit
+
+> *"Das Schloss hat zwei Modi: Tagsüber strahlt es im Licht, nachts hüllt es sich in Dunkel. Du sollst einen Schalter bauen, der zwischen beiden wechselt!"*
+
+## Theme-Wechsel mit JavaScript
+
+\`\`\`js
+// Klasse am body hinzufügen/entfernen
+document.body.classList.toggle("dark");
+
+// Prüfen welches Theme aktiv ist
+if (document.body.classList.contains("dark")) {
+  btn.textContent = "☀️ Light Mode";
+} else {
+  btn.textContent = "🌙 Dark Mode";
+}
+\`\`\`
+
+## CSS für beide Themes
+
+\`\`\`css
+/* Light Mode (Standard) */
+body {
+  background: #ffffff;
+  color: #111111;
+}
+
+/* Dark Mode */
+body.dark {
+  background: #0f0f1a;
+  color: #f0f0ff;
+}
+\`\`\`
+
+## localStorage für Theme-Speicherung
+
+\`\`\`js
+// Theme beim Start laden
+const theme = localStorage.getItem("theme");
+if (theme === "dark") document.body.classList.add("dark");
+
+// Theme beim Wechsel speichern
+localStorage.setItem("theme", "dark");
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Licht/Dunkel-Schalter",
+        instructionsMd: `*"Baue den magischen Schalter des Schlosses!"*
+
+**Deine Aufgabe:**
+1. Zwei CSS-Klassen: normal und \`.dark\`
+2. Button zum Umschalten
+3. \`classList.toggle("dark")\` beim Klick
+4. Button-Text wechselt zwischen ☀️ und 🌙`,
+        starterCode: `<style>
+  body { font-family: Arial; padding: 40px; transition: background 0.3s, color 0.3s; background: #ffffff; color: #111; }
+  body.dark { background: #0f0f1a; color: #f0f0ff; }
+  .card { padding: 30px; border-radius: 16px; max-width: 400px; border: 2px solid currentColor; }
+  button { padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer; font-size: 16px; margin-bottom: 20px; }
+</style>
+
+<button id="theme-btn">🌙 Dark Mode</button>
+<div class="card">
+  <h2>⚔️ Held des Lichts</h2>
+  <p>Dieser Held kämpft sowohl im Licht als auch im Dunkeln!</p>
+</div>
+
+<script>
+  // Theme-Toggle hier
+</script>
+`,
+        check: { kind: "contains", needles: ["classList.toggle", "dark", "addEventListener"] },
+        hintMd: "`document.getElementById('theme-btn').addEventListener('click', function() { document.body.classList.toggle('dark'); this.textContent = document.body.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode'; });`",
+      },
+    },
+    {
+      id: "web-22",
+      trackId: "web",
+      title: "🎬 Scroll-Animationen",
+      summary: "Lass Elemente erscheinen, wenn man zur Seite scrollt!",
+      minutes: 22,
+      xp: 85,
+      contentMd: `# Scroll-Animationen – Die erwachende Welt
+
+> *"Während du durch das Schloss wanderst, erwachen die Gemälde zum Leben – eines nach dem anderen! Das ist die Kunst der Scroll-Animationen: Elemente erscheinen genau dann, wenn du sie siehst."*
+
+## IntersectionObserver
+
+\`\`\`js
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("sichtbar");
+    }
+  });
+});
+
+// Alle .fade-in Elemente beobachten
+document.querySelectorAll(".fade-in").forEach(function(el) {
+  observer.observe(el);
+});
+\`\`\`
+
+## CSS für den Effekt
+
+\`\`\`css
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.sichtbar {
+  opacity: 1;
+  transform: translateY(0);
+}
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Erwachende Karten",
+        instructionsMd: `*"Lass 5 Karten beim Scrollen erscheinen!"*
+
+**Deine Aufgabe:**
+1. 5 Karten mit der Klasse \`fade-in\`
+2. CSS: Karten starten unsichtbar (\`opacity: 0\`)
+3. JavaScript: \`IntersectionObserver\` der \`sichtbar\`-Klasse hinzufügt
+4. CSS: \`.sichtbar\` macht Karten sichtbar`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; padding: 20px; }
+  .karte { max-width: 500px; margin: 20px auto; padding: 30px; border-radius: 16px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3); }
+  .fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.sichtbar {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<div class="karte fade-in"><h2>⚔️ Quest 1: Das Schwert</h2></div>
+<div class="karte fade-in"><h2>🛡️ Quest 2: Der Schild</h2></div>
+<div class="karte fade-in"><h2>🏹 Quest 3: Der Bogen</h2></div>
+<div class="karte fade-in"><h2>🧙 Quest 4: Der Zauberstab</h2></div>
+<div class="karte fade-in"><h2>🏆 Quest 5: Die Krone</h2></div>
+
+<script>
+  // IntersectionObserver hier
+</script>
+`,
+        check: { kind: "contains", needles: ["IntersectionObserver", "classList.add", "sichtbar"] },
+        hintMd: "```js\nconst obs = new IntersectionObserver(entries => {\n  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('sichtbar'); });\n});\ndocument.querySelectorAll('.fade-in').forEach(el => obs.observe(el));\n```",
+      },
+    },
+    {
+      id: "web-23",
+      trackId: "web",
+      title: "⌨️ Keyboard Events & Shortcuts",
+      summary: "Reagiere auf Tastatureingaben für Spiele und Apps!",
+      minutes: 20,
+      xp: 80,
+      contentMd: `# Keyboard Events – Die Macht der Tasten
+
+> *"Der Spielmeister erscheint: 'Ein wirklich gutes Spiel braucht Tastatursteuerung! Lerne, auf jede Taste zu reagieren, und deine Spiele werden legendär!'"*
+
+## keydown Event
+
+\`\`\`js
+document.addEventListener("keydown", function(event) {
+  console.log(event.key);  // "ArrowUp", "Enter", "a", etc.
+
+  if (event.key === "ArrowUp") {
+    console.log("Held bewegt sich hoch!");
+  }
+});
+\`\`\`
+
+## Wichtige Tasten-Keys
+
+| \`event.key\` | Taste |
+|-------------|-------|
+| \`"ArrowUp"\` | Pfeil hoch |
+| \`"ArrowDown"\` | Pfeil runter |
+| \`" "\` | Leertaste |
+| \`"Enter"\` | Enter |
+| \`"Escape"\` | Escape |
+
+## Bewegen mit Tastatur
+
+\`\`\`js
+let x = 200;
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "ArrowLeft") x -= 10;
+  if (e.key === "ArrowRight") x += 10;
+  held.style.left = x + "px";
+});
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Bewege deinen Helden!",
+        instructionsMd: `*"Bringe deinen Helden zum Laufen mit den Pfeiltasten!"*
+
+**Deine Aufgabe:**
+1. Einen Helden (Emoji in einem \`div\`) auf der Seite anzeigen
+2. Mit \`keydown\` auf Pfeiltasten reagieren
+3. Den Helden links/rechts bewegen
+4. Den Helden hüpfen lassen (Pfeil hoch)`,
+        starterCode: `<style>
+  body { background: #0f0f1a; color: white; font-family: Arial; overflow: hidden; margin: 0; }
+  #arena { width: 100vw; height: 100vh; position: relative; }
+  #held {
+    position: absolute;
+    font-size: 48px;
+    bottom: 20px;
+    left: 200px;
+    transition: left 0.1s, bottom 0.2s;
+    user-select: none;
+  }
+  #info { position: fixed; top: 20px; left: 20px; color: #a78bfa; }
+</style>
+
+<div id="arena">
+  <div id="held">🧙</div>
+</div>
+<div id="info">⬅️➡️ Bewegen · ⬆️ Springen</div>
+
+<script>
+  const held = document.getElementById("held");
+  let x = 200;
+
+  document.addEventListener("keydown", function(e) {
+    // Dein Code hier
+  });
+</script>
+`,
+        check: { kind: "contains", needles: ["keydown", "event.key", "ArrowLeft"] },
+        hintMd: "`if (e.key === \"ArrowLeft\") { x -= 20; }`\n`if (e.key === \"ArrowRight\") { x += 20; }`\n`held.style.left = x + \"px\";`",
+      },
+    },
+    {
+      id: "web-24",
+      trackId: "web",
+      title: "🎨 CSS Custom Animations – Komplex",
+      summary: "Baue mehrstufige Animationen mit @keyframes!",
+      minutes: 22,
+      xp: 90,
+      contentMd: `# Epische Animationen – Die Kunst der Bewegung
+
+> *"Die großen Meister des Schlosses enthüllen dir das letzte Geheimnis: Mehrstufige Keyframe-Animationen. Mit ihnen kannst du Dinge fliegen, leuchten und tanzen lassen!"*
+
+## Mehrstufige @keyframes
+
+\`\`\`css
+@keyframes fliegen {
+  0%   { transform: translateY(0) rotate(0); opacity: 1; }
+  25%  { transform: translateY(-40px) rotate(5deg); }
+  50%  { transform: translateY(-20px) rotate(-5deg); }
+  75%  { transform: translateY(-50px) rotate(3deg); }
+  100% { transform: translateY(0) rotate(0); opacity: 1; }
+}
+
+.vogel {
+  animation: fliegen 3s ease-in-out infinite;
+}
+\`\`\`
+
+## Animationen steuern
+
+\`\`\`css
+.element {
+  animation-name: meinAnimation;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite; /* oder eine Zahl */
+  animation-direction: alternate; /* vor und zurück */
+  animation-delay: 0.5s; /* Verzögerung */
+}
+\`\`\`
+
+## Mehrere Animationen kombinieren
+
+\`\`\`css
+.stern {
+  animation:
+    drehen 4s linear infinite,
+    leuchten 2s ease-in-out infinite;
+}
+\`\`\``,
+      exercise: {
+        language: "html",
+        title: "Animierter Charakter",
+        instructionsMd: `*"Erschaffe einen Charakter mit mindestens 2 verschiedenen Animationen!"*
+
+**Deine Aufgabe:**
+1. Mindestens 2 \`@keyframes\` (z.B. schwebend + leuchtend)
+2. Ein Charakter (Emoji oder div) mit beiden Animationen
+3. \`animation-iteration-count: infinite\``,
+        starterCode: `<style>
+  body { background: #050510; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+
+  @keyframes schweben {
+    /* Deine Keyframes hier */
+  }
+
+  @keyframes leuchten {
+    /* Deine Keyframes hier */
+  }
+
+  .held {
+    font-size: 80px;
+    /* animation hier */
+  }
+</style>
+
+<div class="held">🧙‍♂️</div>
+`,
+        check: { kind: "contains", needles: ["@keyframes", "animation", "infinite"] },
+        hintMd: "@keyframes schweben: `0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); }`",
+      },
+    },
+    {
+      id: "web-25",
+      trackId: "web",
+      title: "🏆 Abschlussprojekt: Portfolio-Schloss",
+      summary: "Baue dein episches Portfolio mit allem, was du gelernt hast!",
+      minutes: 45,
+      xp: 150,
+      contentMd: `# 🏆 Das Portfolio-Schloss
+
+> *"Du hast alle Lektionen des Web-Tracks gemeistert! Nun ist es Zeit für dein größtes Werk: Das Portfolio-Schloss – eine Webseite, die zeigt, wer du bist und was du kannst!"*
+
+## Was du baust
+
+Dein persönliches Portfolio mit:
+
+### Pflicht ✅
+- Navigation mit Sprunglinks
+- Hero-Section mit deinem Namen + Animations
+- Über-mich-Section mit Bild
+- Skills-Section (Grid mit Karten)
+- Projekte-Section
+- Dark/Light Mode Toggle
+- Responsive (funktioniert auf Handy)
+- CSS Variablen für Farben
+- Mindestens eine @keyframes Animation
+
+### Bonus ⭐
+- Scroll-Animationen (IntersectionObserver)
+- Tastatur-Shortcut (z.B. \`d\` für Dark Mode)
+- localStorage (Theme wird gemerkt)
+
+## Empfohlene Struktur
+
+\`\`\`html
+<nav>...</nav>
+<section id="start">Hero</section>
+<section id="über-mich">Info</section>
+<section id="skills">Fähigkeiten</section>
+<section id="projekte">Meine Werke</section>
+<footer>...</footer>
+\`\`\`
+
+> 🎉 Dein Portfolio ist deine Visitenkarte – zeige es stolz!`,
+      exercise: {
+        language: "html",
+        title: "Baue dein Portfolio-Schloss!",
+        instructionsMd: `*"Das ist dein Meisterwerk! Keine Einschränkungen – sei kreativ!"*
+
+**Pflicht-Elemente:**
+- \`<nav>\` mit Links
+- Mindestens 3 \`<section>\` Bereiche
+- CSS Variablen (\`:root { --... }\`)
+- Mindestens 1 \`@keyframes\` Animation
+- Dark Mode Toggle
+- Responsive Layout`,
+        starterCode: `<style>
+  :root {
+    --primary: #7c3aed;
+    --bg: #0f0f1a;
+    --text: #f0f0ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: Arial; }
+
+  /* Dein CSS hier */
+</style>
+
+<nav><!-- Navigation --></nav>
+
+<section id="start">
+  <!-- Deine Hero-Section -->
+</section>
+
+<section id="über-mich">
+  <!-- Über-mich -->
+</section>
+
+<section id="skills">
+  <!-- Skills/Fähigkeiten -->
+</section>
+
+<script>
+  /* Dark Mode Toggle, Scroll-Animationen etc. */
+</script>
+`,
+        check: {
+          kind: "contains",
+          needles: ["--primary", "@keyframes", "<nav", "<section", "dark"],
+        },
+        hintMd: "Beginne mit der Hero-Section und dem Dark Mode Toggle. Dann baue Schritt für Schritt die anderen Sektionen.",
+      },
+    },
   ],
 };
 
@@ -1470,6 +2662,1360 @@ const timer = setInterval(function() {
   ],
 };
 
+    {
+      id: "js-11",
+      trackId: "js",
+      title: "Der Ternary-Trick",
+      summary: "Schreibe Bedingungen in einer einzigen Zeile – wie ein Profi-Zauberer!",
+      minutes: 12,
+      xp: 55,
+      contentMd: `# 🪄 Der Ternary-Trick
+
+> *"Im Zauberturm gibt es eine geheime Kurzschrift. Statt langer Beschwörungsformeln – ein einziger Satz."*
+
+Kennst du if/else? Super! Jetzt lernst du die **Kurzversion**:
+
+\`\`\`js
+// Normal:
+if (alter >= 18) {
+  status = "Erwachsen";
+} else {
+  status = "Kind";
+}
+
+// Mit Ternary (viel kürzer!):
+const status = alter >= 18 ? "Erwachsen" : "Kind";
+\`\`\`
+
+**Aufbau:** \`Bedingung ? WennJa : WennNein\`
+
+### Beispiele:
+\`\`\`js
+const punkte = 85;
+const note = punkte >= 60 ? "Bestanden ✅" : "Nicht bestanden ❌";
+console.log(note); // Bestanden ✅
+
+const zahl = 7;
+const art = zahl % 2 === 0 ? "Gerade" : "Ungerade";
+console.log(art); // Ungerade
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Ternary-Zaubertrick",
+        instructionsMd: `Verwende den **Ternary-Operator** um zu prüfen ob eine Temperatur warm oder kalt ist.
+
+Schreibe: \`const beschreibung = temperatur >= 20 ? ... : ...\`
+
+Gib dann \`beschreibung\` aus!`,
+        starterCode: `const temperatur = 25;
+
+// Schreibe hier deinen Ternary-Ausdruck:
+const beschreibung = // ?
+
+console.log(beschreibung);
+`,
+        check: { kind: "js_console_includes", expected: "warm" },
+        hintMd: "`const beschreibung = temperatur >= 20 ? \"Warm ☀️\" : \"Kalt 🥶\";`",
+        solutionCode: `const temperatur = 25;
+const beschreibung = temperatur >= 20 ? "Warm ☀️" : "Kalt 🥶";
+console.log(beschreibung);`,
+      },
+    },
+    {
+      id: "js-12",
+      trackId: "js",
+      title: "map() – der Verwandlungs-Zauber",
+      summary: "Verwandle jedes Element eines Arrays mit einem einzigen Befehl!",
+      minutes: 15,
+      xp: 60,
+      contentMd: `# 🔮 map() – Der Verwandlungs-Zauber
+
+> *"Die Alchemisten des Codes haben eine Kunst perfektioniert: jedes Element einer Liste gleichzeitig zu verwandeln."*
+
+**map()** wendet eine Funktion auf **jedes Element** eines Arrays an und gibt ein **neues Array** zurück:
+
+\`\`\`js
+const zahlen = [1, 2, 3, 4, 5];
+const verdoppelt = zahlen.map(n => n * 2);
+console.log(verdoppelt); // [2, 4, 6, 8, 10]
+\`\`\`
+
+### Weitere Beispiele:
+\`\`\`js
+const namen = ["anna", "ben", "clara"];
+const gross = namen.map(n => n.toUpperCase());
+console.log(gross); // ["ANNA", "BEN", "CLARA"]
+
+const preise = [10, 25, 5, 40];
+const mitRabatt = preise.map(p => p * 0.9); // 10% Rabatt
+console.log(mitRabatt); // [9, 22.5, 4.5, 36]
+\`\`\`
+
+Das **Original-Array bleibt unverändert** – map() erstellt immer ein neues Array!`,
+      exercise: {
+        language: "javascript",
+        title: "Quadriere alle Zahlen",
+        instructionsMd: `Verwende **map()** um jede Zahl im Array zu quadrieren (also: zahl × zahl).
+
+Gib das neue Array mit \`console.log\` aus!`,
+        starterCode: `const zahlen = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Verwende map() zum Quadrieren:
+const quadriert = zahlen.map(n => /* dein Code */);
+
+console.log(quadriert);
+`,
+        check: { kind: "js_console_includes", expected: "100" },
+        hintMd: "`const quadriert = zahlen.map(n => n * n);`",
+        solutionCode: `const zahlen = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const quadriert = zahlen.map(n => n * n);
+console.log(quadriert);`,
+      },
+    },
+    {
+      id: "js-13",
+      trackId: "js",
+      title: "filter() – Das magische Sieb",
+      summary: "Filtere nur die Elemente aus einem Array, die eine Bedingung erfüllen!",
+      minutes: 15,
+      xp: 60,
+      contentMd: `# 🪣 filter() – Das magische Sieb
+
+> *"Der weise Magier schüttelt sein goldenes Sieb – nur die wahren Kristalle fallen hindurch."*
+
+**filter()** gibt alle Elemente zurück, die eine **Bedingung erfüllen**:
+
+\`\`\`js
+const zahlen = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const geradeZahlen = zahlen.filter(n => n % 2 === 0);
+console.log(geradeZahlen); // [2, 4, 6, 8, 10]
+\`\`\`
+
+### Mehr Beispiele:
+\`\`\`js
+const noten = [85, 42, 97, 60, 35, 78];
+const bestanden = noten.filter(n => n >= 60);
+console.log(bestanden); // [85, 97, 60, 78]
+
+const woerter = ["Apfel", "Banane", "Avocado", "Birne", "Ananas"];
+const mitA = woerter.filter(w => w.startsWith("A"));
+console.log(mitA); // ["Apfel", "Avocado", "Ananas"]
+\`\`\`
+
+### map() + filter() kombinieren:
+\`\`\`js
+const zahlen = [1,2,3,4,5,6,7,8,9,10];
+const ergebnis = zahlen
+  .filter(n => n % 2 === 0) // nur gerade
+  .map(n => n * n);         // dann quadrieren
+console.log(ergebnis); // [4, 16, 36, 64, 100]
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Filtere teure Produkte",
+        instructionsMd: `Filtere aus der Preisliste alle Produkte, die **mehr als 50 Euro** kosten.
+
+Gib das gefilterte Array aus!`,
+        starterCode: `const preise = [12, 67, 5, 99, 45, 150, 30, 80];
+
+// Nur Preise über 50 Euro:
+const teuer = preise.filter(p => /* dein Code */);
+
+console.log(teuer);
+`,
+        check: { kind: "js_console_includes", expected: "150" },
+        hintMd: "`const teuer = preise.filter(p => p > 50);`",
+        solutionCode: `const preise = [12, 67, 5, 99, 45, 150, 30, 80];
+const teuer = preise.filter(p => p > 50);
+console.log(teuer);`,
+      },
+    },
+    {
+      id: "js-14",
+      trackId: "js",
+      title: "reduce() – Der Schatzhäufer",
+      summary: "Fasse ein ganzes Array zu einem einzigen Wert zusammen!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# 💰 reduce() – Der Schatzhäufer
+
+> *"Der Schatzhäufer zählt jeden Goldmünzen-Stapel zusammen – am Ende kennt er den Gesamtschatz."*
+
+**reduce()** verarbeitet ein Array und gibt **einen einzigen Wert** zurück:
+
+\`\`\`js
+const zahlen = [1, 2, 3, 4, 5];
+const summe = zahlen.reduce((gesamt, n) => gesamt + n, 0);
+console.log(summe); // 15
+\`\`\`
+
+**Aufbau:** \`array.reduce((akkumulator, element) => neuerWert, startwert)\`
+
+- **akkumulator**: der laufende "Sammler" (startet mit Startwert)
+- **element**: das aktuelle Element
+- **startwert**: womit der Akkumulator beginnt
+
+### Mehr Beispiele:
+\`\`\`js
+// Produkt aller Zahlen:
+const produkt = [1,2,3,4,5].reduce((ges, n) => ges * n, 1);
+console.log(produkt); // 120
+
+// Längsten String finden:
+const woerter = ["Hi", "Hallo", "Servus", "Hey"];
+const laengster = woerter.reduce((lang, w) =>
+  w.length > lang.length ? w : lang, "");
+console.log(laengster); // "Servus"
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Berechne den Gesamtpreis",
+        instructionsMd: `Berechne mit **reduce()** den **Gesamtpreis** aller Artikel im Einkaufswagen.
+
+Gib die Summe aus!`,
+        starterCode: `const einkaufswagen = [12.50, 4.99, 25.00, 7.49, 1.29];
+
+// Berechne die Summe mit reduce():
+const gesamt = einkaufswagen.reduce((/* akkumulator, element */) => /* dein Code */, 0);
+
+console.log("Gesamt: " + gesamt.toFixed(2) + " €");
+`,
+        check: { kind: "js_console_includes", expected: "51.27" },
+        hintMd: "`const gesamt = einkaufswagen.reduce((summe, preis) => summe + preis, 0);`",
+        solutionCode: `const einkaufswagen = [12.50, 4.99, 25.00, 7.49, 1.29];
+const gesamt = einkaufswagen.reduce((summe, preis) => summe + preis, 0);
+console.log("Gesamt: " + gesamt.toFixed(2) + " €");`,
+      },
+    },
+    {
+      id: "js-15",
+      trackId: "js",
+      title: "Spread & Destructuring",
+      summary: "Entpacke Arrays und Objekte wie Zaubertricks!",
+      minutes: 18,
+      xp: 65,
+      contentMd: `# 📦 Spread & Destructuring
+
+> *"Ein Zauberumhang kann sich entfalten und seinen Inhalt enthüllen – genau so funktioniert Destructuring."*
+
+## Destructuring – Entpacken!
+
+**Arrays entpacken:**
+\`\`\`js
+const farben = ["Rot", "Grün", "Blau"];
+const [erste, zweite, dritte] = farben;
+console.log(erste);  // "Rot"
+console.log(zweite); // "Grün"
+\`\`\`
+
+**Objekte entpacken:**
+\`\`\`js
+const held = { name: "Luna", level: 5, klasse: "Magier" };
+const { name, level } = held;
+console.log(name);  // "Luna"
+console.log(level); // 5
+\`\`\`
+
+## Spread-Operator – Verteilen!
+
+**Arrays zusammenführen:**
+\`\`\`js
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+const alle = [...arr1, ...arr2];
+console.log(alle); // [1, 2, 3, 4, 5, 6]
+\`\`\`
+
+**Objekte zusammenführen:**
+\`\`\`js
+const basis = { hp: 100, mp: 50 };
+const held = { ...basis, name: "Aria", level: 3 };
+console.log(held); // { hp: 100, mp: 50, name: "Aria", level: 3 }
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Held-Destrukturierung",
+        instructionsMd: `Entpacke das Objekt \`krieger\` mit **Destructuring** und gib Name und Stärke aus.
+
+Dann füge das Schwert-Array mit **Spread** zusammen!`,
+        starterCode: `const krieger = { name: "Thor", staerke: 95, verteidigung: 70 };
+
+// Entpacke name und staerke:
+const { /* dein Code */ } = krieger;
+console.log(name + " hat Stärke " + staerke);
+
+// Füge Waffen zusammen:
+const schwerter = ["Excalibur", "Durandal"];
+const aexte = ["Mjolnir", "Gungnir"];
+const waffen = [...schwerter, ...aexte];
+console.log(waffen);
+`,
+        check: { kind: "js_console_includes", expected: "Thor" },
+        hintMd: "`const { name, staerke } = krieger;`",
+        solutionCode: `const krieger = { name: "Thor", staerke: 95, verteidigung: 70 };
+const { name, staerke } = krieger;
+console.log(name + " hat Stärke " + staerke);
+const schwerter = ["Excalibur", "Durandal"];
+const aexte = ["Mjolnir", "Gungnir"];
+const waffen = [...schwerter, ...aexte];
+console.log(waffen);`,
+      },
+    },
+    {
+      id: "js-16",
+      trackId: "js",
+      title: "try/catch – Fehler fangen",
+      summary: "Fange Fehler ab bevor sie dein Programm zerstören!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# 🛡️ try/catch – Der Schutzzauber
+
+> *"Auch der mächtigste Zauber kann fehlschlagen. Ein weiser Magier ist immer vorbereitet."*
+
+Manchmal passieren Fehler – Eingaben die falsch sind, Server die nicht antworten... **try/catch** fängt diese Fehler ab:
+
+\`\`\`js
+try {
+  // Code der vielleicht einen Fehler erzeugt
+  const ergebnis = riskanteFunktion();
+  console.log(ergebnis);
+} catch (fehler) {
+  // Was passiert WENN ein Fehler auftritt
+  console.log("Fehler aufgetreten: " + fehler.message);
+}
+\`\`\`
+
+### Eigene Fehler werfen:
+\`\`\`js
+function teile(a, b) {
+  if (b === 0) {
+    throw new Error("Division durch Null ist verboten!");
+  }
+  return a / b;
+}
+
+try {
+  console.log(teile(10, 2)); // 5
+  console.log(teile(10, 0)); // Fehler!
+} catch (e) {
+  console.log("Oops: " + e.message);
+}
+\`\`\`
+
+### finally – immer ausgeführt:
+\`\`\`js
+try {
+  // ...
+} catch (e) {
+  // ...
+} finally {
+  console.log("Das hier läuft IMMER");
+}
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Sicheres Dividieren",
+        instructionsMd: `Schreibe eine Funktion \`sicherTeilen(a, b)\` die:
+1. Bei \`b === 0\` einen Fehler wirft
+2. Sonst das Ergebnis zurückgibt
+
+Teste sie mit try/catch!`,
+        starterCode: `function sicherTeilen(a, b) {
+  if (b === 0) {
+    throw new Error(/* deine Fehlermeldung */);
+  }
+  return a / b;
+}
+
+try {
+  console.log(sicherTeilen(20, 4));  // sollte 5 ausgeben
+  console.log(sicherTeilen(10, 0)); // sollte Fehler werfen
+} catch (e) {
+  console.log("Fehler: " + e.message);
+}
+`,
+        check: { kind: "js_console_includes", expected: "5" },
+        hintMd: "`throw new Error(\"Kann nicht durch Null teilen!\");`",
+        solutionCode: `function sicherTeilen(a, b) {
+  if (b === 0) {
+    throw new Error("Kann nicht durch Null teilen!");
+  }
+  return a / b;
+}
+try {
+  console.log(sicherTeilen(20, 4));
+  console.log(sicherTeilen(10, 0));
+} catch (e) {
+  console.log("Fehler: " + e.message);
+}`,
+      },
+    },
+    {
+      id: "js-17",
+      trackId: "js",
+      title: "⚡ Mini-Projekt: Browser-Rechner",
+      summary: "Baue deinen ersten echten Taschenrechner im Browser!",
+      minutes: 30,
+      xp: 120,
+      contentMd: `# ⚡ Mini-Projekt: Browser-Rechner
+
+> *"Die Handwerker-Quest! Du hast die Werkzeuge gelernt – jetzt baust du dein erstes echtes Werkzeug."*
+
+Du baust einen funktionierenden Taschenrechner mit HTML, CSS und JavaScript!
+
+### Was du brauchst:
+- Ein **Display** das die Zahlen anzeigt
+- **Zahlen-Buttons** (0-9)
+- **Operator-Buttons** (+, -, ×, ÷)
+- Eine **Equals-Taste** (=)
+
+### Architektur:
+\`\`\`js
+let anzeige = "";
+
+function drückeZahl(zahl) {
+  anzeige += zahl;
+  // Display aktualisieren
+}
+
+function drückeOperator(op) {
+  anzeige += op;
+}
+
+function berechne() {
+  try {
+    const ergebnis = eval(anzeige.replace("×", "*").replace("÷", "/"));
+    anzeige = String(ergebnis);
+  } catch {
+    anzeige = "Fehler";
+  }
+}
+
+function lösche() {
+  anzeige = "";
+}
+\`\`\`
+
+Baue die HTML-Struktur mit einem Grid-Layout und verknüpfe alle Buttons!`,
+      exercise: {
+        language: "html",
+        title: "Taschenrechner",
+        instructionsMd: `Baue einen **vollständigen Taschenrechner** mit:
+- Display-Bereich
+- Zahlen 0–9
+- Operatoren +, -, ×, ÷
+- = Taste und C (Clear)`,
+        starterCode: `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Mein Rechner ⚡</title>
+  <style>
+    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #1a1a2e; font-family: monospace; }
+    .rechner { background: #16213e; border-radius: 20px; padding: 20px; box-shadow: 0 0 40px rgba(100,100,255,0.3); }
+    #display { background: #0f3460; color: #e94560; font-size: 2em; text-align: right; padding: 15px; border-radius: 10px; margin-bottom: 15px; min-height: 60px; word-break: break-all; }
+    .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    button { padding: 18px; font-size: 1.2em; border: none; border-radius: 10px; cursor: pointer; background: #0f3460; color: white; transition: transform 0.1s; }
+    button:active { transform: scale(0.95); }
+    .op { background: #533483; }
+    .equals { background: #e94560; grid-column: span 2; }
+    .clear { background: #e94560; }
+  </style>
+</head>
+<body>
+  <div class="rechner">
+    <div id="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="lösche()">C</button>
+      <button onclick="drückeZeichen('%')">%</button>
+      <button class="op" onclick="drückeZeichen('÷')">÷</button>
+      <button class="op" onclick="drückeZeichen('×')">×</button>
+
+      <button onclick="drückeZeichen('7')">7</button>
+      <button onclick="drückeZeichen('8')">8</button>
+      <button onclick="drückeZeichen('9')">9</button>
+      <button class="op" onclick="drückeZeichen('-')">-</button>
+
+      <button onclick="drückeZeichen('4')">4</button>
+      <button onclick="drückeZeichen('5')">5</button>
+      <button onclick="drückeZeichen('6')">6</button>
+      <button class="op" onclick="drückeZeichen('+')">+</button>
+
+      <button onclick="drückeZeichen('1')">1</button>
+      <button onclick="drückeZeichen('2')">2</button>
+      <button onclick="drückeZeichen('3')">3</button>
+      <button class="equals" onclick="berechne()">=</button>
+
+      <button onclick="drückeZeichen('0')" style="grid-column: span 2">0</button>
+      <button onclick="drückeZeichen('.')">.</button>
+    </div>
+  </div>
+
+  <script>
+    let eingabe = "";
+
+    function drückeZeichen(z) {
+      // Dein Code hier
+      document.getElementById("display").textContent = eingabe || "0";
+    }
+
+    function berechne() {
+      try {
+        const ausdruck = eingabe.replace(/×/g, "*").replace(/÷/g, "/");
+        eingabe = String(eval(ausdruck));
+        document.getElementById("display").textContent = eingabe;
+      } catch {
+        document.getElementById("display").textContent = "Fehler";
+        eingabe = "";
+      }
+    }
+
+    function lösche() {
+      eingabe = "";
+      document.getElementById("display").textContent = "0";
+    }
+  </script>
+</body>
+</html>`,
+        check: { kind: "contains", needles: ["onclick", "eval", "display"] },
+        hintMd: "In `drückeZeichen(z)`: `eingabe += z;` – damit werden Zeichen angehängt!",
+        solutionCode: `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Mein Rechner ⚡</title>
+  <style>
+    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #1a1a2e; font-family: monospace; }
+    .rechner { background: #16213e; border-radius: 20px; padding: 20px; box-shadow: 0 0 40px rgba(100,100,255,0.3); }
+    #display { background: #0f3460; color: #e94560; font-size: 2em; text-align: right; padding: 15px; border-radius: 10px; margin-bottom: 15px; min-height: 60px; word-break: break-all; }
+    .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    button { padding: 18px; font-size: 1.2em; border: none; border-radius: 10px; cursor: pointer; background: #0f3460; color: white; transition: transform 0.1s; }
+    button:active { transform: scale(0.95); }
+    .op { background: #533483; }
+    .equals { background: #e94560; grid-column: span 2; }
+    .clear { background: #e94560; }
+  </style>
+</head>
+<body>
+  <div class="rechner">
+    <div id="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="lösche()">C</button>
+      <button onclick="drückeZeichen('%')">%</button>
+      <button class="op" onclick="drückeZeichen('÷')">÷</button>
+      <button class="op" onclick="drückeZeichen('×')">×</button>
+      <button onclick="drückeZeichen('7')">7</button>
+      <button onclick="drückeZeichen('8')">8</button>
+      <button onclick="drückeZeichen('9')">9</button>
+      <button class="op" onclick="drückeZeichen('-')">-</button>
+      <button onclick="drückeZeichen('4')">4</button>
+      <button onclick="drückeZeichen('5')">5</button>
+      <button onclick="drückeZeichen('6')">6</button>
+      <button class="op" onclick="drückeZeichen('+')">+</button>
+      <button onclick="drückeZeichen('1')">1</button>
+      <button onclick="drückeZeichen('2')">2</button>
+      <button onclick="drückeZeichen('3')">3</button>
+      <button class="equals" onclick="berechne()">=</button>
+      <button onclick="drückeZeichen('0')" style="grid-column: span 2">0</button>
+      <button onclick="drückeZeichen('.')">.</button>
+    </div>
+  </div>
+  <script>
+    let eingabe = "";
+    function drückeZeichen(z) { eingabe += z; document.getElementById("display").textContent = eingabe; }
+    function berechne() {
+      try {
+        const ausdruck = eingabe.replace(/×/g,"*").replace(/÷/g,"/");
+        eingabe = String(eval(ausdruck));
+        document.getElementById("display").textContent = eingabe;
+      } catch { document.getElementById("display").textContent = "Fehler"; eingabe = ""; }
+    }
+    function lösche() { eingabe = ""; document.getElementById("display").textContent = "0"; }
+  </script>
+</body>
+</html>`,
+      },
+    },
+    {
+      id: "js-18",
+      trackId: "js",
+      title: "Klassen – Blaupausen-Magie",
+      summary: "Erstelle Blaupausen für Objekte und erschaffe ganze Armeen davon!",
+      minutes: 20,
+      xp: 75,
+      contentMd: `# 🏗️ Klassen – Blaupausen-Magie
+
+> *"Ein Architekt zeichnet eine Blaupause – und danach können hundert Häuser gebaut werden. Klassen sind Blaupausen für Objekte!"*
+
+\`\`\`js
+class Held {
+  constructor(name, hp) {
+    this.name = name;
+    this.hp = hp;
+    this.level = 1;
+  }
+
+  angreifen() {
+    console.log(this.name + " greift an! ⚔️");
+  }
+
+  levelUp() {
+    this.level++;
+    this.hp += 20;
+    console.log(this.name + " ist jetzt Level " + this.level + "!");
+  }
+}
+
+// Erstelle Held-Objekte:
+const luna = new Held("Luna", 100);
+const max = new Held("Max", 80);
+
+luna.angreifen(); // Luna greift an! ⚔️
+luna.levelUp();   // Luna ist jetzt Level 2!
+console.log(luna.hp); // 120
+\`\`\`
+
+### Getter & Setter:
+\`\`\`js
+class Drache {
+  constructor(name) {
+    this.name = name;
+    this._hp = 500;
+  }
+
+  get status() {
+    return this._hp > 100 ? "Stark 💪" : "Schwach 😰";
+  }
+}
+
+const smaug = new Drache("Smaug");
+console.log(smaug.status); // Stark 💪
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Tier-Klasse",
+        instructionsMd: `Erstelle eine Klasse \`Tier\` mit:
+- \`constructor(name, art, geraeusch)\`
+- Methode \`sprechen()\` die ausgibt: **"[Name] sagt: [Geräusch]!"**
+
+Erstelle dann 2 Tiere und lass sie sprechen!`,
+        starterCode: `class Tier {
+  constructor(name, art, geraeusch) {
+    // Dein Code hier
+  }
+
+  sprechen() {
+    // Dein Code hier
+  }
+}
+
+const hund = new Tier("Bello", "Hund", "Wuff");
+const katze = new Tier("Mimi", "Katze", "Miau");
+
+hund.sprechen();
+katze.sprechen();
+`,
+        check: { kind: "js_console_includes", expected: "Bello" },
+        hintMd: "`this.name = name; // im constructor`\n`console.log(this.name + \" sagt: \" + this.geraeusch + \"!\"); // in sprechen()`",
+        solutionCode: `class Tier {
+  constructor(name, art, geraeusch) {
+    this.name = name;
+    this.art = art;
+    this.geraeusch = geraeusch;
+  }
+  sprechen() {
+    console.log(this.name + " sagt: " + this.geraeusch + "!");
+  }
+}
+const hund = new Tier("Bello", "Hund", "Wuff");
+const katze = new Tier("Mimi", "Katze", "Miau");
+hund.sprechen();
+katze.sprechen();`,
+      },
+    },
+    {
+      id: "js-19",
+      trackId: "js",
+      title: "Promises – Versprechen der Maschine",
+      summary: "Lerne asynchronen Code zu schreiben – wenn Dinge Zeit brauchen!",
+      minutes: 20,
+      xp: 80,
+      contentMd: `# 🤝 Promises – Versprechen der Maschine
+
+> *"Der Bote verspricht die Nachricht zu überbringen – aber erst nach der Reise. Bis dahin kann das Königreich weiterarbeiten."*
+
+Manchmal dauern Dinge – Daten laden, warten... Dafür gibt es **Promises**:
+
+\`\`\`js
+// Ein Promise erstellen:
+const versprechen = new Promise((resolve, reject) => {
+  // Simuliere eine Verzögerung:
+  setTimeout(() => {
+    resolve("Die Daten sind da! 📦");
+  }, 1000);
+});
+
+// Auf das Ergebnis warten:
+versprechen
+  .then(daten => console.log(daten))
+  .catch(fehler => console.log("Fehler: " + fehler));
+\`\`\`
+
+### Promise-Status:
+- **pending** – läuft noch (Bote ist unterwegs)
+- **fulfilled** – erfolgreich (Bote hat geliefert)
+- **rejected** – Fehler (Bote ist gestolpert)
+
+### Mehrere Promises gleichzeitig:
+\`\`\`js
+const p1 = Promise.resolve("Ergebnis 1");
+const p2 = Promise.resolve("Ergebnis 2");
+const p3 = Promise.resolve("Ergebnis 3");
+
+Promise.all([p1, p2, p3]).then(ergebnisse => {
+  console.log(ergebnisse); // ["Ergebnis 1", "Ergebnis 2", "Ergebnis 3"]
+});
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Koch-Versprechen",
+        instructionsMd: `Erstelle eine Funktion \`koche(gericht)\` die ein **Promise** zurückgibt.
+
+Das Promise soll nach einer kurzen Wartezeit (mit setTimeout) das Gericht "servieren".
+
+Nutze \`.then()\` um "Guten Appetit!" auszugeben!`,
+        starterCode: `function koche(gericht) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("🍽️ " + gericht + " ist fertig!");
+    }, 100); // 100ms warten
+  });
+}
+
+koche("Pizza")
+  .then(nachricht => {
+    console.log(nachricht);
+    console.log("Guten Appetit!");
+  });
+`,
+        check: { kind: "js_console_includes", expected: "Pizza" },
+        hintMd: "`resolve(\"🍽️ \" + gericht + \" ist fertig!\");`",
+        solutionCode: `function koche(gericht) {
+  return new Promise((resolve) => {
+    setTimeout(() => { resolve("🍽️ " + gericht + " ist fertig!"); }, 100);
+  });
+}
+koche("Pizza").then(nachricht => { console.log(nachricht); console.log("Guten Appetit!"); });`,
+      },
+    },
+    {
+      id: "js-20",
+      trackId: "js",
+      title: "async/await – Sauberere Promises",
+      summary: "Schreibe asynchronen Code so, als wäre er synchron – viel lesbarer!",
+      minutes: 18,
+      xp: 75,
+      contentMd: `# ⚡ async/await – Die elegante Art
+
+> *"Statt verwirrenden Kettenbriefen schreibt der weise Magier klare Anweisungen – eine nach der anderen."*
+
+**async/await** ist syntaktischer Zucker für Promises – viel lesbarer:
+
+\`\`\`js
+// Mit .then():
+ladeNutzer()
+  .then(nutzer => ladeBestellungen(nutzer.id))
+  .then(bestellungen => console.log(bestellungen));
+
+// Mit async/await:
+async function zeigeDaten() {
+  const nutzer = await ladeNutzer();
+  const bestellungen = await ladeBestellungen(nutzer.id);
+  console.log(bestellungen);
+}
+\`\`\`
+
+### Fehler mit try/catch:
+\`\`\`js
+async function ladeDaten() {
+  try {
+    const antwort = await fetch("https://api.example.com/daten");
+    const json = await antwort.json();
+    console.log(json);
+  } catch (fehler) {
+    console.log("Fehler beim Laden: " + fehler.message);
+  }
+}
+\`\`\`
+
+### Simulation ohne echtes Internet:
+\`\`\`js
+function simuliereFetch(url) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve({ status: "ok", url }), 200);
+  });
+}
+
+async function main() {
+  const daten = await simuliereFetch("https://meine-api.de");
+  console.log("Antwort von: " + daten.url);
+}
+
+main();
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Abenteuer-Lader",
+        instructionsMd: `Schreibe eine **async Funktion** \`starteAbenteuer()\` die:
+1. 100ms wartet (mit einem Promise/setTimeout)
+2. Dann "Das Abenteuer beginnt! 🗺️" ausgibt
+3. Dann "Held betritt den Dungeon... ⚔️" ausgibt
+
+Ruf die Funktion auf!`,
+        starterCode: `function warte(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function starteAbenteuer() {
+  // Warte 100ms:
+  await warte(100);
+  // Gib die Nachrichten aus:
+
+}
+
+starteAbenteuer();
+`,
+        check: { kind: "js_console_includes", expected: "Abenteuer" },
+        hintMd: "`console.log(\"Das Abenteuer beginnt! 🗺️\");`",
+        solutionCode: `function warte(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+async function starteAbenteuer() {
+  await warte(100);
+  console.log("Das Abenteuer beginnt! 🗺️");
+  console.log("Held betritt den Dungeon... ⚔️");
+}
+starteAbenteuer();`,
+      },
+    },
+    {
+      id: "js-21",
+      trackId: "js",
+      title: "localStorage – Der Gedächtnisstein",
+      summary: "Speichere Daten im Browser – sie bleiben auch nach dem Neuladen!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# 🪨 localStorage – Der Gedächtnisstein
+
+> *"Ein magischer Stein der alles behält – selbst wenn das Feuer erlischt und die Kerze neu entzündet wird."*
+
+**localStorage** speichert Daten dauerhaft im Browser:
+
+\`\`\`js
+// Speichern:
+localStorage.setItem("name", "Luna");
+localStorage.setItem("punkte", "150");
+
+// Lesen:
+const name = localStorage.getItem("name"); // "Luna"
+const punkte = localStorage.getItem("punkte"); // "150" (immer String!)
+
+// Löschen:
+localStorage.removeItem("punkte");
+
+// Alles löschen:
+localStorage.clear();
+\`\`\`
+
+### Objekte speichern (JSON):
+\`\`\`js
+const held = { name: "Luna", level: 5, xp: 350 };
+
+// Speichern:
+localStorage.setItem("held", JSON.stringify(held));
+
+// Laden:
+const gespeichert = localStorage.getItem("held");
+const heldWiederhergestellt = JSON.parse(gespeichert);
+console.log(heldWiederhergestellt.name); // "Luna"
+\`\`\`
+
+### Praxis – Besuchs-Zähler:
+\`\`\`js
+const besuche = parseInt(localStorage.getItem("besuche") || "0") + 1;
+localStorage.setItem("besuche", String(besuche));
+console.log("Du bist schon " + besuche + " mal hier!");
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Highscore speichern",
+        instructionsMd: `Speichere einen **Highscore** in localStorage.
+
+1. Lies den alten Highscore (oder 0 wenn keiner da ist)
+2. Wenn der neue Wert höher ist: speichere ihn
+3. Gib den aktuellen Highscore aus`,
+        starterCode: `const neuerPunktestand = 1500;
+
+// 1. Alten Highscore lesen (oder 0):
+const alterHighscore = parseInt(localStorage.getItem("highscore") || "0");
+
+// 2. Vergleichen und ggf. speichern:
+if (neuerPunktestand > alterHighscore) {
+  // Speichere neuerPunktestand:
+
+  console.log("Neuer Highscore! 🏆");
+}
+
+// 3. Aktuellen Highscore ausgeben:
+const aktuellerHighscore = parseInt(localStorage.getItem("highscore") || "0");
+console.log("Highscore: " + aktuellerHighscore);
+`,
+        check: { kind: "js_console_includes", expected: "1500" },
+        hintMd: "`localStorage.setItem(\"highscore\", String(neuerPunktestand));`",
+        solutionCode: `const neuerPunktestand = 1500;
+const alterHighscore = parseInt(localStorage.getItem("highscore") || "0");
+if (neuerPunktestand > alterHighscore) {
+  localStorage.setItem("highscore", String(neuerPunktestand));
+  console.log("Neuer Highscore! 🏆");
+}
+const aktuellerHighscore = parseInt(localStorage.getItem("highscore") || "0");
+console.log("Highscore: " + aktuellerHighscore);`,
+      },
+    },
+    {
+      id: "js-22",
+      trackId: "js",
+      title: "🏰 Projekt: To-Do App",
+      summary: "Baue eine vollständige To-Do App mit localStorage – deine Aufgaben bleiben gespeichert!",
+      minutes: 35,
+      xp: 150,
+      contentMd: `# 🏰 Projekt: To-Do App
+
+> *"Das Königreich braucht einen Aufgaben-Verwalter! Deine Quests sollen nie vergessen werden."*
+
+Du baust eine vollständige To-Do App mit:
+- ✅ Aufgaben hinzufügen
+- 🗑️ Aufgaben löschen
+- ☑️ Aufgaben abhaken
+- 💾 Speicherung in localStorage
+
+### Daten-Struktur:
+\`\`\`js
+const aufgaben = [
+  { id: 1, text: "HTML lernen", erledigt: true },
+  { id: 2, text: "CSS üben", erledigt: false },
+];
+\`\`\`
+
+### Speichern & Laden:
+\`\`\`js
+function speichern() {
+  localStorage.setItem("todos", JSON.stringify(aufgaben));
+}
+
+function laden() {
+  const gespeichert = localStorage.getItem("todos");
+  return gespeichert ? JSON.parse(gespeichert) : [];
+}
+\`\`\`
+
+Baue jetzt die komplette App!`,
+      exercise: {
+        language: "html",
+        title: "To-Do App",
+        instructionsMd: `Vervollständige die **To-Do App**!
+
+Die Funktionen \`hinzufügen()\`, \`löschen(id)\` und \`umschalten(id)\` müssen implementiert werden.`,
+        starterCode: `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Meine Quests 🏰</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #1a1a2e; color: white; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; color: #a78bfa; }
+    .eingabe { display: flex; gap: 10px; margin-bottom: 20px; }
+    input { flex: 1; padding: 12px; border-radius: 10px; border: none; background: #16213e; color: white; font-size: 1em; }
+    button { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; background: #7c3aed; color: white; font-weight: bold; }
+    .aufgabe { display: flex; align-items: center; gap: 10px; background: #16213e; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+    .aufgabe.erledigt span { text-decoration: line-through; opacity: 0.5; }
+    .aufgabe span { flex: 1; }
+    .lösch-btn { background: #e94560; padding: 8px 12px; }
+    .check-btn { background: #10b981; padding: 8px 12px; }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Meine Quests</h1>
+  <div class="eingabe">
+    <input id="eingabe" type="text" placeholder="Neue Quest eingeben..." onkeydown="if(event.key==='Enter') hinzufügen()">
+    <button onclick="hinzufügen()">+ Quest</button>
+  </div>
+  <div id="liste"></div>
+
+  <script>
+    let aufgaben = JSON.parse(localStorage.getItem("quests") || "[]");
+    let naechsteId = aufgaben.length > 0 ? Math.max(...aufgaben.map(a => a.id)) + 1 : 1;
+
+    function speichern() {
+      localStorage.setItem("quests", JSON.stringify(aufgaben));
+    }
+
+    function rendern() {
+      const liste = document.getElementById("liste");
+      liste.innerHTML = aufgaben.map(a => \`
+        <div class="aufgabe \${a.erledigt ? 'erledigt' : ''}">
+          <button class="check-btn" onclick="umschalten(\${a.id})">\${a.erledigt ? '↩️' : '✅'}</button>
+          <span>\${a.text}</span>
+          <button class="lösch-btn" onclick="löschen(\${a.id})">🗑️</button>
+        </div>
+      \`).join("");
+    }
+
+    function hinzufügen() {
+      const eingabe = document.getElementById("eingabe");
+      const text = eingabe.value.trim();
+      if (!text) return;
+      // Füge neue Aufgabe zum Array hinzu:
+      aufgaben.push({ id: naechsteId++, text, erledigt: false });
+      eingabe.value = "";
+      speichern();
+      rendern();
+    }
+
+    function löschen(id) {
+      // Entferne die Aufgabe mit dieser id:
+      aufgaben = aufgaben.filter(a => a.id !== id);
+      speichern();
+      rendern();
+    }
+
+    function umschalten(id) {
+      // Schalte erledigt um:
+      const aufgabe = aufgaben.find(a => a.id === id);
+      if (aufgabe) aufgabe.erledigt = !aufgabe.erledigt;
+      speichern();
+      rendern();
+    }
+
+    rendern();
+  </script>
+</body>
+</html>`,
+        check: { kind: "contains", needles: ["hinzufügen", "löschen", "umschalten", "localStorage"] },
+        hintMd: "Die Hauptlogik ist schon implementiert! Stelle sicher dass alle drei Funktionen aufgerufen werden können.",
+      },
+    },
+    {
+      id: "js-23",
+      trackId: "js",
+      title: "Rekursion – Spiegel im Spiegel",
+      summary: "Eine Funktion die sich selbst aufruft – entdecke den Spiegel der Magie!",
+      minutes: 22,
+      xp: 80,
+      contentMd: `# 🪞 Rekursion – Spiegel im Spiegel
+
+> *"Was passiert wenn zwei Spiegel sich gegenseitig ansehen? Endlose Spiegelungen! Rekursion funktioniert ähnlich – aber mit Ausgang."*
+
+Eine **rekursive Funktion** ruft sich selbst auf:
+
+\`\`\`js
+function countdown(n) {
+  if (n <= 0) {
+    console.log("🚀 LAUNCH!");
+    return;
+  }
+  console.log(n);
+  countdown(n - 1); // ruft sich selbst auf!
+}
+
+countdown(5);
+// 5, 4, 3, 2, 1, 🚀 LAUNCH!
+\`\`\`
+
+**Wichtig:** Immer ein **Abbruchkriterium** (Base Case) definieren – sonst endlose Schleife!
+
+### Fakultät berechnen:
+\`\`\`js
+function faktultaet(n) {
+  if (n <= 1) return 1;        // Base Case
+  return n * faktultaet(n - 1); // Rekursiver Aufruf
+}
+
+console.log(faktultaet(5)); // 5 × 4 × 3 × 2 × 1 = 120
+\`\`\`
+
+### Fibonacci-Zahlen:
+\`\`\`js
+function fib(n) {
+  if (n <= 1) return n;
+  return fib(n - 1) + fib(n - 2);
+}
+
+console.log(fib(8)); // 21
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Summe mit Rekursion",
+        instructionsMd: `Schreibe eine **rekursive Funktion** \`summe(n)\` die alle Zahlen von 1 bis n addiert.
+
+Beispiel: \`summe(5)\` → 1+2+3+4+5 = **15**`,
+        starterCode: `function summe(n) {
+  // Base Case: was passiert wenn n <= 0?
+  if (n <= 0) return 0;
+
+  // Rekursiver Fall:
+  return /* dein Code */;
+}
+
+console.log(summe(5));  // 15
+console.log(summe(10)); // 55
+console.log(summe(100)); // 5050
+`,
+        check: { kind: "js_console_includes", expected: "5050" },
+        hintMd: "`return n + summe(n - 1);` – addiere n zur Summe der kleineren Zahlen",
+        solutionCode: `function summe(n) {
+  if (n <= 0) return 0;
+  return n + summe(n - 1);
+}
+console.log(summe(5));
+console.log(summe(10));
+console.log(summe(100));`,
+      },
+    },
+    {
+      id: "js-24",
+      trackId: "js",
+      title: "Closures – Geheimnisvolle Kapseln",
+      summary: "Funktionen die Daten einschließen und sich 'erinnern'!",
+      minutes: 20,
+      xp: 85,
+      contentMd: `# 🔐 Closures – Geheimnisvolle Kapseln
+
+> *"Ein verzauberter Beutel der Dinge speichert die du hineinlegst – und sie nie vergisst."*
+
+Ein **Closure** ist eine Funktion die Zugriff auf Variablen ihrer äußeren Funktion behält:
+
+\`\`\`js
+function erstelleZähler() {
+  let zähler = 0; // Diese Variable "lebt" im Closure
+
+  return function() {
+    zähler++;
+    return zähler;
+  };
+}
+
+const zähl = erstelleZähler();
+console.log(zähl()); // 1
+console.log(zähl()); // 2
+console.log(zähl()); // 3
+\`\`\`
+
+### Warum sind Closures nützlich?
+
+**Private Daten:**
+\`\`\`js
+function bankKonto(startBetrag) {
+  let guthaben = startBetrag; // privat!
+
+  return {
+    einzahlen(betrag) { guthaben += betrag; },
+    auszahlen(betrag) {
+      if (betrag > guthaben) {
+        console.log("Nicht genug Guthaben!");
+        return;
+      }
+      guthaben -= betrag;
+    },
+    kontostand() { return guthaben; },
+  };
+}
+
+const konto = bankKonto(100);
+konto.einzahlen(50);
+console.log(konto.kontostand()); // 150
+konto.auszahlen(30);
+console.log(konto.kontostand()); // 120
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Multiplizier-Fabrik",
+        instructionsMd: `Erstelle eine Funktion \`multipliziereMit(faktor)\` die eine **neue Funktion** zurückgibt.
+
+Die zurückgegebene Funktion soll eine Zahl mit dem Faktor multiplizieren.
+
+Beispiel: \`const dreifach = multipliziereMit(3);\`
+Dann: \`dreifach(5)\` → **15**`,
+        starterCode: `function multipliziereMit(faktor) {
+  return function(zahl) {
+    // Gib das Ergebnis zurück:
+    return /* dein Code */;
+  };
+}
+
+const verdoppeln = multipliziereMit(2);
+const verdreifachen = multipliziereMit(3);
+const verzehnfachen = multipliziereMit(10);
+
+console.log(verdoppeln(5));     // 10
+console.log(verdreifachen(7));  // 21
+console.log(verzehnfachen(4));  // 40
+`,
+        check: { kind: "js_console_includes", expected: "21" },
+        hintMd: "`return zahl * faktor;`",
+        solutionCode: `function multipliziereMit(faktor) {
+  return function(zahl) { return zahl * faktor; };
+}
+const verdoppeln = multipliziereMit(2);
+const verdreifachen = multipliziereMit(3);
+const verzehnfachen = multipliziereMit(10);
+console.log(verdoppeln(5));
+console.log(verdreifachen(7));
+console.log(verzehnfachen(4));`,
+      },
+    },
+    {
+      id: "js-25",
+      trackId: "js",
+      title: "🏆 Capstone: Memory-Spiel",
+      summary: "Dein Meisterwerk! Baue ein vollständiges Memory-Spiel im Browser.",
+      minutes: 45,
+      xp: 200,
+      contentMd: `# 🏆 Capstone: Memory-Spiel
+
+> *"Du hast alle Zauber gelernt. Jetzt ist es Zeit das Meisterwerk zu erschaffen – ein Spiel das andere spielen können!"*
+
+Du baust ein vollständiges **Memory-Spiel** mit:
+- 🃏 16 Karten (8 Paare)
+- 🔄 Karten umdrehen mit Animation
+- ✅ Paare erkennen
+- 🏆 Gewinn-Erkennung
+- 📊 Versuchs-Zähler
+
+### Spiellogik:
+\`\`\`js
+const symbole = ["🐉", "🦄", "⚔️", "🏆", "💎", "🔮", "🧙", "⚡"];
+const karten = [...symbole, ...symbole]; // doppelt
+// Mische die Karten (Fisher-Yates):
+for (let i = karten.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [karten[i], karten[j]] = [karten[j], karten[i]];
+}
+\`\`\`
+
+Setze CSS Transitions ein für das Umdrehen der Karten!`,
+      exercise: {
+        language: "html",
+        title: "Memory-Spiel",
+        instructionsMd: `Baue das **vollständige Memory-Spiel**!
+
+Vervollständige die Funktion \`karteKlicken(index)\` mit der Spiellogik.`,
+        starterCode: `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Quest 🧠</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #1a1a2e; color: white; font-family: sans-serif; padding: 20px; text-align: center; }
+    h1 { color: #a78bfa; margin-bottom: 10px; }
+    #info { margin-bottom: 20px; color: #94a3b8; }
+    #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 400px; margin: 0 auto; }
+    .karte { aspect-ratio: 1; border-radius: 12px; cursor: pointer; font-size: 2em; display: flex; align-items: center; justify-content: center; background: #16213e; border: 2px solid #334155; transition: transform 0.2s; user-select: none; }
+    .karte:hover:not(.aufgedeckt):not(.gefunden) { transform: scale(1.05); }
+    .karte.aufgedeckt { background: #1e3a5f; border-color: #7c3aed; }
+    .karte.gefunden { background: #064e3b; border-color: #10b981; opacity: 0.7; cursor: default; }
+    #neu-btn { margin-top: 20px; padding: 12px 30px; background: #7c3aed; border: none; border-radius: 10px; color: white; font-size: 1em; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🧠 Memory Quest</h1>
+  <div id="info">Versuche: <span id="versuche">0</span> | Gefunden: <span id="gefunden">0</span>/8</div>
+  <div id="grid"></div>
+  <button id="neu-btn" onclick="neuesSpiel()">🔄 Neues Spiel</button>
+
+  <script>
+    const SYMBOLE = ["🐉","🦄","⚔️","🏆","💎","🔮","🧙","⚡"];
+    let karten = [];
+    let aufgedeckt = [];
+    let versuche = 0;
+    let gefundenAnzahl = 0;
+    let blockiert = false;
+
+    function neuesSpiel() {
+      const doppelt = [...SYMBOLE, ...SYMBOLE];
+      // Mischen (Fisher-Yates):
+      for (let i = doppelt.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [doppelt[i], doppelt[j]] = [doppelt[j], doppelt[i]];
+      }
+      karten = doppelt.map((symbol, i) => ({ id: i, symbol, aufgedeckt: false, gefunden: false }));
+      aufgedeckt = [];
+      versuche = 0;
+      gefundenAnzahl = 0;
+      blockiert = false;
+      rendern();
+    }
+
+    function rendern() {
+      document.getElementById("versuche").textContent = versuche;
+      document.getElementById("gefunden").textContent = gefundenAnzahl;
+      const grid = document.getElementById("grid");
+      grid.innerHTML = karten.map((k, i) => \`
+        <div class="karte \${k.aufgedeckt || k.gefunden ? 'aufgedeckt' : ''} \${k.gefunden ? 'gefunden' : ''}"
+             onclick="karteKlicken(\${i})">
+          \${k.aufgedeckt || k.gefunden ? k.symbol : "❓"}
+        </div>
+      \`).join("");
+    }
+
+    function karteKlicken(index) {
+      const karte = karten[index];
+      if (blockiert || karte.aufgedeckt || karte.gefunden) return;
+
+      karte.aufgedeckt = true;
+      aufgedeckt.push(index);
+      rendern();
+
+      if (aufgedeckt.length === 2) {
+        versuche++;
+        const [a, b] = aufgedeckt;
+        if (karten[a].symbol === karten[b].symbol) {
+          // Paar gefunden!
+          karten[a].gefunden = true;
+          karten[b].gefunden = true;
+          karten[a].aufgedeckt = false;
+          karten[b].aufgedeckt = false;
+          gefundenAnzahl++;
+          aufgedeckt = [];
+          rendern();
+          if (gefundenAnzahl === 8) {
+            setTimeout(() => alert("🏆 Gewonnen in " + versuche + " Versuchen!"), 100);
+          }
+        } else {
+          // Kein Paar – nach kurzer Zeit wieder umdrehen:
+          blockiert = true;
+          setTimeout(() => {
+            karten[a].aufgedeckt = false;
+            karten[b].aufgedeckt = false;
+            aufgedeckt = [];
+            blockiert = false;
+            rendern();
+          }, 800);
+        }
+      }
+    }
+
+    neuesSpiel();
+  </script>
+</body>
+</html>`,
+        check: { kind: "contains", needles: ["karteKlicken", "gefunden", "neuesSpiel"] },
+        hintMd: "Die Spiellogik ist vollständig implementiert! Starte das Spiel und finde alle 8 Paare.",
+      },
+    },
+  ],
+};
+
 const PY: Track = {
   id: "python",
   title: "Python‑Playground",
@@ -2023,7 +4569,1914 @@ versuche = [50, 25, 37, 31, 34]
   ],
 };
 
-export const TRACKS: Track[] = [WEB, JS, PY];
+    {
+      id: "py-11",
+      trackId: "python",
+      title: "Tupel & Sets – Unveränderliche Schätze",
+      summary: "Lerne zwei spezielle Sammlungen: Tupel (unveränderlich) und Sets (einmalig)!",
+      minutes: 15,
+      xp: 60,
+      contentMd: `# 📦 Tupel & Sets
+
+> *"Im Schatztresor des Königs gibt es versiegelte Kisten (Tupel) und magische Körbe ohne Duplikate (Sets)."*
+
+## Tupel – versiegelte Listen
+Tupel sind wie Listen, aber **unveränderlich**:
+\`\`\`python
+koordinaten = (10, 20)
+farben = ("rot", "grün", "blau")
+
+print(koordinaten[0])  # 10
+# koordinaten[0] = 5  # Fehler! Nicht änderbar
+
+# Tuple unpacking:
+x, y = koordinaten
+print(x, y)  # 10 20
+\`\`\`
+
+## Sets – Mengen ohne Duplikate
+\`\`\`python
+zahlen = {1, 2, 3, 2, 1, 3}
+print(zahlen)  # {1, 2, 3} – keine Duplikate!
+
+fruechte = {"Apfel", "Banane", "Apfel"}
+fruechte.add("Mango")
+print(fruechte)  # {'Apfel', 'Banane', 'Mango'}
+
+# Mengenoperationen:
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+print(a & b)  # Schnittmenge: {3, 4}
+print(a | b)  # Vereinigung: {1, 2, 3, 4, 5, 6}
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Einmalige Wörter",
+        instructionsMd: `Erstelle aus der Wortliste ein **Set** um Duplikate zu entfernen.
+Gib dann aus wie viele einmalige Wörter es gibt!`,
+        starterCode: `woerter = ["Hallo", "Welt", "Hallo", "Python", "Welt", "Super", "Python", "Code"]
+
+# Erstelle ein Set:
+einmalig = set(woerter)
+
+print("Einmalige Wörter:", len(einmalig))
+print(einmalig)
+`,
+        check: { kind: "python_stdout_includes", expected: "4" },
+        hintMd: "`einmalig = set(woerter)` – Sets entfernen Duplikate automatisch!",
+        solutionCode: `woerter = ["Hallo", "Welt", "Hallo", "Python", "Welt", "Super", "Python", "Code"]
+einmalig = set(woerter)
+print("Einmalige Wörter:", len(einmalig))
+print(einmalig)`,
+      },
+    },
+    {
+      id: "py-12",
+      trackId: "python",
+      title: "List Comprehensions – Magische Listenfabrik",
+      summary: "Erstelle Listen in einer Zeile – die eleganteste Python-Magie!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# ✨ List Comprehensions
+
+> *"Statt stundenlang Steine zu schleppen, ruft der Magier eine einzige Beschwörung – und die Liste erscheint!"*
+
+\`\`\`python
+# Normal:
+quadrate = []
+for n in range(1, 6):
+    quadrate.append(n * n)
+
+# Mit List Comprehension:
+quadrate = [n * n for n in range(1, 6)]
+print(quadrate)  # [1, 4, 9, 16, 25]
+\`\`\`
+
+### Mit Bedingung (filter):
+\`\`\`python
+zahlen = range(1, 21)
+gerade = [n for n in zahlen if n % 2 == 0]
+print(gerade)  # [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+\`\`\`
+
+### Strings transformieren:
+\`\`\`python
+namen = ["anna", "ben", "clara"]
+gross = [name.capitalize() for name in namen]
+print(gross)  # ['Anna', 'Ben', 'Clara']
+
+laengen = [len(name) for name in namen]
+print(laengen)  # [4, 3, 5]
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Celsius zu Fahrenheit",
+        instructionsMd: `Konvertiere alle Celsius-Werte mit einer **List Comprehension** zu Fahrenheit.
+
+Formel: \`F = C * 9/5 + 32\``,
+        starterCode: `celsius = [0, 10, 20, 30, 37, 100]
+
+# Schreibe eine List Comprehension:
+fahrenheit = [/* dein Code */ for c in celsius]
+
+print(fahrenheit)
+`,
+        check: { kind: "python_stdout_includes", expected: "98.6" },
+        hintMd: "`fahrenheit = [c * 9/5 + 32 for c in celsius]`",
+        solutionCode: `celsius = [0, 10, 20, 30, 37, 100]
+fahrenheit = [c * 9/5 + 32 for c in celsius]
+print(fahrenheit)`,
+      },
+    },
+    {
+      id: "py-13",
+      trackId: "python",
+      title: "Exception Handling – Der Fehler-Ritter",
+      summary: "Fange Fehler ab und verhindere dass dein Programm abstürzt!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# 🛡️ Exception Handling
+
+> *"Ein weiser Ritter kennt die Fallen auf dem Weg und weiß wie er sicher hindurchkommt."*
+
+\`\`\`python
+try:
+    zahl = int("keine_zahl")  # Fehler!
+except ValueError:
+    print("Das ist keine Zahl!")
+
+# Mehrere Exceptions:
+try:
+    ergebnis = 10 / 0
+except ZeroDivisionError:
+    print("Division durch Null!")
+except ValueError as e:
+    print("Wert-Fehler:", e)
+finally:
+    print("Das läuft immer!")
+\`\`\`
+
+### Eigene Exceptions:
+\`\`\`python
+def pruefe_alter(alter):
+    if alter < 0:
+        raise ValueError("Alter kann nicht negativ sein!")
+    if alter > 150:
+        raise ValueError("Das ist unrealistisch!")
+    return f"Alter {alter} ist gültig."
+
+try:
+    print(pruefe_alter(25))   # OK
+    print(pruefe_alter(-5))   # Fehler!
+except ValueError as e:
+    print("Fehler:", e)
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Sicherer Taschenrechner",
+        instructionsMd: `Schreibe eine Funktion \`teile(a, b)\` die:
+1. Bei b=0 einen \`ZeroDivisionError\` abfängt
+2. Sonst das Ergebnis zurückgibt
+
+Teste mit verschiedenen Eingaben!`,
+        starterCode: `def teile(a, b):
+    try:
+        ergebnis = a / b
+        return ergebnis
+    except ZeroDivisionError:
+        return "Fehler: Division durch Null!"
+
+print(teile(10, 2))   # 5.0
+print(teile(15, 3))   # 5.0
+print(teile(7, 0))    # Fehlermeldung
+`,
+        check: { kind: "python_stdout_includes", expected: "5.0" },
+        hintMd: "`except ZeroDivisionError: return \"Fehler: Division durch Null!\"`",
+        solutionCode: `def teile(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return "Fehler: Division durch Null!"
+print(teile(10, 2))
+print(teile(15, 3))
+print(teile(7, 0))`,
+      },
+    },
+    {
+      id: "py-14",
+      trackId: "python",
+      title: "Strings meistern – Schriftrollen-Magie",
+      summary: "Lerne alle mächtigen String-Methoden um Text zu bearbeiten!",
+      minutes: 18,
+      xp: 65,
+      contentMd: `# 📜 String-Meisterschaft
+
+> *"Die alten Schriftrollen enthalten alle Geheimnisse – wenn man sie richtig lesen kann."*
+
+\`\`\`python
+text = "  Hallo, Python-Welt!  "
+
+# Aufräumen:
+print(text.strip())        # "Hallo, Python-Welt!"
+print(text.lower())        # "  hallo, python-welt!  "
+print(text.upper())        # "  HALLO, PYTHON-WELT!  "
+
+# Suchen & Ersetzen:
+print("Hallo Welt".replace("Welt", "Python"))  # "Hallo Python"
+print("Hallo Welt".find("Welt"))                # 6
+print("Hallo Welt".count("l"))                  # 3
+
+# Aufteilen:
+satz = "Apfel,Banane,Mango"
+fruechte = satz.split(",")
+print(fruechte)  # ['Apfel', 'Banane', 'Mango']
+
+# Zusammenfügen:
+print(" | ".join(fruechte))  # "Apfel | Banane | Mango"
+
+# f-Strings:
+name = "Luna"
+level = 5
+print(f"Held {name} ist auf Level {level}!")
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Text-Analyse",
+        instructionsMd: `Analysiere den Text und gib aus:
+1. Anzahl der Wörter
+2. Anzahl der Zeichen (ohne Leerzeichen)
+3. Den Text in Großbuchstaben`,
+        starterCode: `text = "Python ist eine tolle Programmiersprache fuer Abenteurer"
+
+# 1. Wörter zählen:
+woerter = text.split()
+print("Wörter:", len(woerter))
+
+# 2. Zeichen ohne Leerzeichen:
+zeichen = len(text.replace(" ", ""))
+print("Zeichen:", zeichen)
+
+# 3. Großbuchstaben:
+print(text.upper())
+`,
+        check: { kind: "python_stdout_includes", expected: "8" },
+        hintMd: "`text.split()` teilt am Leerzeichen auf. `text.replace(\" \", \"\")` entfernt Leerzeichen.",
+        solutionCode: `text = "Python ist eine tolle Programmiersprache fuer Abenteurer"
+woerter = text.split()
+print("Wörter:", len(woerter))
+zeichen = len(text.replace(" ", ""))
+print("Zeichen:", zeichen)
+print(text.upper())`,
+      },
+    },
+    {
+      id: "py-15",
+      trackId: "python",
+      title: "⚡ Mini-Projekt: Taschenrechner",
+      summary: "Baue einen Python-Taschenrechner mit Menü und Fehlerbehandlung!",
+      minutes: 30,
+      xp: 120,
+      contentMd: `# ⚡ Mini-Projekt: Python-Taschenrechner
+
+> *"Das erste große Werkzeug des Abenteurers: ein Rechner der nie abstürzt!"*
+
+Baue einen Taschenrechner mit:
+- Vier Grundrechenarten
+- Fehlerbehandlung (Division durch Null, ungültige Eingaben)
+- Schöner Ausgabe
+
+\`\`\`python
+def addiere(a, b): return a + b
+def subtrahiere(a, b): return a - b
+def multipliziere(a, b): return a * b
+def dividiere(a, b):
+    if b == 0:
+        raise ZeroDivisionError("Nicht durch Null!")
+    return a / b
+
+def rechne(a, op, b):
+    operationen = {
+        '+': addiere,
+        '-': subtrahiere,
+        '*': multipliziere,
+        '/': dividiere,
+    }
+    if op not in operationen:
+        raise ValueError(f"Unbekannter Operator: {op}")
+    return operationen[op](a, b)
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Vollständiger Taschenrechner",
+        instructionsMd: `Implementiere die Funktion \`rechne(a, op, b)\` und teste sie mit verschiedenen Berechnungen!`,
+        starterCode: `def rechne(a, op, b):
+    if op == '+':
+        return a + b
+    elif op == '-':
+        return a - b
+    elif op == '*':
+        return a * b
+    elif op == '/':
+        if b == 0:
+            return "Fehler: Division durch Null!"
+        return a / b
+    else:
+        return f"Unbekannter Operator: {op}"
+
+# Teste den Rechner:
+print(rechne(10, '+', 5))   # 15
+print(rechne(20, '-', 8))   # 12
+print(rechne(6, '*', 7))    # 42
+print(rechne(15, '/', 3))   # 5.0
+print(rechne(10, '/', 0))   # Fehlermeldung
+print(rechne(5, '%', 2))    # Unbekannter Operator
+`,
+        check: { kind: "python_stdout_includes", expected: "42" },
+        hintMd: "Alle Funktionen sind schon implementiert! Starte den Code und schau dir die Ergebnisse an.",
+        solutionCode: `def rechne(a, op, b):
+    if op == '+': return a + b
+    elif op == '-': return a - b
+    elif op == '*': return a * b
+    elif op == '/':
+        if b == 0: return "Fehler: Division durch Null!"
+        return a / b
+    else: return f"Unbekannter Operator: {op}"
+print(rechne(10, '+', 5))
+print(rechne(20, '-', 8))
+print(rechne(6, '*', 7))
+print(rechne(15, '/', 3))
+print(rechne(10, '/', 0))`,
+      },
+    },
+    {
+      id: "py-16",
+      trackId: "python",
+      title: "Klassen – Blaupausen erschaffen",
+      summary: "Erstelle eigene Datentypen mit Klassen – der Kern der OOP!",
+      minutes: 20,
+      xp: 75,
+      contentMd: `# 🏗️ Klassen in Python
+
+> *"Ein Architekt zeichnet eine Blaupause. Danach können hundert Häuser entstehen. Klassen sind Blaupausen für Objekte!"*
+
+\`\`\`python
+class Held:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+        self.level = 1
+
+    def angreifen(self):
+        schaden = self.level * 10
+        print(f"{self.name} greift an und macht {schaden} Schaden! ⚔️")
+
+    def level_up(self):
+        self.level += 1
+        self.hp += 20
+        print(f"🎉 {self.name} ist jetzt Level {self.level}!")
+
+    def __str__(self):
+        return f"Held({self.name}, HP:{self.hp}, Lvl:{self.level})"
+
+# Objekte erstellen:
+luna = Held("Luna", 100)
+max_held = Held("Max", 80)
+
+luna.angreifen()
+luna.level_up()
+print(luna)
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Auto-Klasse",
+        instructionsMd: `Erstelle eine Klasse \`Auto\` mit:
+- \`__init__(marke, ps)\`
+- Methode \`beschleunigen()\` die "+10 km/h" ausgibt
+- Methode \`infos()\` die Marke und PS ausgibt`,
+        starterCode: `class Auto:
+    def __init__(self, marke, ps):
+        self.marke = marke
+        self.ps = ps
+        self.geschwindigkeit = 0
+
+    def beschleunigen(self):
+        self.geschwindigkeit += 10
+        print(f"{self.marke} beschleunigt auf {self.geschwindigkeit} km/h! 🚗")
+
+    def infos(self):
+        print(f"Auto: {self.marke}, {self.ps} PS")
+
+mein_auto = Auto("BMW", 200)
+mein_auto.infos()
+mein_auto.beschleunigen()
+mein_auto.beschleunigen()
+`,
+        check: { kind: "python_stdout_includes", expected: "BMW" },
+        hintMd: "`self.marke = marke` im `__init__` speichert den Wert am Objekt.",
+        solutionCode: `class Auto:
+    def __init__(self, marke, ps):
+        self.marke = marke
+        self.ps = ps
+        self.geschwindigkeit = 0
+    def beschleunigen(self):
+        self.geschwindigkeit += 10
+        print(f"{self.marke} beschleunigt auf {self.geschwindigkeit} km/h! 🚗")
+    def infos(self):
+        print(f"Auto: {self.marke}, {self.ps} PS")
+mein_auto = Auto("BMW", 200)
+mein_auto.infos()
+mein_auto.beschleunigen()
+mein_auto.beschleunigen()`,
+      },
+    },
+    {
+      id: "py-17",
+      trackId: "python",
+      title: "Vererbung – Familien-Magie",
+      summary: "Erstelle spezialisierte Klassen die von anderen erben!",
+      minutes: 20,
+      xp: 80,
+      contentMd: `# 👨‍👩‍👧 Vererbung
+
+> *"Der Sohn des Magiers erbt alle Zauberkräfte des Vaters – und entwickelt noch zusätzliche Fähigkeiten!"*
+
+\`\`\`python
+class Tier:
+    def __init__(self, name):
+        self.name = name
+
+    def atmen(self):
+        print(f"{self.name} atmet.")
+
+    def sprechen(self):
+        print(f"{self.name} macht ein Geräusch.")
+
+class Hund(Tier):  # Hund erbt von Tier
+    def sprechen(self):  # Überschreibt die Eltern-Methode
+        print(f"{self.name} sagt: Wuff! 🐕")
+
+    def apportieren(self):
+        print(f"{self.name} bringt den Ball! 🎾")
+
+class Katze(Tier):
+    def sprechen(self):
+        print(f"{self.name} sagt: Miau! 🐈")
+
+bello = Hund("Bello")
+mimi = Katze("Mimi")
+
+bello.atmen()       # von Tier geerbt
+bello.sprechen()    # überschrieben: Wuff!
+bello.apportieren() # nur für Hunde
+mimi.sprechen()     # überschrieben: Miau!
+\`\`\`
+
+### super() – Eltern-Methode aufrufen:
+\`\`\`python
+class Zauberer(Held):
+    def __init__(self, name, hp, mana):
+        super().__init__(name, hp)  # Eltern-__init__ aufrufen
+        self.mana = mana
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Fahrzeug-Hierarchie",
+        instructionsMd: `Erstelle:
+- Klasse \`Fahrzeug\` mit \`name\` und Methode \`fahren()\`
+- Klasse \`Auto(Fahrzeug)\` mit Methode \`hupen()\`
+- Klasse \`Motorrad(Fahrzeug)\` mit Methode \`wheelie()\`
+
+Erstelle je ein Objekt und teste alle Methoden!`,
+        starterCode: `class Fahrzeug:
+    def __init__(self, name):
+        self.name = name
+
+    def fahren(self):
+        print(f"{self.name} fährt! 🛣️")
+
+class Auto(Fahrzeug):
+    def hupen(self):
+        print(f"{self.name}: Huuuup! 📯")
+
+class Motorrad(Fahrzeug):
+    def wheelie(self):
+        print(f"{self.name} macht einen Wheelie! 🏍️")
+
+mein_auto = Auto("Tesla")
+mein_bike = Motorrad("Harley")
+
+mein_auto.fahren()
+mein_auto.hupen()
+mein_bike.fahren()
+mein_bike.wheelie()
+`,
+        check: { kind: "python_stdout_includes", expected: "Tesla" },
+        hintMd: "`class Auto(Fahrzeug):` – so erbt Auto alle Methoden von Fahrzeug!",
+        solutionCode: `class Fahrzeug:
+    def __init__(self, name):
+        self.name = name
+    def fahren(self):
+        print(f"{self.name} fährt! 🛣️")
+class Auto(Fahrzeug):
+    def hupen(self):
+        print(f"{self.name}: Huuuup! 📯")
+class Motorrad(Fahrzeug):
+    def wheelie(self):
+        print(f"{self.name} macht einen Wheelie! 🏍️")
+mein_auto = Auto("Tesla")
+mein_bike = Motorrad("Harley")
+mein_auto.fahren()
+mein_auto.hupen()
+mein_bike.fahren()
+mein_bike.wheelie()`,
+      },
+    },
+    {
+      id: "py-18",
+      trackId: "python",
+      title: "Module & Bibliotheken",
+      summary: "Nutze mächtige Bibliotheken statt alles selbst zu schreiben!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# 📚 Module & Bibliotheken
+
+> *"Ein kluger Abenteurer baut das Rad nicht neu. Er geht in die magische Bibliothek und leiht sich das Wissen!"*
+
+Python kommt mit vielen eingebauten Modulen:
+
+\`\`\`python
+import math
+print(math.pi)           # 3.14159...
+print(math.sqrt(144))    # 12.0
+print(math.floor(3.7))   # 3
+print(math.ceil(3.2))    # 4
+
+import random
+print(random.randint(1, 6))          # Würfeln!
+print(random.choice(["rot", "blau", "grün"]))  # Zufällige Auswahl
+liste = [1, 2, 3, 4, 5]
+random.shuffle(liste)
+print(liste)             # Gemischt
+
+import datetime
+heute = datetime.date.today()
+print(heute)             # 2026-03-26
+\`\`\`
+
+### Nur bestimmte Teile importieren:
+\`\`\`python
+from math import pi, sqrt
+from random import randint, choice
+
+print(pi)           # kein math. nötig!
+print(randint(1,6)) # direkt nutzbar
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Würfel-Simulator",
+        instructionsMd: `Simuliere 10 Würfelwürfe mit dem \`random\` Modul.
+
+Gib jeden Würfelwurf aus und am Ende den **Durchschnitt**!`,
+        starterCode: `import random
+
+wuerfe = []
+for i in range(10):
+    wurf = random.randint(1, 6)
+    wuerfe.append(wurf)
+    print(f"Wurf {i+1}: {wurf}")
+
+durchschnitt = sum(wuerfe) / len(wuerfe)
+print(f"Durchschnitt: {durchschnitt:.1f}")
+`,
+        check: { kind: "python_stdout_includes", expected: "Wurf 10" },
+        hintMd: "`random.randint(1, 6)` würfelt eine Zahl zwischen 1 und 6!",
+        solutionCode: `import random
+wuerfe = []
+for i in range(10):
+    wurf = random.randint(1, 6)
+    wuerfe.append(wurf)
+    print(f"Wurf {i+1}: {wurf}")
+durchschnitt = sum(wuerfe) / len(wuerfe)
+print(f"Durchschnitt: {durchschnitt:.1f}")`,
+      },
+    },
+    {
+      id: "py-19",
+      trackId: "python",
+      title: "Lambda, map & filter",
+      summary: "Kompakte Funktionen und funktionale Programmierung in Python!",
+      minutes: 18,
+      xp: 75,
+      contentMd: `# ⚡ Lambda, map & filter
+
+> *"Der Kurzform-Zauberer braucht keine langen Beschwörungen – ein einziges Wort genügt."*
+
+## Lambda – Mini-Funktionen:
+\`\`\`python
+# Normal:
+def verdoppeln(x):
+    return x * 2
+
+# Lambda (gleich, aber kürzer):
+verdoppeln = lambda x: x * 2
+print(verdoppeln(5))  # 10
+
+quadrat = lambda x: x ** 2
+addiere = lambda x, y: x + y
+print(quadrat(4))     # 16
+print(addiere(3, 7))  # 10
+\`\`\`
+
+## map() – auf alle anwenden:
+\`\`\`python
+zahlen = [1, 2, 3, 4, 5]
+quadrate = list(map(lambda x: x**2, zahlen))
+print(quadrate)  # [1, 4, 9, 16, 25]
+\`\`\`
+
+## filter() – filtern:
+\`\`\`python
+zahlen = range(1, 21)
+gerade = list(filter(lambda x: x % 2 == 0, zahlen))
+print(gerade)  # [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+\`\`\`
+
+## sorted() mit Lambda:
+\`\`\`python
+personen = [{"name": "Anna", "alter": 25}, {"name": "Ben", "alter": 18}]
+sortiert = sorted(personen, key=lambda p: p["alter"])
+print(sortiert[0]["name"])  # Ben (jüngster)
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Lambda-Magie",
+        instructionsMd: `Nutze **Lambda + filter** um alle Zahlen über 100 aus der Liste zu filtern.
+
+Dann **map** um sie zu verdreifachen. Gib das Ergebnis aus!`,
+        starterCode: `zahlen = [45, 120, 67, 200, 88, 150, 30, 175, 99, 300]
+
+# Filtere Zahlen über 100:
+ueber_100 = list(filter(lambda x: x > 100, zahlen))
+
+# Verdreifache sie:
+dreifach = list(map(lambda x: x * 3, ueber_100))
+
+print("Über 100:", ueber_100)
+print("Dreifach:", dreifach)
+`,
+        check: { kind: "python_stdout_includes", expected: "900" },
+        hintMd: "`filter(lambda x: x > 100, zahlen)` – filtert Werte über 100",
+        solutionCode: `zahlen = [45, 120, 67, 200, 88, 150, 30, 175, 99, 300]
+ueber_100 = list(filter(lambda x: x > 100, zahlen))
+dreifach = list(map(lambda x: x * 3, ueber_100))
+print("Über 100:", ueber_100)
+print("Dreifach:", dreifach)`,
+      },
+    },
+    {
+      id: "py-20",
+      trackId: "python",
+      title: "🤖 Projekt: Chatbot",
+      summary: "Baue deinen ersten Chatbot – der erste Schritt Richtung KI!",
+      minutes: 35,
+      xp: 150,
+      contentMd: `# 🤖 Projekt: Chatbot
+
+> *"Die Maschine erwacht zum Leben! Du erschaffst eine KI die mit dir spricht."*
+
+Du baust einen Chatbot mit Dictionaries und string-Matching:
+
+\`\`\`python
+antworten = {
+    "hallo": "Hey! Wie kann ich dir helfen? 😊",
+    "wie geht es": "Mir geht es super, ich bin eine KI! 🤖",
+    "was bist du": "Ich bin ein Python-Chatbot, den du gebaut hast!",
+    "tschüss": "Auf Wiedersehen! 👋",
+}
+
+def chatbot(eingabe):
+    eingabe_lower = eingabe.lower()
+    for schluessel, antwort in antworten.items():
+        if schluessel in eingabe_lower:
+            return antwort
+    return "Hmm, das verstehe ich noch nicht. Versuch es anders! 🤔"
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Mein erster Chatbot",
+        instructionsMd: `Erweitere den Chatbot um mindestens **5 eigene Antworten**!
+
+Teste ihn mit verschiedenen Eingaben.`,
+        starterCode: `antworten = {
+    "hallo": "Hey! Schön dich zu sehen! 😊",
+    "wie geht": "Mir geht es super, ich bin dein Python-Bot! 🤖",
+    "was kannst du": "Ich kann Fragen beantworten und plaudern!",
+    "witz": "Warum können Programmierer nicht schlafen? Weil sie zu viele Bugs haben! 🐛😄",
+    "danke": "Bitte sehr! Immer gerne! 🙏",
+    "wetter": "Ich schaue nicht aus dem Fenster... ich bin ein Bot! ☁️",
+    "python": "Python ist die beste Programmiersprache – du lernst sie ja gerade!",
+    "tschüss": "Auf Wiedersehen! Bis zum nächsten Mal! 👋",
+}
+
+def chatbot(eingabe):
+    eingabe_lower = eingabe.lower()
+    for schluessel, antwort in antworten.items():
+        if schluessel in eingabe_lower:
+            return antwort
+    return "Das verstehe ich leider noch nicht. Versuch etwas anderes! 🤔"
+
+# Teste den Chatbot:
+fragen = ["Hallo!", "Was kannst du?", "Erzähl mir einen Witz", "Wie geht es dir?", "Tschüss!"]
+for frage in fragen:
+    print(f"Du: {frage}")
+    print(f"Bot: {chatbot(frage)}")
+    print()
+`,
+        check: { kind: "python_stdout_includes", expected: "Bot:" },
+        hintMd: "Füge einfach neue Einträge zum `antworten`-Dictionary hinzu!",
+        solutionCode: `antworten = {
+    "hallo": "Hey! Schön dich zu sehen! 😊",
+    "wie geht": "Mir geht es super! 🤖",
+    "was kannst du": "Ich kann Fragen beantworten!",
+    "witz": "Warum können Programmierer nicht schlafen? Zu viele Bugs! 🐛",
+    "danke": "Bitte sehr! 🙏",
+    "tschüss": "Auf Wiedersehen! 👋",
+}
+def chatbot(eingabe):
+    for k, v in antworten.items():
+        if k in eingabe.lower(): return v
+    return "Das verstehe ich noch nicht. 🤔"
+for frage in ["Hallo!", "Was kannst du?", "Danke!", "Tschüss!"]:
+    print(f"Du: {frage}")
+    print(f"Bot: {chatbot(frage)}")`,
+      },
+    },
+    {
+      id: "py-21",
+      trackId: "python",
+      title: "Rekursion – Der Spiegel-Zauber",
+      summary: "Funktionen die sich selbst aufrufen – mächtig und elegant!",
+      minutes: 20,
+      xp: 80,
+      contentMd: `# 🪞 Rekursion
+
+> *"Der Zauberspiegel zeigt sich selbst – immer kleiner werdend, bis er zur kleinsten Wahrheit kommt."*
+
+\`\`\`python
+def countdown(n):
+    if n <= 0:           # Base Case
+        print("🚀 Start!")
+        return
+    print(n)
+    countdown(n - 1)     # Rekursiver Aufruf
+
+countdown(5)  # 5, 4, 3, 2, 1, 🚀 Start!
+\`\`\`
+
+### Fakultät:
+\`\`\`python
+def fakultaet(n):
+    if n <= 1:              # Base Case
+        return 1
+    return n * fakultaet(n - 1)
+
+print(fakultaet(5))  # 120
+print(fakultaet(10)) # 3628800
+\`\`\`
+
+### Fibonacci:
+\`\`\`python
+def fib(n):
+    if n <= 1: return n
+    return fib(n-1) + fib(n-2)
+
+for i in range(10):
+    print(fib(i), end=" ")
+# 0 1 1 2 3 5 8 13 21 34
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Potenz rekursiv",
+        instructionsMd: `Berechne \`a hoch b\` (**a^b**) **rekursiv** ohne den \`**\` Operator.
+
+Tipp: \`a^b = a × a^(b-1)\` und \`a^0 = 1\``,
+        starterCode: `def potenz(a, b):
+    # Base Case:
+    if b == 0:
+        return 1
+    # Rekursiver Fall:
+    return a * potenz(a, b - 1)
+
+print(potenz(2, 10))  # 1024
+print(potenz(3, 4))   # 81
+print(potenz(5, 3))   # 125
+`,
+        check: { kind: "python_stdout_includes", expected: "1024" },
+        hintMd: "`return a * potenz(a, b - 1)` – multipliziere a mit der kleineren Potenz",
+        solutionCode: `def potenz(a, b):
+    if b == 0: return 1
+    return a * potenz(a, b - 1)
+print(potenz(2, 10))
+print(potenz(3, 4))
+print(potenz(5, 3))`,
+      },
+    },
+    {
+      id: "py-22",
+      trackId: "python",
+      title: "Dictionaries meistern",
+      summary: "Fortgeschrittene Dictionary-Techniken für mächtige Datenstrukturen!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# 📖 Dictionaries meistern
+
+> *"Das Zauberbuch kennt zu jedem Schlüssel die Antwort – und es lässt sich auf viele Arten befragen."*
+
+\`\`\`python
+# Dictionary Comprehension:
+quadrate = {n: n**2 for n in range(1, 6)}
+print(quadrate)  # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# Nur gerade Quadrate:
+gerade_q = {n: n**2 for n in range(1, 11) if n % 2 == 0}
+print(gerade_q)  # {2: 4, 4: 16, 6: 36, 8: 64, 10: 100}
+\`\`\`
+
+### Iterieren:
+\`\`\`python
+noten = {"Anna": 90, "Ben": 75, "Clara": 88}
+
+for name, note in noten.items():
+    status = "Bestanden ✅" if note >= 60 else "Nicht bestanden ❌"
+    print(f"{name}: {note} – {status}")
+
+# Bestes Ergebnis:
+bester = max(noten, key=lambda k: noten[k])
+print(f"Bester: {bester} mit {noten[bester]}")
+\`\`\`
+
+### get() – sicherer Zugriff:
+\`\`\`python
+config = {"farbe": "blau", "groesse": 42}
+print(config.get("farbe", "rot"))    # "blau"
+print(config.get("gewicht", "???"))  # "???" (kein Fehler!)
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Wort-Häufigkeit",
+        instructionsMd: `Zähle wie oft jedes Wort in dem Text vorkommt.
+Nutze ein Dictionary und gib das Ergebnis sortiert aus!`,
+        starterCode: `text = "der die das der die der eine ein eine der das"
+woerter = text.split()
+
+haeufigkeit = {}
+for wort in woerter:
+    haeufigkeit[wort] = haeufigkeit.get(wort, 0) + 1
+
+# Sortiert nach Häufigkeit ausgeben:
+sortiert = sorted(haeufigkeit.items(), key=lambda x: x[1], reverse=True)
+for wort, anzahl in sortiert:
+    print(f"{wort}: {anzahl}x")
+`,
+        check: { kind: "python_stdout_includes", expected: "4x" },
+        hintMd: "`haeufigkeit.get(wort, 0) + 1` – erhöhe den Zähler (oder starte bei 0)",
+        solutionCode: `text = "der die das der die der eine ein eine der das"
+woerter = text.split()
+haeufigkeit = {}
+for wort in woerter:
+    haeufigkeit[wort] = haeufigkeit.get(wort, 0) + 1
+sortiert = sorted(haeufigkeit.items(), key=lambda x: x[1], reverse=True)
+for wort, anzahl in sortiert:
+    print(f"{wort}: {anzahl}x")`,
+      },
+    },
+    {
+      id: "py-23",
+      trackId: "python",
+      title: "Dateien & Daten",
+      summary: "Simuliere das Lesen und Schreiben von Daten – wie eine echte Datenbank!",
+      minutes: 18,
+      xp: 70,
+      contentMd: `# 💾 Dateien & Daten
+
+> *"Der Schreiber bewahrt das Wissen – in Büchern, die auch nach seinem Tod noch gelesen werden."*
+
+Python kann Dateien lesen und schreiben. In unserem Sandbox simulieren wir das mit Strings:
+
+\`\`\`python
+import json
+
+# Daten als JSON speichern (simuliert):
+spielstand = {
+    "name": "Luna",
+    "level": 7,
+    "xp": 1450,
+    "items": ["Schwert", "Schild", "Trank"]
+}
+
+# In JSON-String umwandeln:
+json_text = json.dumps(spielstand, indent=2)
+print("Gespeichert:")
+print(json_text)
+
+# Wieder einlesen:
+geladen = json.loads(json_text)
+print(f"\\nSpieler: {geladen['name']}, Level {geladen['level']}")
+print(f"Items: {', '.join(geladen['items'])}")
+\`\`\`
+
+### CSV-Daten verarbeiten:
+\`\`\`python
+csv_daten = """Name,Alter,Stadt
+Anna,25,Berlin
+Ben,18,Hamburg
+Clara,30,München"""
+
+zeilen = csv_daten.strip().split("\\n")
+kopfzeile = zeilen[0].split(",")
+for zeile in zeilen[1:]:
+    werte = zeile.split(",")
+    person = dict(zip(kopfzeile, werte))
+    print(f"{person['Name']} aus {person['Stadt']}")
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "JSON Spielstand",
+        instructionsMd: `Erstelle einen Spielstand als Dictionary, wandle ihn in JSON um und lies ihn wieder ein.
+Gib dann alle Daten schön formatiert aus!`,
+        starterCode: `import json
+
+spielstand = {
+    "held": "Merlin",
+    "level": 5,
+    "xp": 750,
+    "quests_abgeschlossen": 12,
+    "gold": 330
+}
+
+# In JSON umwandeln:
+gespeichert = json.dumps(spielstand)
+
+# Wieder einlesen:
+geladen = json.loads(gespeichert)
+
+print("=== Spielstand ===")
+print(f"Held: {geladen['held']}")
+print(f"Level: {geladen['level']}")
+print(f"XP: {geladen['xp']}")
+print(f"Gold: {geladen['gold']} 💰")
+`,
+        check: { kind: "python_stdout_includes", expected: "Merlin" },
+        hintMd: "`json.dumps(daten)` → String | `json.loads(string)` → Dictionary",
+        solutionCode: `import json
+spielstand = {"held": "Merlin", "level": 5, "xp": 750, "quests_abgeschlossen": 12, "gold": 330}
+gespeichert = json.dumps(spielstand)
+geladen = json.loads(gespeichert)
+print("=== Spielstand ===")
+print(f"Held: {geladen['held']}")
+print(f"Level: {geladen['level']}")
+print(f"XP: {geladen['xp']}")
+print(f"Gold: {geladen['gold']} 💰")`,
+      },
+    },
+    {
+      id: "py-24",
+      trackId: "python",
+      title: "Random – Die Würfel-Magie",
+      summary: "Erstelle Zufallszahlen, mische Listen und simuliere Spiele!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# 🎲 Random – Würfel-Magie
+
+> *"Die Götter des Zufalls entscheiden – aber du lernst ihre Sprache!"*
+
+\`\`\`python
+import random
+
+# Zufallszahlen:
+print(random.randint(1, 6))        # Würfel (1-6)
+print(random.randint(1, 100))      # 1-100
+print(random.random())             # 0.0 bis 1.0
+
+# Zufällige Auswahl:
+farben = ["rot", "grün", "blau", "gelb"]
+print(random.choice(farben))       # z.B. "blau"
+print(random.choices(farben, k=3)) # 3 Zufällige
+
+# Mischen:
+karten = list(range(1, 53))
+random.shuffle(karten)
+print(karten[:5])  # Erste 5 nach dem Mischen
+
+# Stichprobe (ohne Wiederholung):
+print(random.sample(farben, 2))    # 2 verschiedene
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Lotto-Generator",
+        instructionsMd: `Generiere einen **Lotto-Schein**: 6 verschiedene Zahlen zwischen 1 und 49!
+
+Gib sie **sortiert** aus.`,
+        starterCode: `import random
+
+# 6 verschiedene Zahlen 1-49:
+lotto = random.sample(range(1, 50), 6)
+lotto.sort()
+
+print("🎰 Dein Lotto-Schein:")
+print(lotto)
+print("Bonuszahl:", random.randint(1, 49))
+`,
+        check: { kind: "python_stdout_includes", expected: "Lotto" },
+        hintMd: "`random.sample(range(1, 50), 6)` – 6 einmalige Zahlen aus 1-49",
+        solutionCode: `import random
+lotto = random.sample(range(1, 50), 6)
+lotto.sort()
+print("🎰 Dein Lotto-Schein:")
+print(lotto)
+print("Bonuszahl:", random.randint(1, 49))`,
+      },
+    },
+    {
+      id: "py-25",
+      trackId: "python",
+      title: "🏆 Capstone: Passwort-Generator",
+      summary: "Dein Meisterwerk! Baue einen sicheren Passwort-Generator.",
+      minutes: 40,
+      xp: 200,
+      contentMd: `# 🏆 Capstone: Passwort-Generator
+
+> *"Du hast alle Python-Kräfte gemeistert. Nun erschaffst du ein Werkzeug das echten Nutzen hat!"*
+
+Baue einen Passwort-Generator der:
+- Buchstaben, Zahlen und Sonderzeichen mischt
+- Verschiedene Stärken erzeugt
+- Die Sicherheit bewertet
+
+\`\`\`python
+import random
+import string
+
+def passwort_erstellen(laenge, gross=True, zahlen=True, sonderzeichen=True):
+    zeichen = string.ascii_lowercase
+    if gross: zeichen += string.ascii_uppercase
+    if zahlen: zeichen += string.digits
+    if sonderzeichen: zeichen += "!@#$%&*?"
+
+    passwort = [random.choice(zeichen) for _ in range(laenge)]
+    random.shuffle(passwort)
+    return "".join(passwort)
+
+def bewerte_staerke(passwort):
+    punkte = 0
+    if len(passwort) >= 8: punkte += 1
+    if len(passwort) >= 12: punkte += 1
+    if any(c.isupper() for c in passwort): punkte += 1
+    if any(c.isdigit() for c in passwort): punkte += 1
+    if any(c in "!@#$%&*?" for c in passwort): punkte += 1
+
+    if punkte <= 2: return "Schwach ❌"
+    if punkte <= 3: return "Mittel ⚠️"
+    return "Stark ✅"
+\`\`\``,
+      exercise: {
+        language: "python",
+        title: "Passwort-Generator",
+        instructionsMd: `Nutze die Funktionen um verschiedene Passwörter zu generieren und zu bewerten!`,
+        starterCode: `import random
+import string
+
+def passwort_erstellen(laenge, gross=True, zahlen=True, sonderzeichen=True):
+    zeichen = string.ascii_lowercase
+    if gross: zeichen += string.ascii_uppercase
+    if zahlen: zeichen += string.digits
+    if sonderzeichen: zeichen += "!@#$%&*?"
+    passwort = [random.choice(zeichen) for _ in range(laenge)]
+    random.shuffle(passwort)
+    return "".join(passwort)
+
+def bewerte_staerke(passwort):
+    punkte = 0
+    if len(passwort) >= 8: punkte += 1
+    if len(passwort) >= 12: punkte += 1
+    if any(c.isupper() for c in passwort): punkte += 1
+    if any(c.isdigit() for c in passwort): punkte += 1
+    if any(c in "!@#$%&*?" for c in passwort): punkte += 1
+    if punkte <= 2: return "Schwach ❌"
+    if punkte <= 3: return "Mittel ⚠️"
+    return "Stark ✅"
+
+print("=== Passwort-Generator 🔐 ===")
+for laenge in [8, 12, 20]:
+    pw = passwort_erstellen(laenge)
+    staerke = bewerte_staerke(pw)
+    print(f"Länge {laenge:2d}: {pw} → {staerke}")
+`,
+        check: { kind: "python_stdout_includes", expected: "Stark" },
+        hintMd: "Alle Funktionen sind implementiert! Führe den Code aus und schau dir die Passwörter an.",
+        solutionCode: `import random, string
+def passwort_erstellen(laenge, gross=True, zahlen=True, sonderzeichen=True):
+    z = string.ascii_lowercase
+    if gross: z += string.ascii_uppercase
+    if zahlen: z += string.digits
+    if sonderzeichen: z += "!@#$%&*?"
+    pw = [random.choice(z) for _ in range(laenge)]
+    random.shuffle(pw)
+    return "".join(pw)
+def bewerte_staerke(pw):
+    p = sum([len(pw)>=8, len(pw)>=12, any(c.isupper() for c in pw), any(c.isdigit() for c in pw), any(c in "!@#$%&*?" for c in pw)])
+    return "Schwach ❌" if p<=2 else "Mittel ⚠️" if p<=3 else "Stark ✅"
+for l in [8, 12, 20]:
+    pw = passwort_erstellen(l)
+    print(f"Länge {l:2d}: {pw} → {bewerte_staerke(pw)}")`,
+      },
+    },
+  ],
+};
+
+const KI: Track = {
+  id: "ki",
+  title: "KI-Abenteuer",
+  emoji: "🤖",
+  description: "Lerne wie du ChatGPT, Gemini und andere KIs richtig nutzt – werde zum Prompt-Meister!",
+  color: "violet",
+  recommendedAge: "ab 9 Jahren",
+  lessons: [
+    {
+      id: "ki-01",
+      trackId: "ki",
+      title: "Was ist eine KI?",
+      summary: "Entdecke was KI wirklich ist – kein Roboter, aber trotzdem faszinierend!",
+      minutes: 10,
+      xp: 40,
+      contentMd: `# 🤖 Was ist eine KI?
+
+> *"Tief im Inneren des Internets schläft ein riesiges Gehirn aus Zahlen. Es hat Millionen von Büchern gelesen – und du kannst mit ihm sprechen!"*
+
+## Was ist Künstliche Intelligenz?
+
+Eine **KI (Künstliche Intelligenz)** ist ein Computerprogramm das:
+- Texte lesen und schreiben kann
+- Fragen beantworten kann
+- Bilder erstellen kann
+- Beim Lernen helfen kann
+
+## Bekannte KIs:
+| KI | Gemacht von | Was sie kann |
+|----|-------------|--------------|
+| **ChatGPT** | OpenAI | Text, Code, Bilder |
+| **Gemini** | Google | Text, Bilder, Suche |
+| **Claude** | Anthropic | Text, Analyse, Code |
+| **Copilot** | Microsoft | Text, Bilder, Office |
+
+## Was eine KI NICHT ist:
+- ❌ Ein Roboter mit Körper
+- ❌ Allwissend (sie macht Fehler!)
+- ❌ Bewusst oder lebendig
+- ❌ Immer richtig
+
+## Was eine KI IST:
+- ✅ Sehr hilfreich als Assistent
+- ✅ Gut im Erklären
+- ✅ Kreativ beim Schreiben
+- ✅ Schnell beim Zusammenfassen`,
+      exercise: {
+        language: "javascript",
+        title: "KI-Quiz",
+        instructionsMd: `Beantworte die Frage: **Was ist eine KI?**
+
+Schreibe deinen Prompt (deine Frage an eine KI) als JavaScript-String in der Variable \`meinPrompt\`.
+
+Ein guter Prompt enthält das Wort "KI" oder "Künstliche Intelligenz"!`,
+        starterCode: `// Schreibe hier deinen Prompt für eine KI:
+const meinPrompt = "Erkläre mir was eine Künstliche Intelligenz ist";
+
+// Was würde die KI antworten? Rate mal:
+const meineVermutung = "Eine KI ist...";
+
+console.log("Mein Prompt:", meinPrompt);
+console.log("Meine Vermutung:", meineVermutung);
+`,
+        check: { kind: "js_console_includes", expected: "Prompt" },
+        hintMd: "`const meinPrompt = \"Was ist eine KI und wie funktioniert sie?\";`",
+        solutionCode: `const meinPrompt = "Erkläre mir was eine Künstliche Intelligenz ist";
+const meineVermutung = "Eine KI ist ein Computerprogramm das denken kann";
+console.log("Mein Prompt:", meinPrompt);
+console.log("Meine Vermutung:", meineVermutung);`,
+      },
+    },
+    {
+      id: "ki-02",
+      trackId: "ki",
+      title: "Was ist ein Prompt?",
+      summary: "Ein Prompt ist deine Frage oder Anweisung an die KI – lerne die Grundregeln!",
+      minutes: 12,
+      xp: 45,
+      contentMd: `# 💬 Was ist ein Prompt?
+
+> *"Ein Zauberer spricht Beschwörungsformeln. Du sprichst Prompts. Beide brauchen die richtigen Worte um zu funktionieren!"*
+
+## Prompt = Deine Nachricht an die KI
+
+Wenn du mit ChatGPT oder Gemini schreibst, nennst man das was du schreibst einen **Prompt**.
+
+## Schlechte vs. Gute Prompts:
+
+### ❌ Schlechter Prompt:
+\`\`\`
+"Erkläre Dinosaurier"
+\`\`\`
+*Problem: Zu vage! Was soll erklärt werden? Wie lang? Für wen?*
+
+### ✅ Guter Prompt:
+\`\`\`
+"Erkläre mir Dinosaurier so als wärst du ein Museumsführer
+für 10-jährige Kinder. Nenn mir 3 interessante Fakten
+und mach es spannend!"
+\`\`\`
+*Besser! Du sagst: WAS, WIE, FÜR WEN und WIE VIELE Infos.*
+
+## Die goldene Formel:
+**WAS** du wissen willst + **WIE** es erklärt werden soll + **FÜR WEN** es ist
+
+## Beispiele:
+- *"Erkläre Mathematik wie ein Pirat für Kinder"*
+- *"Schreibe ein kurzes Gedicht über Katzen im Stil von Dr. Seuss"*
+- *"Fasse diesen Text in 3 Sätzen zusammen"*`,
+      exercise: {
+        language: "javascript",
+        title: "Verbessere den Prompt!",
+        instructionsMd: `Der schlechte Prompt ist bereits gegeben. Schreibe einen **besseren Prompt** der erklärt:
+- WAS du lernen willst (Schwerkraft)
+- WIE (einfach, lustig)
+- FÜR WEN (für dich, 10 Jahre alt)`,
+        starterCode: `const schlechterPrompt = "Erkläre Schwerkraft";
+
+// Schreibe einen besseren Prompt:
+const meinBessererPrompt = "Erkläre mir die Schwerkraft ...";
+// Tipp: Füge hinzu WIE es erklärt werden soll und FÜR WEN!
+
+console.log("Schlecht:", schlechterPrompt);
+console.log("Besser:", meinBessererPrompt);
+console.log("Länge des besseren Prompts:", meinBessererPrompt.length, "Zeichen");
+`,
+        check: { kind: "js_console_includes", expected: "Besser:" },
+        hintMd: `"Erkläre mir die Schwerkraft so als wärst du ein Superheld. Ich bin 10 Jahre alt und verstehe noch keine Physik. Mach es lustig!"`,
+        solutionCode: `const schlechterPrompt = "Erkläre Schwerkraft";
+const meinBessererPrompt = "Erkläre mir die Schwerkraft so als wärst du ein Superheld. Ich bin 10 Jahre alt. Mach es lustig und spannend!";
+console.log("Schlecht:", schlechterPrompt);
+console.log("Besser:", meinBessererPrompt);
+console.log("Länge des besseren Prompts:", meinBessererPrompt.length, "Zeichen");`,
+      },
+    },
+    {
+      id: "ki-03",
+      trackId: "ki",
+      title: "Gib der KI Kontext!",
+      summary: "Die KI weiß nichts über dich – du musst ihr alles erklären!",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# 🗺️ Kontext ist alles!
+
+> *"Stell dir vor du rufst jemanden an der dich nicht kennt und sagst nur: 'Hilf mir!' – Was soll die Person tun? Genau! Du musst mehr erklären."*
+
+## Die KI kennt DICH nicht
+
+Wenn du eine KI öffnest, weiß sie nichts über dich:
+- Wer du bist
+- Was du schon weißt
+- Was du brauchst
+- Warum du fragst
+
+## Kontext = Hintergrundinfos
+
+### Ohne Kontext ❌:
+\`\`\`
+"Hilf mir mit meinen Hausaufgaben"
+\`\`\`
+
+### Mit Kontext ✅:
+\`\`\`
+"Ich bin 11 Jahre alt und muss einen Aufsatz über
+den Zweiten Weltkrieg schreiben. Das Thema soll
+'Warum ist Frieden wichtig?' sein. Der Aufsatz
+soll 200 Wörter lang sein. Kannst du mir helfen
+eine Gliederung zu erstellen?"
+\`\`\`
+
+## Guter Kontext enthält:
+1. **Wer du bist** – Alter, was du weißt
+2. **Was du brauchst** – genau beschrieben
+3. **Warum** – wofür ist es?
+4. **Einschränkungen** – Länge, Format, Schwierigkeit
+
+## Merke:
+> *"Erzähl lieber zu viel als zu wenig. Die Maschine weiß NICHTS wenn du es ihr nicht sagst!"*`,
+      exercise: {
+        language: "javascript",
+        title: "Kontext-Meister",
+        instructionsMd: `Schreibe einen Prompt MIT gutem Kontext für diese Situation:
+
+Du bist 10 Jahre alt und willst eine Geschichte über Drachen schreiben. Sie soll spannend sein und 3 Absätze haben.`,
+        starterCode: `// Schreibe einen Prompt MIT Kontext:
+const meinPrompt = \`
+Ich bin ... Jahre alt und möchte ...
+Die Geschichte soll ...
+Bitte schreibe ...
+\`;
+
+console.log("Mein Prompt mit Kontext:");
+console.log(meinPrompt);
+console.log("Zeichen:", meinPrompt.length);
+`,
+        check: { kind: "js_console_includes", expected: "Zeichen:" },
+        hintMd: `Füge ein: dein Alter, das Thema (Drachen), die gewünschte Länge (3 Absätze) und den Stil (spannend)`,
+        solutionCode: `const meinPrompt = \`Ich bin 10 Jahre alt und möchte eine spannende Geschichte über Drachen schreiben. Die Geschichte soll 3 Absätze haben und einen tapferen Held enthalten. Bitte schreibe mir die Geschichte!\`;
+console.log("Mein Prompt mit Kontext:");
+console.log(meinPrompt);
+console.log("Zeichen:", meinPrompt.length);`,
+      },
+    },
+    {
+      id: "ki-04",
+      trackId: "ki",
+      title: "Sei präzise – Spezifisch promten",
+      summary: "Vage Fragen = vage Antworten. Lerne spezifisch zu sein!",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# 🎯 Präzision ist Macht!
+
+> *"Ein Bogenschütze der nicht auf ein Ziel zielt, trifft alles und nichts. Sei präzise!"*
+
+## Vage vs. Präzise
+
+| Vage ❌ | Präzise ✅ |
+|---------|-----------|
+| "Erkläre Mathematik" | "Erkläre Bruchrechnung mit Beispielen für Klasse 5" |
+| "Schreibe eine Geschichte" | "Schreibe eine 200-Wort-Geschichte über einen Hund der fliegen kann, im Stil eines Kinderbuches" |
+| "Mach das besser" | "Verbessere die Grammatik und mache die Sätze kürzer" |
+| "Hilf mir" | "Ich verstehe Multiplikation nicht. Erkläre sie mit 3 konkreten Beispielen" |
+
+## Präzisions-Techniken:
+
+### 1. Zahlen nennen:
+- ❌ "ein paar Beispiele"
+- ✅ "genau 5 Beispiele"
+
+### 2. Format bestimmen:
+- ❌ "liste das auf"
+- ✅ "liste das als nummerierte Liste auf"
+
+### 3. Ausgabe-Länge:
+- ❌ "erkläre es kurz"
+- ✅ "erkläre es in maximal 3 Sätzen"
+
+### 4. Vergleiche nutzen:
+- ❌ "erkläre einfach"
+- ✅ "erkläre so, als ob ich 8 Jahre alt wäre und noch nie davon gehört habe"`,
+      exercise: {
+        language: "javascript",
+        title: "Präzisions-Training",
+        instructionsMd: `Mache diese vagen Prompts **präziser**!
+
+Füge Zahlen, Format und Zielgruppe hinzu.`,
+        starterCode: `const vagePrompts = [
+  "Erkläre das Sonnensystem",
+  "Gib mir Ideen für ein Projekt",
+  "Was ist Python?",
+];
+
+// Schreibe präzise Versionen:
+const praezisePrompts = [
+  "Erkläre mir die 8 Planeten des Sonnensystems mit je einem interessanten Fakt. Ich bin 10 Jahre alt.",
+  "Gib mir genau 5 Ideen für ein Schulprojekt über das Mittelalter als nummerierte Liste.",
+  "Was ist Python? Erkläre es in 3 Sätzen für jemanden der noch nie programmiert hat.",
+];
+
+for (let i = 0; i < vagePrompts.length; i++) {
+  console.log("❌ Vage:", vagePrompts[i]);
+  console.log("✅ Präzise:", praezisePrompts[i]);
+  console.log();
+}
+`,
+        check: { kind: "js_console_includes", expected: "Präzise:" },
+        hintMd: "Füge immer Zahlen, Zielgruppe und gewünschtes Format hinzu!",
+        solutionCode: `const vage = ["Erkläre Sonnensystem", "Projektideen", "Was ist Python?"];
+const praezise = ["Erkläre 8 Planeten mit je einem Fakt für 10-Jährige.", "5 Projektideen als Liste.", "Python in 3 Sätzen für Anfänger."];
+for (let i = 0; i < vage.length; i++) {
+  console.log("❌ Vage:", vage[i]);
+  console.log("✅ Präzise:", praezise[i]);
+}`,
+      },
+    },
+    {
+      id: "ki-05",
+      trackId: "ki",
+      title: "Rollen-Prompts – Die KI verwandeln",
+      summary: "Gib der KI eine Rolle und bekomme viel bessere Antworten!",
+      minutes: 12,
+      xp: 55,
+      contentMd: `# 🎭 Rollen-Prompts
+
+> *"Ein Zauberer kann viele Gestalten annehmen. Die KI auch – wenn du es ihr sagst!"*
+
+## "Tue so als ob..."
+
+Du kannst der KI eine **Rolle** geben:
+
+\`\`\`
+"Du bist ein erfahrener Koch. Erkläre mir wie man Pasta kocht."
+\`\`\`
+
+\`\`\`
+"Spiele einen freundlichen Lehrer und erkläre mir Bruchrechnung."
+\`\`\`
+
+\`\`\`
+"Du bist ein Astronaut der gerade auf dem Mars ist. Beschreibe was du siehst."
+\`\`\`
+
+## Warum Rollen helfen:
+- 🎯 Die KI passt den **Sprachstil** an
+- 🎓 Du bekommst **Expertenwissen** in einfacher Sprache
+- 🎪 Die Antworten werden **kreativer und interessanter**
+
+## Gute Rollen für Kinder:
+| Rolle | Wann nützlich |
+|-------|---------------|
+| "freundlicher Lehrer" | Schwierige Themen lernen |
+| "Museumsführer" | Geschichte und Fakten |
+| "Koch" | Rezepte erklären |
+| "Pirat" | Spaßige Erklärungen |
+| "Wissenschaftler" | Experimente und Fakten |
+| "Buchautor" | Geschichten schreiben |
+
+## Kombination mit Kontext:
+\`\`\`
+"Du bist ein freundlicher Biologielehrer.
+Ich bin 11 Jahre alt.
+Erkläre mir wie Fotosynthese funktioniert
+mit einer lustigen Analogie."
+\`\`\``,
+      exercise: {
+        language: "javascript",
+        title: "Rollen-Designer",
+        instructionsMd: `Erstelle **3 verschiedene Rollen-Prompts** für unterschiedliche Themen.
+
+Jeder Prompt soll eine Rolle + Kontext + Aufgabe enthalten!`,
+        starterCode: `const rollenPrompts = [
+  // Prompt 1: Über Dinosaurier (Rolle: Paläontologe)
+  "Du bist ein begeisterter Paläontologe. Erkläre mir die 3 bekanntesten Dinosaurier für ein 10-jähriges Kind mit lustigen Fakten!",
+
+  // Prompt 2: Über Raumfahrt (erfinde eine passende Rolle!)
+  "Du bist ein ...",
+
+  // Prompt 3: Über Kochen (erfinde eine passende Rolle!)
+  "Du bist ein ...",
+];
+
+rollenPrompts.forEach((prompt, i) => {
+  console.log(\`Prompt \${i + 1}:\`);
+  console.log(prompt);
+  console.log("---");
+});
+`,
+        check: { kind: "js_console_includes", expected: "Prompt 3:" },
+        hintMd: `Prompt 2: "Du bist ein Astronaut..." | Prompt 3: "Du bist ein Sternekoch..."`,
+        solutionCode: `const rollenPrompts = [
+  "Du bist ein begeisterter Paläontologe. Erkläre mir 3 Dinosaurier für 10-Jährige!",
+  "Du bist ein Astronaut auf der ISS. Erkläre wie das Leben im Weltraum aussieht.",
+  "Du bist ein Sternekoch. Erkläre mir wie ich ein einfaches Nudelgericht kochen kann.",
+];
+rollenPrompts.forEach((p, i) => {
+  console.log(\`Prompt \${i+1}:\`);
+  console.log(p);
+  console.log("---");
+});`,
+      },
+    },
+    {
+      id: "ki-06",
+      trackId: "ki",
+      title: "KI-Grenzen kennen",
+      summary: "Die KI ist mächtig – aber nicht unfehlbar. Lerne ihre Schwächen!",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# ⚠️ Was KI nicht kann
+
+> *"Auch der mächtigste Zauber hat seine Grenzen. Ein weiser Abenteurer kennt die Grenzen seiner Werkzeuge."*
+
+## KI macht Fehler!
+
+KIs können **halluzinieren** – das heißt: sie erfinden Fakten die klingen als wären sie wahr!
+
+### Beispiel:
+\`\`\`
+Du: "Wer hat das Telefon erfunden?"
+KI: "Alexander Graham Bell erfand das Telefon 1876."
+✅ Das stimmt!
+
+Du: "Welche Bücher hat Kaiser Augustus geschrieben?"
+KI: "Kaiser Augustus schrieb die berühmten Werke..."
+❌ FALSCH! Augustus hat keine Bücher geschrieben.
+   Aber die KI erfindet trotzdem Antworten!
+\`\`\`
+
+## Was KI schlecht kann:
+- ❌ Aktuelle Ereignisse (nach ihrem Wissens-Cutoff)
+- ❌ Mathematik mit großen Zahlen (manchmal!)
+- ❌ Vorhersagen über die Zukunft
+- ❌ Persönliche Meinungen und Gefühle
+- ❌ Immer korrekte Fakten
+
+## Was du tun solltest:
+1. **Wichtige Fakten überprüfen** – Schule, Bücher, Wikipedia
+2. **Kritisch denken** – klingt das plausibel?
+3. **Mehrere Quellen nutzen** – nicht nur KI
+4. **Nach Quellen fragen**: "Woher weißt du das?"`,
+      exercise: {
+        language: "javascript",
+        title: "Fakten-Checker",
+        instructionsMd: `Erstelle eine Liste von Dingen die du mit einer KI **immer überprüfen** würdest.
+
+Dann eine Liste was du der KI **vertrauen** würdest.`,
+        starterCode: `const immerUeberpruefen = [
+  "Aktuelle Nachrichten",
+  "Medizinische Ratschläge",
+  // Füge 3 weitere hinzu:
+  "",
+  "",
+  "",
+];
+
+const kannVertrauen = [
+  "Erklärungen zu bekannten Konzepten",
+  "Kreative Geschichten schreiben",
+  // Füge 3 weitere hinzu:
+  "",
+  "",
+  "",
+];
+
+console.log("🔍 Immer überprüfen:");
+immerUeberpruefen.filter(x => x).forEach(x => console.log("  -", x));
+
+console.log("✅ Kann vertrauen:");
+kannVertrauen.filter(x => x).forEach(x => console.log("  -", x));
+`,
+        check: { kind: "js_console_includes", expected: "Immer überprüfen" },
+        hintMd: "Überprüfen: Historische Daten, Mathematik, Nachrichten. Vertrauen: Grammatik, Zusammenfassungen, Kreativität.",
+        solutionCode: `const immerUeberpruefen = ["Aktuelle Nachrichten", "Medizinische Ratschläge", "Historische Daten", "Mathematik", "Gesetze"];
+const kannVertrauen = ["Erklärungen", "Geschichten schreiben", "Grammatik prüfen", "Ideen brainstormen", "Texte zusammenfassen"];
+console.log("🔍 Immer überprüfen:");
+immerUeberpruefen.forEach(x => console.log("  -", x));
+console.log("✅ Kann vertrauen:");
+kannVertrauen.forEach(x => console.log("  -", x));`,
+      },
+    },
+    {
+      id: "ki-07",
+      trackId: "ki",
+      title: "KI als Lernhelfer",
+      summary: "Nutze KI um besser zu lernen – Erklärungen, Übungen und Feedback!",
+      minutes: 15,
+      xp: 60,
+      contentMd: `# 📚 KI als Lernhelfer
+
+> *"Der klügste Schüler nutzt alle Werkzeuge. Die KI ist wie ein geduldiger Tutor der 24/7 für dich da ist!"*
+
+## Wie KI beim Lernen hilft:
+
+### 1. Erklären lassen:
+\`\`\`
+"Erkläre mir die Photosynthese wie ich 10 Jahre alt wäre.
+Nutze eine Analogie die ich kenne."
+\`\`\`
+
+### 2. Übungsaufgaben erstellen:
+\`\`\`
+"Erstelle mir 5 Übungsaufgaben zur Bruchrechnung
+für Klasse 5, von leicht nach schwer."
+\`\`\`
+
+### 3. Feedback bekommen:
+\`\`\`
+"Hier ist mein Aufsatz: [Text]
+Was kann ich verbessern? Erkläre mir konkret
+was gut ist und was nicht."
+\`\`\`
+
+### 4. Zusammenfassungen:
+\`\`\`
+"Fasse dieses Kapitel in 5 Stichpunkten zusammen:
+[Text aus dem Schulbuch]"
+\`\`\`
+
+### 5. Lernen mit Beispielen:
+\`\`\`
+"Erkläre mir das Konzept der Division durch 3 Beispiele
+aus dem Alltag."
+\`\`\`
+
+## ⚠️ Wichtig:
+**Lass die KI nicht deine Hausaufgaben machen!**
+Nutze sie um zu **verstehen** – nicht um **abzuschreiben**.
+Wenn du abschreibst, lernst du nichts.`,
+      exercise: {
+        language: "javascript",
+        title: "Lern-Prompts designen",
+        instructionsMd: `Erstelle **4 verschiedene Lern-Prompts** für echte Schulfächer.
+
+Jeder Prompt soll eine andere Lern-Strategie nutzen!`,
+        starterCode: `const lernPrompts = {
+  erklaerung: "Erkläre mir den Unterschied zwischen Verb und Adjektiv mit 3 Beispielen für einen 11-Jährigen.",
+
+  uebungsaufgaben: "Erstelle mir ...",
+
+  feedback: "Prüfe meinen Satz auf Grammatik: 'Der Hund rennt schnell über die Wiese.' Was ist gut, was kann besser?",
+
+  zusammenfassung: "Fasse die wichtigsten Fakten über ...",
+};
+
+Object.entries(lernPrompts).forEach(([typ, prompt]) => {
+  console.log(\`📚 \${typ.toUpperCase()}:\`);
+  console.log(prompt);
+  console.log();
+});
+`,
+        check: { kind: "js_console_includes", expected: "ERKLAERUNG:" },
+        hintMd: "Nutze verschiedene Typen: Erklärung, Übungsaufgaben, Feedback, Zusammenfassung",
+        solutionCode: `const lernPrompts = {
+  erklaerung: "Erkläre Verb vs Adjektiv mit 3 Beispielen für 11-Jährige.",
+  uebungsaufgaben: "Erstelle 5 Matheaufgaben zu Addition mit Dezimalzahlen.",
+  feedback: "Prüfe: 'Der Hund rennt schnell.' Was ist gut, was besser?",
+  zusammenfassung: "Fasse den Deutschen Bundestag in 5 Stichpunkten zusammen.",
+};
+Object.entries(lernPrompts).forEach(([typ, prompt]) => {
+  console.log(\`📚 \${typ.toUpperCase()}:\`);
+  console.log(prompt);
+  console.log();
+});`,
+      },
+    },
+    {
+      id: "ki-08",
+      trackId: "ki",
+      title: "Kreativ mit KI",
+      summary: "KI als kreativer Partner – Geschichten, Gedichte und Ideen!",
+      minutes: 15,
+      xp: 60,
+      contentMd: `# 🎨 Kreativ mit KI
+
+> *"Die KI ist kein Künstler – aber sie ist der perfekte kreative Assistent. Du bist der Dirigent, sie ist das Orchester!"*
+
+## KI für kreative Projekte:
+
+### Geschichten:
+\`\`\`
+"Schreibe den Anfang (100 Wörter) einer Geschichte über
+ein Kind das entdeckt, dass sein Hund sprechen kann.
+Stil: lustig und abenteuerlich. Ich bin 10 Jahre alt."
+\`\`\`
+
+### Gedichte:
+\`\`\`
+"Schreibe ein Reim-Gedicht (4 Strophen, je 4 Zeilen)
+über den Herbst. Nutze lebhafte Farben und klingende Wörter."
+\`\`\`
+
+### Ideen entwickeln:
+\`\`\`
+"Ich will ein Schulprojekt über Klimawandel machen.
+Gib mir 10 kreative Präsentations-Ideen die nicht
+nur PowerPoint sind. Ich bin in Klasse 6."
+\`\`\`
+
+### Weiterdenken:
+\`\`\`
+"Ich habe diese Geschichte-Idee: [deine Idee]
+Was könnten interessante Wendungen sein?"
+\`\`\`
+
+## Wichtig: DU bist der Kreative!
+Die KI gibt dir **Rohmaterial**. Du:
+- Wählst was dir gefällt
+- Veränderst es nach deinem Geschmack
+- Fügst deine eigenen Ideen hinzu
+- Machst es zu **deinem** Werk`,
+      exercise: {
+        language: "javascript",
+        title: "Story-Prompt Meister",
+        instructionsMd: `Erstelle **einen detaillierten Kreativ-Prompt** für eine Geschichte die du dir wünscht.
+
+Nutze: Genres, Charaktere, Setting, Ton und gewünschte Länge!`,
+        starterCode: `const meinStoryPrompt = \`
+Schreibe den Anfang einer Geschichte (ungefähr 150 Wörter) über:
+
+Hauptcharakter: Ein 11-jähriges Mädchen namens ...
+Setting: ...
+Besondere Fähigkeit: ...
+Problem/Konflikt: ...
+Ton: ...
+
+Beginne die Geschichte spannend mit Action!
+\`;
+
+console.log("Mein Story-Prompt:");
+console.log(meinStoryPrompt);
+console.log("\\nDieser Prompt ist gut weil er folgende Elemente hat:");
+console.log("✅ Charakter definiert");
+console.log("✅ Setting definiert");
+console.log("✅ Konflikt definiert");
+console.log("✅ Länge angegeben");
+`,
+        check: { kind: "js_console_includes", expected: "Story-Prompt" },
+        hintMd: "Je mehr Details du gibst, desto besser wird die Geschichte! Namen, Ort, Problem, Stil – alles hinein!",
+        solutionCode: `const meinStoryPrompt = \`Schreibe den Anfang (150 Wörter) einer Geschichte: Hauptcharakter ist Luna, 11 Jahre, kann Gedanken lesen. Setting: magische Schule. Konflikt: Sie entdeckt ein Geheimnis das die Schule in Gefahr bringt. Ton: spannend und abenteuerlich.\`;
+console.log("Mein Story-Prompt:");
+console.log(meinStoryPrompt);
+console.log("\\nDieser Prompt hat alle wichtigen Elemente! ✅");`,
+      },
+    },
+    {
+      id: "ki-09",
+      trackId: "ki",
+      title: "Sicherheit & Datenschutz",
+      summary: "Was du NIEMALS einer KI verraten solltest – bleib sicher online!",
+      minutes: 10,
+      xp: 45,
+      contentMd: `# 🔒 Sicherheit online
+
+> *"Ein weiser Abenteurer verrät seinen Namen nicht jedem Fremden. Das Internet ist kein anderes."*
+
+## NIEMALS einer KI geben:
+
+### ❌ Persönliche Daten:
+- Deinen vollen Namen + Adresse
+- Schule und Klasse + Stadt
+- Telefonnummer
+- Passwörter (NIEMALS!)
+- Fotos von dir oder deiner Familie
+
+### ❌ Andere Personen:
+- Infos über Freunde und Familie
+- Private Probleme anderer
+- Adressen oder Nummern anderer
+
+## Was OKAY ist:
+- ✅ Fragen über Schulfächer
+- ✅ Kreative Ideen entwickeln
+- ✅ Texte verbessern lassen
+- ✅ Dinge erklären lassen
+- ✅ Hilfe bei Projekten
+
+## Denk daran:
+1. KI-Gespräche werden oft gespeichert
+2. Unternehmen können deine Prompts lesen
+3. Behandle KI wie einen Fremden im Netz
+4. Sprich mit Eltern wenn du unsicher bist
+
+## Die goldene Regel:
+> *"Schreibe nichts in eine KI das du nicht auf ein Plakat schreiben würdest das jeder lesen kann."*`,
+      exercise: {
+        language: "javascript",
+        title: "Sicher oder Nicht?",
+        instructionsMd: `Sortiere diese Prompts in "sicher" und "nicht sicher"!`,
+        starterCode: `const prompts = [
+  { text: "Erkläre mir Photosynthese", sicher: true },
+  { text: "Ich heiße Anna Müller und wohne in der Musterstraße 5", sicher: false },
+  { text: "Schreibe eine Geschichte über Drachen", sicher: true },
+  { text: "Mein Passwort vergessen, hier sind meine Daten...", sicher: false },
+  { text: "Hilf mir mit meinen Mathe-Hausaufgaben zu Brüchen", sicher: true },
+  { text: "Meine Freundin Lena aus Klasse 6b hat Probleme mit...", sicher: false },
+];
+
+console.log("✅ Sichere Prompts:");
+prompts.filter(p => p.sicher).forEach(p => console.log(" -", p.text));
+
+console.log("\\n❌ Nicht sichere Prompts:");
+prompts.filter(p => !p.sicher).forEach(p => console.log(" -", p.text));
+`,
+        check: { kind: "js_console_includes", expected: "Sichere Prompts" },
+        hintMd: "Persönliche Daten, Namen, Adressen = nicht sicher. Schulfragen, Kreativität = sicher.",
+        solutionCode: `const prompts = [
+  { text: "Erkläre Photosynthese", sicher: true },
+  { text: "Ich heiße Anna Müller, Musterstraße 5", sicher: false },
+  { text: "Geschichte über Drachen", sicher: true },
+  { text: "Mein Passwort...", sicher: false },
+];
+console.log("✅ Sichere Prompts:");
+prompts.filter(p => p.sicher).forEach(p => console.log(" -", p.text));
+console.log("\\n❌ Nicht sichere Prompts:");
+prompts.filter(p => !p.sicher).forEach(p => console.log(" -", p.text));`,
+      },
+    },
+    {
+      id: "ki-10",
+      trackId: "ki",
+      title: "🏆 Capstone: Dein Prompt-Portfolio",
+      summary: "Zeige was du gelernt hast – baue dein persönliches Prompt-Buch!",
+      minutes: 35,
+      xp: 180,
+      contentMd: `# 🏆 Capstone: Prompt-Portfolio
+
+> *"Ein Meister-Abenteurer braucht sein Zauberbuch. Dein Prompt-Portfolio ist dein persönliches Zauberbuch!"*
+
+## Was du gelernt hast:
+- ✅ Was eine KI ist
+- ✅ Was ein Prompt ist
+- ✅ Kontext geben
+- ✅ Präzise sein
+- ✅ Rollen-Prompts
+- ✅ KI-Grenzen kennen
+- ✅ KI als Lernhelfer
+- ✅ Kreativ mit KI
+- ✅ Sicher bleiben
+
+## Dein Capstone:
+Erstelle **6 professionelle Prompts** für verschiedene Lebenssituationen.
+
+Jeder Prompt soll nutzen:
+1. **Rolle** für die KI
+2. **Kontext** (wer du bist, was du brauchst)
+3. **Präzise Anweisung** (Was genau, wie viel, welches Format)
+
+## Qualitäts-Check:
+- Hat der Prompt eine Rolle? ✅
+- Ist Kontext dabei? ✅
+- Ist die Aufgabe präzise? ✅
+- Keine privaten Daten? ✅`,
+      exercise: {
+        language: "javascript",
+        title: "Mein Prompt-Portfolio",
+        instructionsMd: `Erstelle **6 professionelle Prompts** für diese Situationen:
+1. Mathe-Hausaufgaben verstehen
+2. Eine Geschichte schreiben
+3. Ein Hobby erklären lassen
+4. Für ein Referat recherchieren
+5. Einen Brief verbessern
+6. Etwas Kreatives erfinden
+
+Jeder Prompt muss **Rolle + Kontext + präzise Aufgabe** haben!`,
+        starterCode: `const meinPromptPortfolio = {
+  mathe: \`
+    Du bist ein geduldiger Mathelehrer.
+    Ich bin in Klasse 5 und verstehe Brüche noch nicht.
+    Erkläre mir wie ich 3/4 + 1/2 rechne mit Schritt-für-Schritt Erklärung und einem Alltagsbeispiel.
+  \`,
+
+  geschichte: \`
+    // Dein Prompt hier:
+    // Rolle + Kontext + was die Geschichte enthalten soll
+  \`,
+
+  hobby: \`
+    // Dein Prompt hier:
+  \`,
+
+  referat: \`
+    // Dein Prompt hier:
+  \`,
+
+  brief: \`
+    // Dein Prompt hier:
+  \`,
+
+  kreativ: \`
+    // Dein Prompt hier:
+  \`,
+};
+
+// Qualitäts-Check:
+let fertig = 0;
+Object.entries(meinPromptPortfolio).forEach(([name, prompt]) => {
+  const laenge = prompt.trim().length;
+  const gut = laenge > 30;
+  console.log(\`\${gut ? "✅" : "❌"} \${name}: \${laenge} Zeichen\`);
+  if (gut) fertig++;
+});
+
+console.log(\`\\n🏆 Fertige Prompts: \${fertig}/6\`);
+`,
+        check: { kind: "js_console_includes", expected: "Portfolio" },
+        hintMd: "Nutze für jeden Prompt: 'Du bist [Rolle]. Ich bin [Kontext]. [Präzise Aufgabe].'",
+        solutionCode: `const portfolio = {
+  mathe: "Du bist Mathelehrer. Ich bin in Klasse 5. Erkläre Brüche Schritt für Schritt.",
+  geschichte: "Du bist Buchautor. Schreibe 100 Wörter über einen fliegenden Hund, lustig.",
+  hobby: "Du bist Experte. Erkläre Skateboarden für Anfänger in 5 Schritten.",
+  referat: "Du bist Historiker. Gib 5 Fakten über die Römer für Klasse 5.",
+  brief: "Du bist Deutschlehrer. Prüfe Grammatik: 'Lieber Oma, ich schreibe dir.'",
+  kreativ: "Erfinde ein neues Tier das halb Hund halb Vogel ist. Beschreibe es in 50 Wörtern.",
+};
+let ok = 0;
+Object.entries(portfolio).forEach(([n, p]) => { const gut = p.length > 20; console.log(\`\${gut?"✅":"❌"} \${n}\`); if(gut)ok++; });
+console.log(\`\\n🏆 Fertige Prompts: \${ok}/6\`);`,
+      },
+    },
+  ],
+};
+
+export const TRACKS: Track[] = [WEB, JS, PY, KI];
 
 export function getTrack(trackId: TrackId): Track {
   const track = TRACKS.find((t) => t.id === trackId);

@@ -107,27 +107,33 @@ export function SandboxRunner({
     return () => window.removeEventListener("message", onMessage);
   }, [mode, onResult, runId]);
 
+  const hasRun = runSignal > 0;
+
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2 text-xs text-zinc-200">
         <div className="font-semibold">
-          {mode === "html" ? "Vorschau" : "Konsole"}
+          {mode === "html" ? "🖼️ Vorschau" : "💻 Konsole"}
         </div>
-        {mode === "javascript" ? (
-          <div className="flex items-center gap-2">
-            <div className="tabular-nums text-zinc-400">
-              Logs: {result.logs.length} · Errors: {result.errors.length}
-            </div>
+        {mode === "javascript" && hasRun ? (
+          <div className="tabular-nums text-zinc-400">
+            Logs: {result.logs.length} · Errors: {result.errors.length}
           </div>
         ) : null}
       </div>
-      <iframe
-        key={runId}
-        sandbox="allow-scripts"
-        className="h-72 w-full bg-white"
-        srcDoc={srcDoc}
-        title="CodeQuest Vorschau"
-      />
+      {hasRun ? (
+        <iframe
+          key={runId}
+          sandbox="allow-scripts"
+          className="h-72 w-full bg-white"
+          srcDoc={srcDoc}
+          title="CodeQuest Vorschau"
+        />
+      ) : (
+        <div className="flex h-72 items-center justify-center text-sm text-zinc-500">
+          ▶️ Klicke auf <span className="mx-1 rounded bg-white/10 px-2 py-0.5 font-semibold text-zinc-300">Ausführen</span> um die Ausgabe zu sehen
+        </div>
+      )}
     </div>
   );
 }

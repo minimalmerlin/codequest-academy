@@ -6,11 +6,12 @@ export const metadata = {
   title: "Lernen – CodeQuest Academy",
 };
 
-const TRACK_STYLES = {
+const TRACK_STYLES: Record<string, { gradient: string; border: string; badge: string }> = {
   web:    { gradient: "from-indigo-500/20 to-indigo-500/5", border: "border-indigo-500/40", badge: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" },
   js:     { gradient: "from-amber-500/20 to-amber-500/5",   border: "border-amber-500/40",  badge: "bg-amber-500/20 text-amber-300 border-amber-500/30"   },
   python: { gradient: "from-emerald-500/20 to-emerald-500/5",border: "border-emerald-500/40",badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"},
-} as const;
+  ki:     { gradient: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40", badge: "bg-violet-500/20 text-violet-300 border-violet-500/30" },
+};
 
 export default function LearnPage() {
   return (

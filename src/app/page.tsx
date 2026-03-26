@@ -25,7 +25,14 @@ const TRACK_STYLES = {
     glow: "shadow-emerald-500/20",
     bar: "bg-emerald-500",
   },
-} as const;
+  ki: {
+    gradient: "from-violet-500/20 to-violet-500/5",
+    border: "border-violet-500/40",
+    badge: "bg-violet-500/20 text-violet-300 border-violet-500/30",
+    glow: "shadow-violet-500/20",
+    bar: "bg-violet-500",
+  },
+} satisfies Record<string, { gradient: string; border: string; badge: string; glow: string; bar: string }>;
 
 export default function Home() {
   return (

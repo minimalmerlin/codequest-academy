@@ -19,11 +19,12 @@ function nextLessonLink(isLessonCompleted: (id: string) => boolean) {
   return null;
 }
 
-const TRACK_STYLES = {
+const TRACK_STYLES: Record<string, { gradient: string; border: string; badge: string; bar: string }> = {
   web:    { gradient: "from-indigo-500/20 to-indigo-500/5",  border: "border-indigo-500/40",  badge: "text-indigo-300",  bar: "bg-indigo-500" },
   js:     { gradient: "from-amber-500/20 to-amber-500/5",    border: "border-amber-500/40",    badge: "text-amber-300",   bar: "bg-amber-500"  },
   python: { gradient: "from-emerald-500/20 to-emerald-500/5",border: "border-emerald-500/40",  badge: "text-emerald-300", bar: "bg-emerald-500"},
-} as const;
+  ki:     { gradient: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40",   badge: "text-violet-300",  bar: "bg-violet-500" },
+};
 
 const LEVEL_TITLES = [
   "Code-Neuling", "Quest-Starter", "HTML-Held", "Script-Kid", "Loop-Lord",
