@@ -112,33 +112,30 @@ export type LearningStats = {
   totalAttempts: number;
 };
 
-/** Loads aggregated stats per lesson for a profile – feeds the adaptive ML layer. */
-export async function dbLoadLearningStats(profileId: string): Promise<LearningStats[]> {
+/**
+ * Loads aggregated learning stats for the current user via a secure RPC function.
+ * Uses get_my_learning_stats() which is SECURITY INVOKER and respects RLS –
+ * never queries the view directly from the client.
+ */
+export async function dbLoadLearningStats(): Promise<LearningStats[]> {
   if (!supabase) return [];
-  const { data, error } = await supabase
-    .from("lesson_attempts")
-    .select("lesson_id, track_id, success, attempts_count, time_spent_seconds")
-    .eq("profile_id", profileId);
+  const { data, error } = await supabase.rpc("get_my_learning_stats");
   if (error || !data) return [];
-
-  // Aggregate per lesson
-  const map = new Map<string, { total: number; successes: number; time: number; attempts: number; trackId: string }>();
-  for (const row of data) {
-    const key = row.lesson_id;
-    const existing = map.get(key) ?? { total: 0, successes: 0, time: 0, attempts: 0, trackId: row.track_id };
-    existing.total++;
-    if (row.success) existing.successes++;
-    existing.time += row.time_spent_seconds ?? 0;
-    existing.attempts += row.attempts_count ?? 1;
-    map.set(key, existing);
-  }
-
-  return Array.from(map.entries()).map(([lessonId, s]) => ({
-    lessonId,
-    trackId: s.trackId,
-    avgTimeSeconds: s.total > 0 ? Math.round(s.time / s.total) : 0,
-    avgAttempts: s.total > 0 ? Math.round((s.attempts / s.total) * 10) / 10 : 0,
-    successRate: s.total > 0 ? s.successes / s.total : 0,
-    totalAttempts: s.total,
+  return (data as Array<{
+    profile_id: string;
+    lesson_id: string;
+    track_id: string;
+    total_attempts: number;
+    avg_time_seconds: number;
+    avg_attempts_session: number;
+    success_rate_pct: number;
+    last_attempted_at: string;
+  }>).map((row) => ({
+    lessonId: row.lesson_id,
+    trackId: row.track_id,
+    avgTimeSeconds: row.avg_time_seconds ?? 0,
+    avgAttempts: row.avg_attempts_session ?? 0,
+    successRate: row.success_rate_pct != null ? row.success_rate_pct / 100 : 0,
+    totalAttempts: row.total_attempts ?? 0,
   }));
 }
