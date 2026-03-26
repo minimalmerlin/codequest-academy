@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import type { Lesson, TrackId } from "@/lib/curriculum";
 import { getTrack, TRACKS } from "@/lib/curriculum";
 import { getActiveProfileId, subscribeProfiles } from "@/lib/profiles";
+import { safeStorage } from "@/lib/storage";
 
 type StoredProgress = {
   completedLessons: Record<string, true>;
@@ -64,12 +65,12 @@ function emit() {
 function readProgress(): StoredProgress {
   if (typeof window === "undefined") return DEFAULT_PROGRESS;
   const profileId = getActiveProfileId();
-  return safeParse(window.localStorage.getItem(`${STORAGE_KEY}:${profileId}`));
+  return safeParse(safeStorage.getItem(`${STORAGE_KEY}:${profileId}`));
 }
 
 function writeProgress(next: StoredProgress) {
   const profileId = getActiveProfileId();
-  window.localStorage.setItem(
+  safeStorage.setItem(
     `${STORAGE_KEY}:${profileId}`,
     JSON.stringify(next),
   );

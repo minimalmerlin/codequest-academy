@@ -1,5 +1,7 @@
 "use client";
 
+import { safeStorage } from "@/lib/storage";
+
 export type KidProfile = {
   id: string;
   name: string;
@@ -41,25 +43,25 @@ function safeParseProfiles(raw: string | null): KidProfile[] {
 }
 
 function writeProfiles(profiles: KidProfile[]) {
-  window.localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+  safeStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
   emit();
 }
 
 function readProfiles(): KidProfile[] {
-  const existing = safeParseProfiles(window.localStorage.getItem(PROFILES_KEY));
+  const existing = safeParseProfiles(safeStorage.getItem(PROFILES_KEY));
   return existing.length > 0 ? existing : [DEFAULT_PROFILE];
 }
 
 export function initializeProfiles() {
   if (typeof window === "undefined") return;
-  const existing = safeParseProfiles(window.localStorage.getItem(PROFILES_KEY));
+  const existing = safeParseProfiles(safeStorage.getItem(PROFILES_KEY));
   if (existing.length === 0) {
-    window.localStorage.setItem(PROFILES_KEY, JSON.stringify([DEFAULT_PROFILE]));
+    safeStorage.setItem(PROFILES_KEY, JSON.stringify([DEFAULT_PROFILE]));
   }
   const profiles = readProfiles();
-  const active = window.localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   if (!active || !profiles.some((p) => p.id === active)) {
-    window.localStorage.setItem(ACTIVE_PROFILE_KEY, profiles[0]!.id);
+    safeStorage.setItem(ACTIVE_PROFILE_KEY, profiles[0]!.id);
   }
   emit();
 }
@@ -76,7 +78,7 @@ export function getProfilesSnapshot() {
 
 export function getActiveProfileId() {
   if (typeof window === "undefined") return "kid-1";
-  const active = window.localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   const profiles = readProfiles();
   return active && profiles.some((p) => p.id === active) ? active : profiles[0]!.id;
 }
@@ -85,7 +87,7 @@ export function setActiveProfileId(profileId: string) {
   initializeProfiles();
   const profiles = readProfiles();
   if (!profiles.some((p) => p.id === profileId)) return;
-  window.localStorage.setItem(ACTIVE_PROFILE_KEY, profileId);
+  safeStorage.setItem(ACTIVE_PROFILE_KEY, profileId);
   emit();
 }
 
@@ -116,9 +118,9 @@ export function deleteProfile(profileId: string) {
   const next = profiles.filter((p) => p.id !== profileId);
   if (next.length === 0) return;
   writeProfiles(next);
-  const active = window.localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   if (active === profileId) {
-    window.localStorage.setItem(ACTIVE_PROFILE_KEY, next[0]!.id);
+    safeStorage.setItem(ACTIVE_PROFILE_KEY, next[0]!.id);
   }
   emit();
 }

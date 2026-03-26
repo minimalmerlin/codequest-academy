@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ExerciseLanguage } from "@/lib/curriculum";
+import { safeStorage } from "@/lib/storage";
 
 function draftKey(lessonId: string) {
   return `codequest_draft_v1:${lessonId}`;
@@ -23,7 +24,7 @@ export function CodeEditor({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    const raw = window.localStorage.getItem(key);
+    const raw = safeStorage.getItem(key);
     if (raw && raw.trim().length > 0) {
       setCode(raw);
       onChange(raw);
@@ -35,7 +36,7 @@ export function CodeEditor({
   }, [key]);
 
   useEffect(() => {
-    window.localStorage.setItem(key, code);
+    safeStorage.setItem(key, code);
   }, [key, code]);
 
   function update(next: string) {
@@ -80,4 +81,3 @@ export function CodeEditor({
     </div>
   );
 }
-
