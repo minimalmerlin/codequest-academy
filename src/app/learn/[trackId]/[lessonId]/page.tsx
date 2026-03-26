@@ -10,17 +10,18 @@ export function generateStaticParams() {
   );
 }
 
-export default function LessonPage({
+export default async function LessonPage({
   params,
 }: {
-  params: { trackId: string; lessonId: string };
+  params: Promise<{ trackId: string; lessonId: string }>;
 }) {
-  const trackId = params.trackId as TrackId;
+  const { trackId: trackIdRaw, lessonId } = await params;
+  const trackId = trackIdRaw as TrackId;
   const track = TRACKS.find((t) => t.id === trackId) ? getTrack(trackId) : null;
   if (!track) return notFound();
 
-  const lesson = track.lessons.find((l) => l.id === params.lessonId)
-    ? getLesson(trackId, params.lessonId)
+  const lesson = track.lessons.find((l) => l.id === lessonId)
+    ? getLesson(trackId, lessonId)
     : null;
   if (!lesson) return notFound();
 

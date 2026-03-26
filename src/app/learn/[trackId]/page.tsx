@@ -9,12 +9,13 @@ export function generateStaticParams() {
   return TRACKS.map((t) => ({ trackId: t.id }));
 }
 
-export default function TrackPage({
+export default async function TrackPage({
   params,
 }: {
-  params: { trackId: string };
+  params: Promise<{ trackId: string }>;
 }) {
-  const trackId = params.trackId as TrackId;
+  const { trackId: trackIdRaw } = await params;
+  const trackId = trackIdRaw as TrackId;
   const track = TRACKS.find((t) => t.id === trackId) ? getTrack(trackId) : null;
   if (!track) return notFound();
 
