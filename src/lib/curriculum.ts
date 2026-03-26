@@ -786,9 +786,9 @@ Eine persönliche Homepage mit:
 
 | Stil | Farben |
 |------|--------|
-| Neon-Dark | `#0f0f1a`, `#7c3aed`, `#e94560` |
-| Ocean | `#0f3460`, `#16213e`, `#00d4ff` |
-| Forest | `#1a2e1a`, `#16a34a`, `#a3e635` |
+| Neon-Dark | \`#0f0f1a\`, \`#7c3aed\`, \`#e94560\` |
+| Ocean | \`#0f3460\`, \`#16213e\`, \`#00d4ff\` |
+| Forest | \`#1a2e1a\`, \`#16a34a\`, \`#a3e635\` |
 
 > 🎉 Wenn du fertig bist: Zeig deine Seite deinen Eltern oder Freunden!`,
       exercise: {
