@@ -13,11 +13,12 @@ export async function dbLoadProfiles(userId: string): Promise<ProfileShape[]> {
   if (!supabase) return [];
   const { data, error } = await supabase
     .from("kid_profiles")
-    .select("*")
+    .select("id, name, created_at")
     .eq("user_id", userId)
     .order("created_at");
   if (error || !data) return [];
-  return data.map((p) => ({ id: p.id, name: p.name, createdAt: p.created_at }));
+  return (data as Array<{ id: string; name: string; created_at: string }>)
+    .map((p) => ({ id: p.id, name: p.name, createdAt: p.created_at }));
 }
 
 export async function dbUpsertProfile(userId: string, profile: ProfileShape): Promise<void> {
@@ -54,15 +55,16 @@ export async function dbLoadProgress(profileId: string): Promise<DbProgress | nu
   if (!supabase) return null;
   const { data, error } = await supabase
     .from("profile_progress")
-    .select("*")
+    .select("completed_lessons, xp, streak_days, last_completed_date")
     .eq("profile_id", profileId)
     .single();
   if (error || !data) return null;
+  const row = data as { completed_lessons: Record<string, true> | null; xp: number; streak_days: number; last_completed_date: string | null };
   return {
-    completedLessons: (data.completed_lessons as Record<string, true>) ?? {},
-    xp: data.xp ?? 0,
-    streakDays: data.streak_days ?? 0,
-    lastCompletedDate: data.last_completed_date ?? undefined,
+    completedLessons: row.completed_lessons ?? {},
+    xp: row.xp ?? 0,
+    streakDays: row.streak_days ?? 0,
+    lastCompletedDate: row.last_completed_date ?? undefined,
   };
 }
 
