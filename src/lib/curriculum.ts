@@ -4563,9 +4563,6 @@ versuche = [50, 25, 37, 31, 34]
         hintMd: "```python\nfor i, versuch in enumerate(versuche, 1):\n    if versuch < geheimzahl:\n        print(f\"Versuch {i}: {versuch} → Zu klein!\")\n    elif versuch > geheimzahl:\n        print(f\"Versuch {i}: {versuch} → Zu groß!\")\n    else:\n        print(f\"🎉 Richtig! {i} Versuche gebraucht!\")\n        break\n```",
       },
     },
-  ],
-};
-
     {
       id: "py-11",
       trackId: "python",
