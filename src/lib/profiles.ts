@@ -1,6 +1,8 @@
 "use client";
 
 import { safeStorage } from "@/lib/storage";
+import { getAuthUser } from "@/lib/auth";
+import { dbUpsertProfile, dbRenameProfile, dbDeleteProfile } from "@/lib/db";
 
 export type KidProfile = {
   id: string;
@@ -104,6 +106,9 @@ export function addProfile(name: string) {
   const next: KidProfile = { id, name: cleaned, createdAt: new Date().toISOString() };
   writeProfiles([...profiles, next]);
   setActiveProfileId(id);
+  // Sync to Supabase if logged in
+  const user = getAuthUser();
+  if (user) void dbUpsertProfile(user.id, next);
 }
 
 export function renameProfile(profileId: string, name: string) {
@@ -114,6 +119,8 @@ export function renameProfile(profileId: string, name: string) {
   writeProfiles(
     profiles.map((p) => (p.id === profileId ? { ...p, name: cleaned } : p)),
   );
+  // Sync to Supabase if logged in
+  if (getAuthUser()) void dbRenameProfile(profileId, cleaned);
 }
 
 export function deleteProfile(profileId: string) {
@@ -125,6 +132,21 @@ export function deleteProfile(profileId: string) {
   const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   if (active === profileId) {
     safeStorage.setItem(ACTIVE_PROFILE_KEY, next[0]!.id);
+  }
+  emit();
+  // Sync to Supabase if logged in
+  if (getAuthUser()) void dbDeleteProfile(profileId);
+}
+
+/**
+ * Called by SupabaseSync after login to replace local profiles with cloud data.
+ */
+export function hydrateProfilesFromCloud(profiles: KidProfile[]) {
+  if (profiles.length === 0) return;
+  safeStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+  const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
+  if (!active || !profiles.some((p) => p.id === active)) {
+    safeStorage.setItem(ACTIVE_PROFILE_KEY, profiles[0]!.id);
   }
   emit();
 }

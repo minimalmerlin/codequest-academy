@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SupabaseSync } from "@/components/SupabaseSync";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="de" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
+        <SupabaseSync />
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <footer className="border-t border-white/10 py-10">
@@ -28,7 +30,7 @@ export default function RootLayout({
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <p>© CodeQuest Academy</p>
               <p className="text-zinc-400">
-                Lokal gespeicherter Fortschritt · Keine Accounts nötig
+                Fortschritt in der Cloud gespeichert · Jederzeit auf allen Geräten
               </p>
             </div>
           </div>

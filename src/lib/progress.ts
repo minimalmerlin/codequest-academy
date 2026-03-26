@@ -5,6 +5,7 @@ import type { Lesson, TrackId } from "@/lib/curriculum";
 import { getTrack, TRACKS } from "@/lib/curriculum";
 import { getActiveProfileId, subscribeProfiles } from "@/lib/profiles";
 import { safeStorage } from "@/lib/storage";
+import { dbSaveProgress } from "@/lib/db";
 
 type StoredProgress = {
   completedLessons: Record<string, true>;
@@ -80,10 +81,23 @@ function readProgress(): StoredProgress {
 
 function writeProgress(next: StoredProgress) {
   const profileId = getActiveProfileId();
-  safeStorage.setItem(
-    `${STORAGE_KEY}:${profileId}`,
-    JSON.stringify(next),
-  );
+  safeStorage.setItem(`${STORAGE_KEY}:${profileId}`, JSON.stringify(next));
+  emit();
+  // Fire-and-forget sync to Supabase (no await intentionally)
+  void dbSaveProgress(profileId, {
+    completedLessons: next.completedLessons,
+    xp: next.xp,
+    streakDays: next.streakDays,
+    lastCompletedDate: next.lastCompletedDate,
+  });
+}
+
+/**
+ * Called by SupabaseSync after loading cloud data.
+ * Overwrites local progress for a given profile without triggering another cloud write.
+ */
+export function hydrateProgressFromCloud(profileId: string, data: StoredProgress) {
+  safeStorage.setItem(`${STORAGE_KEY}:${profileId}`, JSON.stringify(data));
   emit();
 }
 
