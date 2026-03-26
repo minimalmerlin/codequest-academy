@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #0d0d1a;
+  --foreground: #f0f0ff;
   --font-sans-stack: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono-stack: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
@@ -16,21 +16,77 @@
   --font-mono: var(--font-mono-stack);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
 
+.hero-panel {
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(124, 58, 237, 0.35), transparent 55%),
+    radial-gradient(ellipse 700px 400px at 85% 10%, rgba(233, 69, 96, 0.25), transparent 50%),
+    radial-gradient(ellipse 600px 350px at 50% 100%, rgba(16, 185, 129, 0.15), transparent 50%),
+    linear-gradient(180deg, #0d0d1a 0%, #0d0d1a 100%);
+}
+
 .code-panel {
-  background: radial-gradient(1200px 400px at 10% -10%, rgba(99, 102, 241, 0.25), transparent 60%),
-    radial-gradient(800px 300px at 80% 0%, rgba(16, 185, 129, 0.18), transparent 55%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(124, 58, 237, 0.22), transparent 60%),
+    radial-gradient(800px 300px at 80% 0%, rgba(16, 185, 129, 0.15), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+}
+
+/* Track-Farben */
+.track-web {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.05));
+  border-color: rgba(99, 102, 241, 0.4);
+}
+.track-web:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(99, 102, 241, 0.1));
+}
+
+.track-js {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+  border-color: rgba(245, 158, 11, 0.4);
+}
+.track-js:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(245, 158, 11, 0.1));
+}
+
+.track-python {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.track-python:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.1));
+}
+
+/* XP-Bar Animation */
+@keyframes xp-fill {
+  from { width: 0%; }
+}
+
+.xp-bar {
+  animation: xp-fill 1s ease-out;
+}
+
+/* Pulse für Buttons */
+@keyframes gentle-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(124, 58, 237, 0); }
+}
+
+.btn-pulse {
+  animation: gentle-pulse 2s infinite;
+}
+
+/* Stern-Glow für Badges */
+@keyframes star-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.6)); }
+  50%       { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 1)); }
+}
+
+.badge-glow {
+  animation: star-glow 2s ease-in-out infinite;
 }
