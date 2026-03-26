@@ -20,7 +20,14 @@ export type Database = {
           avatar_emoji?: string;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["kid_profiles"]["Insert"]>;
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          avatar_emoji?: string;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       profile_progress: {
         Row: {
@@ -39,7 +46,15 @@ export type Database = {
           last_completed_date?: string | null;
           updated_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["profile_progress"]["Insert"]>;
+        Update: {
+          profile_id?: string;
+          completed_lessons?: Record<string, true>;
+          xp?: number;
+          streak_days?: number;
+          last_completed_date?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       lesson_attempts: {
         Row: {
@@ -64,9 +79,24 @@ export type Database = {
           attempts_count?: number;
           time_spent_seconds?: number | null;
         };
-        Update: Partial<Database["public"]["Tables"]["lesson_attempts"]["Insert"]>;
+        Update: {
+          id?: string;
+          profile_id?: string;
+          lesson_id?: string;
+          track_id?: string;
+          started_at?: string;
+          completed_at?: string | null;
+          success?: boolean | null;
+          attempts_count?: number;
+          time_spent_seconds?: number | null;
+        };
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 };
 
