@@ -14,8 +14,8 @@ supabase login
 # 3. Link to your project (find ref in Supabase Dashboard → Settings → General)
 supabase link --project-ref YOUR_PROJECT_REF
 
-# 4. Set your OpenAI API key (stays secret, never in client code)
-supabase secrets set OPENAI_API_KEY=sk-proj-...
+# 4. Set your Gemini API key (stays secret, never in client code)
+supabase secrets set GEMINI_API_KEY=AIza...
 
 # 5. Deploy the function
 supabase functions deploy generate-practice
@@ -25,7 +25,7 @@ supabase functions deploy generate-practice
 
 1. Client calls `supabase.functions.invoke("generate-practice", { body: {...} })`
 2. Edge Function verifies the user's JWT (auth check)
-3. Calls OpenAI `gpt-4o-mini` with the lesson context
+3. Calls Google Gemini `gemini-2.0-flash` with the lesson context
 4. Returns a personalized, easier exercise as JSON
 5. Client renders it in the `PracticeGenerator` component
 
@@ -33,6 +33,6 @@ supabase functions deploy generate-practice
 
 | Variable | Description |
 |----------|-------------|
-| `OPENAI_API_KEY` | Your OpenAI API key — **never expose this client-side** |
+| `GEMINI_API_KEY` | Your Google Gemini API key — **never expose this client-side** |
 | `SUPABASE_URL` | Auto-injected by Supabase |
 | `SUPABASE_ANON_KEY` | Auto-injected by Supabase |

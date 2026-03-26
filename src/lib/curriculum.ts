@@ -2659,9 +2659,6 @@ const timer = setInterval(function() {
         hintMd: "Timer: `const timer = setInterval(function() { zeit--; if (zeit <= 0) { clearInterval(timer); btn.disabled = true; } }, 1000);`",
       },
     },
-  ],
-};
-
     {
       id: "js-11",
       trackId: "js",

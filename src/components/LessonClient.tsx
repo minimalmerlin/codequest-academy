@@ -167,6 +167,7 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
   ]);
 
   return (
+    <>
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="space-y-6">
         <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
@@ -311,5 +312,6 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
       </div>
     </div>
     {checkState.status === "passed" ? <AdaptivePanel /> : null}
+    </>
   );
 }

@@ -6,7 +6,7 @@
  *
  * Deploy:
  *   supabase functions deploy generate-practice
- *   supabase secrets set OPENAI_API_KEY=sk-...
+ *   supabase secrets set GEMINI_API_KEY=AIza...
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -21,14 +21,13 @@ type GenerateRequest = {
   lessonId: string;
   trackId: string;
   lessonTitle: string;
-  lessonContent: string;  // the contentMd of the lesson (trimmed)
+  lessonContent: string;
   difficulty: "schwer" | "mittel";
   language: "javascript" | "python" | "html";
-  childAgeHint?: number;  // default: 11
+  childAgeHint?: number;
 };
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: CORS_HEADERS });
   }
@@ -75,10 +74,10 @@ serve(async (req) => {
     childAgeHint = 11,
   } = body;
 
-  // ── OpenAI call ────────────────────────────────────────────────────────────
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!openaiKey) {
-    return new Response(JSON.stringify({ error: "OpenAI not configured" }), {
+  // ── Gemini call ────────────────────────────────────────────────────────────
+  const geminiKey = Deno.env.get("GEMINI_API_KEY");
+  if (!geminiKey) {
+    return new Response(JSON.stringify({ error: "Gemini not configured" }), {
       status: 500,
       headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
     });
@@ -95,7 +94,7 @@ REGELN:
 - Code-Kommentare auf Deutsch
 - Der Starter-Code soll dem Kind den Einstieg erleichtern (mehr Vorstruktur)
 
-Antworte NUR mit diesem JSON-Format (kein Markdown, keine Erklärung drumherum):
+Antworte NUR mit validem JSON (kein Markdown, keine Erklärung drumherum):
 {
   "title": "...",
   "instructionsMd": "Kurze Aufgabenbeschreibung in Markdown (2-3 Sätze)",
@@ -116,25 +115,31 @@ Erstelle jetzt eine einfachere Alternativ-Übung.`;
 
   let aiResponse: Response;
   try {
-    aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
+    aiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: systemPrompt }],
+          },
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: userPrompt }],
+            },
+          ],
+          generationConfig: {
+            responseMimeType: "application/json",
+            temperature: 0.7,
+            maxOutputTokens: 1200,
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        temperature: 0.7,
-        max_tokens: 1200,
-        response_format: { type: "json_object" },
-      }),
-    });
+    );
   } catch (e) {
-    return new Response(JSON.stringify({ error: `OpenAI request failed: ${e}` }), {
+    return new Response(JSON.stringify({ error: `Gemini request failed: ${e}` }), {
       status: 500,
       headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
     });
@@ -142,16 +147,16 @@ Erstelle jetzt eine einfachere Alternativ-Übung.`;
 
   if (!aiResponse.ok) {
     const errText = await aiResponse.text();
-    return new Response(JSON.stringify({ error: `OpenAI error: ${errText}` }), {
+    return new Response(JSON.stringify({ error: `Gemini error: ${errText}` }), {
       status: 502,
       headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
     });
   }
 
   const aiJson = await aiResponse.json() as {
-    choices: Array<{ message: { content: string } }>;
+    candidates: Array<{ content: { parts: Array<{ text: string }> } }>;
   };
-  const content = aiJson.choices?.[0]?.message?.content ?? "{}";
+  const content = aiJson.candidates?.[0]?.content?.parts?.[0]?.text ?? "{}";
 
   let exercise: Record<string, string>;
   try {
