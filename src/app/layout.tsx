@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SupabaseSync } from "@/components/SupabaseSync";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { OnboardingModal } from "@/components/OnboardingModal";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -23,8 +25,11 @@ export default function RootLayout({
     <html lang="de" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
         <SupabaseSync />
+        <OnboardingModal />
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </main>
         <footer className="border-t border-white/10 py-10">
           <div className="mx-auto w-full max-w-6xl px-4 text-sm text-zinc-300">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

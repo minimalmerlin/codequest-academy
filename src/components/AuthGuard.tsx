@@ -3,10 +3,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { PageSkeleton } from "@/components/PageSkeleton";
 
 /**
  * Wraps protected pages. Redirects to "/" if not logged in.
- * Shows nothing while auth state is loading to prevent flash.
+ * Shows skeleton while auth state is loading to prevent white flash.
  */
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -18,7 +19,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [loading, user, router]);
 
-  if (loading || !user) return null;
+  if (loading) return <PageSkeleton />;
+  if (!user) return null;
 
   return <>{children}</>;
 }
