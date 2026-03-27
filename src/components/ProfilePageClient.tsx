@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { TRACKS } from "@/lib/curriculum";
+import type { Track } from "@/lib/curriculum";
+import { CertificateModal } from "@/components/CertificateModal";
 import {
   getActiveProfileId,
   getProfilesSnapshot,
@@ -42,6 +44,9 @@ export function ProfilePageClient() {
   // ── Progress + Adaptive data ────────────────────────────────────────────────
   const { progress, level, trackStats, badges } = useProgress();
   const { loading: adaptiveLoading, weakAreas } = useAdaptiveLearning();
+
+  // ── Certificate modal ───────────────────────────────────────────────────────
+  const [certTrack, setCertTrack] = useState<Track | null>(null);
 
   // ── Name editing ────────────────────────────────────────────────────────────
   const [editing, setEditing] = useState(false);
@@ -87,6 +92,7 @@ export function ProfilePageClient() {
   const totalLessons = TRACKS.reduce((acc, t) => acc + t.lessons.length, 0);
 
   return (
+    <>
     <div className="mx-auto w-full max-w-2xl px-4 py-10 space-y-6">
 
       {/* ── Back ──────────────────────────────────────────────────────────── */}
@@ -273,6 +279,15 @@ export function ProfilePageClient() {
                 <div className="text-xs mt-0.5 opacity-70">
                   {earned ? "✓ Verdient" : "Noch nicht"}
                 </div>
+                {earned ? (
+                  <button
+                    type="button"
+                    onClick={() => setCertTrack(track)}
+                    className="mt-2 text-[10px] font-semibold underline underline-offset-2 opacity-80 hover:opacity-100"
+                  >
+                    📄 Zertifikat
+                  </button>
+                ) : null}
               </div>
             );
           })}
@@ -280,5 +295,14 @@ export function ProfilePageClient() {
       </div>
 
     </div>
+
+      {certTrack && profile ? (
+        <CertificateModal
+          track={certTrack}
+          profileName={profile.name}
+          onClose={() => setCertTrack(null)}
+        />
+      ) : null}
+    </>
   );
 }
