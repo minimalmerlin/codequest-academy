@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth";
 
 type Tab = "signin" | "signup";
@@ -8,6 +9,8 @@ type Tab = "signin" | "signup";
 export function AuthModal({ onClose }: { onClose: () => void }) {
   const { signIn, signUp } = useAuth();
   const [tab, setTab] = useState<Tab>("signin");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,7 +40,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
     }
   }, [tab, email, password, signIn, signUp, onClose]);
 
-  return (
+  const modal = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
@@ -123,4 +126,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
+
+  if (!mounted) return null;
+  return createPortal(modal, document.body);
 }
