@@ -71,7 +71,7 @@ export function ProfilePill() {
 
           <div className="border-t border-white/10 p-2">
             <Link
-              href={`/profile/${activeId}`}
+              href="/profile"
               className="flex w-full items-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-3 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-500/20 mb-2"
             >
               👤 Mein Profil & Fortschritt

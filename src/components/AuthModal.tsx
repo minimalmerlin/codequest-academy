@@ -41,7 +41,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
     } finally {
       setLoading(false);
     }
-  }, [tab, email, password, signIn, signUp, onClose]);
+  }, [tab, email, password, signIn, signUp, onClose, router]);
 
   const modal = (
     <div

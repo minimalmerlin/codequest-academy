@@ -19,14 +19,14 @@ const TRACK_COLORS: Record<string, { bar: string; badge: string; text: string }>
   ki:     { bar: "bg-violet-500",  badge: "border-violet-500/30 bg-violet-500/10 text-violet-300",  text: "text-violet-300" },
 };
 
-export function ProfilePageClient({ profileId }: { profileId: string }) {
+export function ProfilePageClient() {
   // ── Reactive profile list ───────────────────────────────────────────────────
   const profiles = useSyncExternalStore(
     subscribeProfiles,
     getProfilesSnapshot,
     getProfilesSnapshot,
   );
-  const activeId = useSyncExternalStore(
+  const profileId = useSyncExternalStore(
     subscribeProfiles,
     getActiveProfileId,
     getActiveProfileId,
@@ -58,25 +58,6 @@ export function ProfilePageClient({ profileId }: { profileId: string }) {
       renameProfile(profileId, cleaned);
     }
     setEditing(false);
-  }
-
-  // ── Access guard ────────────────────────────────────────────────────────────
-  if (activeId !== profileId) {
-    return (
-      <div className="mx-auto w-full max-w-lg px-4 py-20 text-center">
-        <div className="text-5xl mb-4">🔒</div>
-        <h1 className="text-2xl font-bold text-white mb-2">Kein Zugriff</h1>
-        <p className="text-zinc-400 text-sm mb-6">
-          Du kannst nur dein eigenes Profil sehen. Wechsel zuerst zu diesem Profil.
-        </p>
-        <Link
-          href="/dashboard"
-          className="inline-block rounded-2xl bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15"
-        >
-          ← Zum Dashboard
-        </Link>
-      </div>
-    );
   }
 
   if (!profile) {
