@@ -168,7 +168,7 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
 
   return (
     <>
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
       <div className="space-y-6">
         <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -244,14 +244,14 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-zinc-200 hover:bg-white/10"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-white/10"
               onClick={run}
             >
               Ausführen
             </button>
             <button
               type="button"
-              className="rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-400 disabled:opacity-60"
+              className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-400 disabled:opacity-60"
               onClick={checkNow}
               disabled={alreadyDone}
             >

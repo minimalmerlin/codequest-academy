@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { TRACKS } from "@/lib/curriculum";
 import {
@@ -11,6 +11,9 @@ import {
 } from "@/lib/profiles";
 import { useProgress } from "@/lib/progress";
 import { useAdaptiveLearning } from "@/lib/adaptive";
+
+// Captured at module load — used as fallback for profiles with "init" createdAt
+const MODULE_LOAD_TIME = Date.now();
 
 const TRACK_COLORS: Record<string, { bar: string; badge: string; text: string }> = {
   web:    { bar: "bg-indigo-500",  badge: "border-indigo-500/30 bg-indigo-500/10 text-indigo-300",  text: "text-indigo-300" },
@@ -59,6 +62,11 @@ export function ProfilePageClient() {
     }
     setEditing(false);
   }
+
+  const memberSinceDate = useMemo(
+    () => new Date(profile?.createdAt === "init" || !profile ? MODULE_LOAD_TIME : profile.createdAt),
+    [profile],
+  );
 
   if (!profile) {
     return (
@@ -133,7 +141,7 @@ export function ProfilePageClient() {
               </div>
             )}
             <p className="mt-0.5 text-sm text-zinc-400">
-              Mitglied seit {new Date(profile.createdAt === "init" ? Date.now() : profile.createdAt).toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
+              Mitglied seit {memberSinceDate.toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
             </p>
           </div>
         </div>
@@ -154,7 +162,7 @@ export function ProfilePageClient() {
       </div>
 
       {/* ── Stats Row ─────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
           { label: "Gesamt XP", value: progress.xp.toLocaleString("de-DE"), icon: "⭐" },
           { label: "Streak", value: `${progress.streakDays} Tage`, icon: "🔥" },

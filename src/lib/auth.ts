@@ -38,7 +38,8 @@ export function useAuth() {
   const [state, setState] = useState<AuthState>(currentAuthState);
 
   useEffect(() => {
-    setState(currentAuthState);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setState(currentAuthState); // sync hydration gap: state may have changed between render and effect
     authListeners.add(setState);
     return () => { authListeners.delete(setState); };
   }, []);

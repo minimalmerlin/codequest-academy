@@ -19,11 +19,13 @@ export function OnboardingModal() {
   const [name, setName] = useState("");
   const [mounted, setMounted] = useState(false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (!user) return;
     const done = localStorage.getItem(ONBOARDING_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!done) setShow(true);
   }, [user]);
 
@@ -66,7 +68,7 @@ export function OnboardingModal() {
           onClick={finish}
           className="w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 text-base font-bold text-white shadow-lg shadow-violet-500/30 hover:opacity-90 transition-opacity"
         >
-          ✨ Los geht's!
+          ✨ Los geht&apos;s!
         </button>
 
         <div className="mt-6 grid grid-cols-3 gap-3 text-center">
