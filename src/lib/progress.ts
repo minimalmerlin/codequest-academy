@@ -164,6 +164,8 @@ export function useProgress() {
       js: false,
       python: false,
       ki: false,
+      sql: false,
+      react: false,
     };
     for (const track of TRACKS) {
       result[track.id] =

@@ -8,10 +8,12 @@ export const metadata = {
 };
 
 const TRACK_STYLES: Record<string, { gradient: string; border: string; badge: string }> = {
-  web:    { gradient: "from-indigo-500/20 to-indigo-500/5", border: "border-indigo-500/40", badge: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" },
-  js:     { gradient: "from-amber-500/20 to-amber-500/5",   border: "border-amber-500/40",  badge: "bg-amber-500/20 text-amber-300 border-amber-500/30"   },
-  python: { gradient: "from-emerald-500/20 to-emerald-500/5",border: "border-emerald-500/40",badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"},
-  ki:     { gradient: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40", badge: "bg-violet-500/20 text-violet-300 border-violet-500/30" },
+  web:    { gradient: "from-indigo-500/20 to-indigo-500/5",  border: "border-indigo-500/40",  badge: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30"  },
+  js:     { gradient: "from-amber-500/20 to-amber-500/5",    border: "border-amber-500/40",   badge: "bg-amber-500/20 text-amber-300 border-amber-500/30"     },
+  python: { gradient: "from-emerald-500/20 to-emerald-500/5",border: "border-emerald-500/40", badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"},
+  ki:     { gradient: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40",  badge: "bg-violet-500/20 text-violet-300 border-violet-500/30"  },
+  sql:    { gradient: "from-sky-500/20 to-sky-500/5",         border: "border-sky-500/40",     badge: "bg-sky-500/20 text-sky-300 border-sky-500/30"           },
+  react:  { gradient: "from-rose-500/20 to-rose-500/5",       border: "border-rose-500/40",    badge: "bg-rose-500/20 text-rose-300 border-rose-500/30"        },
 };
 
 export default function LearnPage() {

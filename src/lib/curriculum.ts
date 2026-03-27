@@ -1,5 +1,5 @@
-export type TrackId = "web" | "js" | "python" | "ki";
-export type ExerciseLanguage = "html" | "javascript" | "python";
+export type TrackId = "web" | "js" | "python" | "ki" | "sql" | "react";
+export type ExerciseLanguage = "html" | "javascript" | "python" | "sql" | "react";
 
 export type ExerciseCheck =
   | {
@@ -13,6 +13,10 @@ export type ExerciseCheck =
     }
   | {
       kind: "python_stdout_includes";
+      expected: string;
+    }
+  | {
+      kind: "sql_result_includes";
       expected: string;
     };
 
@@ -42,7 +46,7 @@ export type Track = {
   title: string;
   emoji: string;
   description: string;
-  color: "indigo" | "emerald" | "amber" | "violet";
+  color: "indigo" | "emerald" | "amber" | "violet" | "sky" | "rose";
   recommendedAge: string;
   lessons: Lesson[];
 };
@@ -6470,7 +6474,944 @@ console.log(\`\\n🏆 Fertige Prompts: \${ok}/6\`);`,
   ],
 };
 
-export const TRACKS: Track[] = [WEB, JS, PY, KI];
+const SQL: Track = {
+  id: "sql",
+  title: "SQL & Daten",
+  emoji: "🗄️",
+  description: "Lerne, wie du Datenbanken abfragst und riesige Datemengen blitzschnell findest – wie ein echter Daten-Detektiv!",
+  color: "sky",
+  recommendedAge: "ab 12 Jahren",
+  lessons: [
+    {
+      id: "sql-01",
+      trackId: "sql",
+      title: "🔍 Alle Daten anzeigen mit SELECT *",
+      summary: "Lerne den einfachsten SQL-Befehl: alle Daten aus einer Tabelle abrufen.",
+      minutes: 8,
+      xp: 30,
+      contentMd: `# SELECT * – Alles auf einmal!
+
+SQL ist die Sprache, mit der du Datenbanken befragst – wie ein Suchbefehl für riesige Tabellen.
+
+Der einfachste Befehl ist \`SELECT * FROM tabellenname\` – das \`*\` bedeutet "alles".
+
+\`\`\`sql
+SELECT * FROM tiere;
+\`\`\`
+
+Das zeigt dir **alle Zeilen und alle Spalten** der Tabelle \`tiere\`.
+
+> 💡 Vergiss das Semikolon \`;\` am Ende nicht – es sagt SQL: "Befehl fertig!"`,
+      exercise: {
+        language: "sql",
+        title: "Zeig alle Tiere!",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige alle Daten aus der Tabelle \`tiere\` an.\n\nErsetze die Lücke \`__\` mit dem richtigen Tabellennamen.`,
+        starterCode: "SELECT * FROM __;",
+        check: { kind: "sql_result_includes", expected: "Elefant" },
+        hintMd: "Der Tabellenname lautet `tiere`. Schreib: `SELECT * FROM tiere;`",
+        solutionCode: "SELECT * FROM tiere;",
+      },
+    },
+    {
+      id: "sql-02",
+      trackId: "sql",
+      title: "🎯 Bestimmte Spalten auswählen",
+      summary: "Wähle gezielt nur die Spalten aus, die du wirklich brauchst.",
+      minutes: 8,
+      xp: 35,
+      contentMd: `# Nur bestimmte Spalten anzeigen
+
+Statt \`*\` (alles) kannst du genau sagen, welche Spalten du sehen willst.
+
+\`\`\`sql
+SELECT name, art FROM tiere;
+\`\`\`
+
+Schreibe einfach die Spaltennamen nach \`SELECT\`, getrennt durch Kommas.
+
+Das ist nützlich, wenn eine Tabelle viele Spalten hat und du nur bestimmte Infos brauchst.
+
+> 💡 Groß- und Kleinschreibung bei Spaltennamen ist egal: \`Name\` und \`name\` funktionieren beide.`,
+      exercise: {
+        language: "sql",
+        title: "Nur Name und Art der Tiere!",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige aus der Tabelle \`tiere\` nur die Spalten \`name\` und \`art\` an.`,
+        starterCode: "SELECT __, __ FROM tiere;",
+        check: { kind: "sql_result_includes", expected: "Säugetier" },
+        hintMd: "Schreib beide Spaltennamen nach SELECT:\n\n`SELECT name, art FROM tiere;`",
+        solutionCode: "SELECT name, art FROM tiere;",
+      },
+    },
+    {
+      id: "sql-03",
+      trackId: "sql",
+      title: "🔎 Filtern mit WHERE",
+      summary: "Nutze WHERE, um nur die Zeilen anzuzeigen, die eine Bedingung erfüllen.",
+      minutes: 10,
+      xp: 40,
+      contentMd: `# WHERE – Der Filter-Befehl
+
+Mit \`WHERE\` kannst du Zeilen filtern – ähnlich wie bei einer Suchfunktion.
+
+\`\`\`sql
+SELECT * FROM tiere WHERE art = 'Säugetier';
+\`\`\`
+
+Nur Zeilen, bei denen \`art\` gleich \`'Säugetier'\` ist, werden angezeigt.
+
+Textwerte musst du immer in **einfache Anführungszeichen** \`' '\` setzen.
+
+> 💡 Das Gleichheitszeichen \`=\` prüft: "Ist dieser Wert genau gleich?"`,
+      exercise: {
+        language: "sql",
+        title: "Zeig alle Vögel!",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige alle Tiere aus der Tabelle \`tiere\` an, bei denen \`art\` gleich \`'Vogel'\` ist.`,
+        starterCode: "SELECT * FROM tiere WHERE __ = '__';",
+        check: { kind: "sql_result_includes", expected: "Adler" },
+        hintMd: "Filtere nach der Spalte `art`:\n\n`SELECT * FROM tiere WHERE art = 'Vogel';`",
+        solutionCode: "SELECT * FROM tiere WHERE art = 'Vogel';",
+      },
+    },
+    {
+      id: "sql-04",
+      trackId: "sql",
+      title: "📊 Sortieren mit ORDER BY",
+      summary: "Sortiere deine Ergebnisse auf- oder absteigend mit ORDER BY.",
+      minutes: 10,
+      xp: 40,
+      contentMd: `# ORDER BY – Sortieren leicht gemacht
+
+Mit \`ORDER BY\` kannst du deine Ergebnisse sortieren.
+
+\`\`\`sql
+SELECT name, punkte FROM schueler ORDER BY punkte DESC;
+\`\`\`
+
+- \`DESC\` = absteigend (höchster Wert zuerst)
+- \`ASC\` = aufsteigend (niedrigster Wert zuerst, das ist der Standard)
+
+So siehst du sofort, wer die meisten Punkte hat – oder die wenigsten.
+
+> 💡 \`DESC\` kommt von "descending" (englisch für "absteigend").`,
+      exercise: {
+        language: "sql",
+        title: "Wer hat die meisten Punkte?",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige \`name\` und \`punkte\` aus der Tabelle \`schueler\` an, sortiert nach \`punkte\` absteigend.`,
+        starterCode: "SELECT name, punkte FROM schueler ORDER BY __ __;",
+        check: { kind: "sql_result_includes", expected: "Julia" },
+        hintMd: "Nutze `ORDER BY punkte DESC`:\n\n`SELECT name, punkte FROM schueler ORDER BY punkte DESC;`",
+        solutionCode: "SELECT name, punkte FROM schueler ORDER BY punkte DESC;",
+      },
+    },
+    {
+      id: "sql-05",
+      trackId: "sql",
+      title: "✂️ Nur die ersten N Zeilen mit LIMIT",
+      summary: "Begrenze die Anzahl der angezeigten Ergebnisse mit LIMIT.",
+      minutes: 8,
+      xp: 35,
+      contentMd: `# LIMIT – Nur so viele Ergebnisse wie du willst
+
+Mit \`LIMIT\` kannst du festlegen, wie viele Zeilen maximal angezeigt werden.
+
+\`\`\`sql
+SELECT name, punkte FROM schueler ORDER BY punkte DESC LIMIT 3;
+\`\`\`
+
+Das zeigt dir nur die **Top 3** Schüler mit den meisten Punkten!
+
+LIMIT kommt immer ganz am **Ende** der Abfrage.
+
+> 💡 Kombiniere ORDER BY + LIMIT, um z.B. "die 5 schwersten Tiere" zu finden.`,
+      exercise: {
+        language: "sql",
+        title: "Die Top 5 Länder nach Einwohnern!",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige \`name\` und \`einwohner_mio\` aus \`laender\`, sortiert nach Einwohnern absteigend, aber nur die ersten **5** Einträge.`,
+        starterCode: "SELECT name, einwohner_mio FROM laender ORDER BY einwohner_mio DESC LIMIT __;",
+        check: { kind: "sql_result_includes", expected: "Brasilien" },
+        hintMd: "Ersetze `__` mit der Zahl 5:\n\n`SELECT name, einwohner_mio FROM laender ORDER BY einwohner_mio DESC LIMIT 5;`",
+        solutionCode: "SELECT name, einwohner_mio FROM laender ORDER BY einwohner_mio DESC LIMIT 5;",
+      },
+    },
+    {
+      id: "sql-06",
+      trackId: "sql",
+      title: "🔢 Zählen mit COUNT()",
+      summary: "Zähle, wie viele Zeilen eine Bedingung erfüllen, mit der COUNT()-Funktion.",
+      minutes: 10,
+      xp: 45,
+      contentMd: `# COUNT() – Wie viele gibt es?
+
+\`COUNT()\` zählt die Anzahl der Zeilen in einer Abfrage.
+
+\`\`\`sql
+SELECT COUNT(*) FROM tiere;
+\`\`\`
+
+Das gibt dir die Gesamtzahl aller Tiere zurück.
+
+Du kannst auch mit \`WHERE\` kombinieren:
+
+\`\`\`sql
+SELECT COUNT(*) FROM tiere WHERE art = 'Säugetier';
+\`\`\`
+
+> 💡 \`COUNT(*)\` zählt alle Zeilen; \`COUNT(spalte)\` zählt nur Zeilen, wo diese Spalte nicht leer ist.`,
+      exercise: {
+        language: "sql",
+        title: "Wie viele Schüler gibt es?",
+        instructionsMd: `**Deine Aufgabe:**\n\nZähle, wie viele Schüler in der Tabelle \`schueler\` vorhanden sind.`,
+        starterCode: "SELECT __(*)  FROM schueler;",
+        check: { kind: "sql_result_includes", expected: "8" },
+        hintMd: "Nutze `COUNT(*)`:\n\n`SELECT COUNT(*) FROM schueler;`",
+        solutionCode: "SELECT COUNT(*) FROM schueler;",
+      },
+    },
+    {
+      id: "sql-07",
+      trackId: "sql",
+      title: "🔢 WHERE mit Zahlen",
+      summary: "Filtere Daten mit Zahlenbedingungen wie größer als oder kleiner als.",
+      minutes: 10,
+      xp: 40,
+      contentMd: `# WHERE mit Zahlen – Vergleiche nutzen
+
+Bei Zahlen kannst du mehr als nur \`=\` verwenden:
+
+| Operator | Bedeutung |
+|----------|-----------|
+| \`=\`    | gleich |
+| \`>\`    | größer als |
+| \`<\`    | kleiner als |
+| \`>=\`   | größer oder gleich |
+| \`<=\`   | kleiner oder gleich |
+
+\`\`\`sql
+SELECT name, punkte FROM schueler WHERE punkte > 80;
+\`\`\`
+
+> 💡 Bei Zahlen brauchst du **keine** Anführungszeichen!`,
+      exercise: {
+        language: "sql",
+        title: "Schüler mit über 80 Punkten!",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige \`name\` und \`punkte\` aller Schüler aus \`schueler\`, die **mehr als 80 Punkte** haben.`,
+        starterCode: "SELECT name, punkte FROM schueler WHERE punkte __ 80;",
+        check: { kind: "sql_result_includes", expected: "Mia" },
+        hintMd: "Nutze den `>` Operator:\n\n`SELECT name, punkte FROM schueler WHERE punkte > 80;`",
+        solutionCode: "SELECT name, punkte FROM schueler WHERE punkte > 80;",
+      },
+    },
+    {
+      id: "sql-08",
+      trackId: "sql",
+      title: "🔗 Mehrere Bedingungen mit AND und OR",
+      summary: "Kombiniere mehrere Filterbedingungen mit AND und OR.",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# AND und OR – Mehrere Bedingungen
+
+Du kannst mehrere \`WHERE\`-Bedingungen verbinden:
+
+- \`AND\` – **beide** Bedingungen müssen zutreffen
+- \`OR\` – **mindestens eine** Bedingung muss zutreffen
+
+\`\`\`sql
+SELECT name, klasse, punkte
+FROM schueler
+WHERE klasse = 6 AND punkte > 80;
+\`\`\`
+
+\`\`\`sql
+SELECT * FROM tiere WHERE art = 'Vogel' OR art = 'Reptil';
+\`\`\`
+
+> 💡 Bei Unklarheit: Klammern \`()\` helfen, die Reihenfolge deutlich zu machen.`,
+      exercise: {
+        language: "sql",
+        title: "Schüler aus Klasse 7 oder 8 mit vielen Punkten!",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige alle Schüler aus \`schueler\`, die in Klasse 7 **oder** Klasse 8 sind **und** mehr als 80 Punkte haben.`,
+        starterCode: "SELECT name, klasse, punkte FROM schueler WHERE (klasse = 7 __ klasse = 8) __ punkte > 80;",
+        check: { kind: "sql_result_includes", expected: "Julia" },
+        hintMd: "Nutze `OR` für die Klassen und `AND` für die Punkte:\n\n`SELECT name, klasse, punkte FROM schueler WHERE (klasse = 7 OR klasse = 8) AND punkte > 80;`",
+        solutionCode: "SELECT name, klasse, punkte FROM schueler WHERE (klasse = 7 OR klasse = 8) AND punkte > 80;",
+      },
+    },
+    {
+      id: "sql-09",
+      trackId: "sql",
+      title: "📐 MIN, MAX und AVG – Statistik-Funktionen",
+      summary: "Berechne Minimum, Maximum und Durchschnitt mit Aggregatfunktionen.",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# MIN, MAX, AVG – Statistik mit SQL
+
+SQL kann direkt Berechnungen für dich durchführen:
+
+| Funktion | Was sie macht |
+|----------|--------------|
+| \`MIN(spalte)\` | Kleinster Wert |
+| \`MAX(spalte)\` | Größter Wert |
+| \`AVG(spalte)\` | Durchschnitt |
+| \`SUM(spalte)\` | Summe aller Werte |
+
+\`\`\`sql
+SELECT MIN(punkte), MAX(punkte), AVG(punkte) FROM schueler;
+\`\`\`
+
+> 💡 Du kannst mehrere Aggregat-Funktionen in einer Abfrage kombinieren!`,
+      exercise: {
+        language: "sql",
+        title: "Wie schwer ist das schwerste Tier?",
+        instructionsMd: `**Deine Aufgabe:**\n\nFinde das **schwerste** Tier aus \`tiere\` – zeige den maximalen Wert der Spalte \`gewicht_kg\`.`,
+        starterCode: "SELECT __(gewicht_kg) FROM tiere;",
+        check: { kind: "sql_result_includes", expected: "5000" },
+        hintMd: "Nutze `MAX()`:\n\n`SELECT MAX(gewicht_kg) FROM tiere;`",
+        solutionCode: "SELECT MAX(gewicht_kg) FROM tiere;",
+      },
+    },
+    {
+      id: "sql-10",
+      trackId: "sql",
+      title: "📦 Gruppieren mit GROUP BY",
+      summary: "Gruppiere Daten nach einer Spalte und wende Aggregatfunktionen auf jede Gruppe an.",
+      minutes: 15,
+      xp: 60,
+      contentMd: `# GROUP BY – Daten gruppieren
+
+Mit \`GROUP BY\` kannst du Zeilen zu Gruppen zusammenfassen und Berechnungen für jede Gruppe durchführen.
+
+\`\`\`sql
+SELECT art, COUNT(*) FROM tiere GROUP BY art;
+\`\`\`
+
+Das zählt, wie viele Tiere es pro Tierart gibt – Säugetiere, Vögel und Reptilien jeweils getrennt.
+
+\`\`\`sql
+SELECT klasse, AVG(punkte) FROM schueler GROUP BY klasse;
+\`\`\`
+
+> 💡 Nach \`GROUP BY\` darf \`SELECT\` nur Spalten enthalten, nach denen du gruppierst, oder Aggregatfunktionen!`,
+      exercise: {
+        language: "sql",
+        title: "Wie viele Tiere pro Tierart?",
+        instructionsMd: `**Deine Aufgabe:**\n\nZeige für jede \`art\` in der Tabelle \`tiere\`, wie viele Tiere es gibt. Nutze \`GROUP BY\`.`,
+        starterCode: "SELECT art, COUNT(*) FROM tiere GROUP BY __;",
+        check: { kind: "sql_result_includes", expected: "Säugetier" },
+        hintMd: "Gruppiere nach der Spalte `art`:\n\n`SELECT art, COUNT(*) FROM tiere GROUP BY art;`",
+        solutionCode: "SELECT art, COUNT(*) FROM tiere GROUP BY art;",
+      },
+    },
+  ],
+};
+
+const REACT: Track = {
+  id: "react",
+  title: "React",
+  emoji: "⚛️",
+  description: "Baue moderne, interaktive UIs mit dem beliebtesten JavaScript-Framework – mit Komponenten, Props und Hooks!",
+  color: "rose",
+  recommendedAge: "ab 14 Jahren",
+  lessons: [
+    {
+      id: "react-01",
+      trackId: "react",
+      title: "⚛️ Was ist React? Erstes Element",
+      summary: "Lerne, was React ist, und erstelle dein erstes Element mit React.createElement.",
+      minutes: 10,
+      xp: 40,
+      contentMd: `# Was ist React?
+
+React ist eine JavaScript-Bibliothek, mit der du interaktive Benutzeroberflächen bauen kannst.
+
+Anstatt HTML direkt zu schreiben, beschreibst du mit React **Komponenten**: kleine Bausteine, die zusammengesetzt eine ganze App ergeben.
+
+Mit \`React.createElement\` kannst du HTML-Elemente in JavaScript erstellen:
+
+\`\`\`javascript
+const element = React.createElement('h1', null, 'Hallo Welt!');
+ReactDOM.render(element, document.getElementById('root'));
+\`\`\`
+
+> 💡 Das \`null\` ist der Platz für Eigenschaften (Props) – dazu später mehr!`,
+      exercise: {
+        language: "react",
+        title: "Dein erstes React-Element!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle mit \`React.createElement\` ein \`<h1>\`-Element mit dem Text "Ich lerne React!" und rendere es in den \`root\`-Container.`,
+        starterCode: `const element = React.createElement('h1', null, '___');
+ReactDOM.render(element, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["React.createElement", "ReactDOM.render"] },
+        hintMd: "Ersetze `___` mit deinem Text:\n\n```javascript\nconst element = React.createElement('h1', null, 'Ich lerne React!');\nReactDOM.render(element, document.getElementById('root'));\n```",
+        solutionCode: `const element = React.createElement('h1', null, 'Ich lerne React!');
+ReactDOM.render(element, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-02",
+      trackId: "react",
+      title: "✍️ JSX – HTML direkt in JavaScript",
+      summary: "Schreibe HTML-ähnlichen Code direkt in JavaScript mit JSX.",
+      minutes: 10,
+      xp: 40,
+      contentMd: `# JSX – Die einfachere Schreibweise
+
+JSX ist eine spezielle Schreibweise für React, bei der du HTML direkt in JavaScript schreiben kannst.
+
+\`\`\`jsx
+function Begruessung() {
+  return <h1>Hallo, Welt!</h1>;
+}
+
+ReactDOM.render(<Begruessung />, document.getElementById('root'));
+\`\`\`
+
+JSX sieht wie HTML aus, ist aber eigentlich JavaScript! Babel übersetzt JSX automatisch für den Browser.
+
+> 💡 Komponentennamen müssen immer mit einem **Großbuchstaben** beginnen, z.B. \`MeinKnopf\`.`,
+      exercise: {
+        language: "react",
+        title: "Deine erste JSX-Komponente!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Funktion \`App\`, die ein \`<h1>\`-Element mit dem Text "Meine React-App" zurückgibt. Rendere \`<App />\` in den \`root\`-Container.`,
+        starterCode: `function App() {
+  return <h1>___</h1>;
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["function App", "return", "<h1>", "ReactDOM.render"] },
+        hintMd: "Ersetze `___` mit deinem Text:\n\n```jsx\nfunction App() {\n  return <h1>Meine React-App</h1>;\n}\n```",
+        solutionCode: `function App() {
+  return <h1>Meine React-App</h1>;
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-03",
+      trackId: "react",
+      title: "📦 Props – Daten an Komponenten übergeben",
+      summary: "Übergebe Daten an Komponenten mithilfe von Props.",
+      minutes: 12,
+      xp: 45,
+      contentMd: `# Props – Eigenschaften von Komponenten
+
+Props (kurz für "Properties") sind wie Parameter einer Funktion: Du gibst einer Komponente Daten von außen mit.
+
+\`\`\`jsx
+function Begruessung(props) {
+  return <h1>Hallo, {props.name}!</h1>;
+}
+
+ReactDOM.render(
+  <Begruessung name="Mia" />,
+  document.getElementById('root')
+);
+\`\`\`
+
+Mit \`{props.name}\` fügst du den Wert des Props in JSX ein – die geschweiften Klammern \`{}\` bedeuten "JavaScript hier einsetzen".
+
+> 💡 Zahlen-Props schreibst du in geschweifte Klammern: \`alter={12}\`, Text in Anführungszeichen: \`name="Tim"\`.`,
+      exercise: {
+        language: "react",
+        title: "Erstelle eine Tier-Karte mit Props!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`TierKarte\`, die die Props \`name\` und \`art\` entgegennimmt und sie anzeigt. Rendere \`<TierKarte name="Elefant" art="Säugetier" />\`.`,
+        starterCode: `function TierKarte(props) {
+  return <p>{props.___} ist ein {props.___}</p>;
+}
+
+ReactDOM.render(
+  <TierKarte name="Elefant" art="Säugetier" />,
+  document.getElementById('root')
+);`,
+        check: { kind: "contains", needles: ["props.name", "props.art", "TierKarte"] },
+        hintMd: "Ersetze die `___` durch `name` und `art`:\n\n```jsx\nfunction TierKarte(props) {\n  return <p>{props.name} ist ein {props.art}</p>;\n}\n```",
+        solutionCode: `function TierKarte(props) {
+  return <p>{props.name} ist ein {props.art}</p>;
+}
+
+ReactDOM.render(
+  <TierKarte name="Elefant" art="Säugetier" />,
+  document.getElementById('root')
+);`,
+      },
+    },
+    {
+      id: "react-04",
+      trackId: "react",
+      title: "🔄 useState – Zustand in Komponenten",
+      summary: "Speichere veränderliche Daten in einer Komponente mit dem useState Hook.",
+      minutes: 14,
+      xp: 55,
+      contentMd: `# useState – Daten, die sich ändern
+
+Mit \`useState\` kannst du Daten in einer Komponente speichern, die sich verändern können.
+
+\`\`\`jsx
+const { useState } = React;
+
+function Zaehler() {
+  const [zahl, setZahl] = useState(0);
+  return <p>Aktuelle Zahl: {zahl}</p>;
+}
+\`\`\`
+
+\`useState(0)\` erstellt eine Variable \`zahl\` mit dem Startwert \`0\` und eine Funktion \`setZahl\`, mit der du den Wert ändern kannst.
+
+> 💡 Die Schreibweise \`const [zahl, setZahl]\` heißt **Array-Destrukturierung**.`,
+      exercise: {
+        language: "react",
+        title: "Erstelle einen Punktezähler!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`Punkte\`, die \`useState\` mit dem Startwert \`0\` nutzt und die aktuellen Punkte anzeigt.`,
+        starterCode: `const { useState } = React;
+
+function Punkte() {
+  const [punkte, setPunkte] = useState(___);
+
+  return <p>Deine Punkte: {punkte}</p>;
+}
+
+ReactDOM.render(<Punkte />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["useState", "punkte", "setPunkte"] },
+        hintMd: "Ersetze `___` mit dem Startwert `0`:\n\n```jsx\nconst [punkte, setPunkte] = useState(0);\n```",
+        solutionCode: `const { useState } = React;
+
+function Punkte() {
+  const [punkte, setPunkte] = useState(0);
+
+  return <p>Deine Punkte: {punkte}</p>;
+}
+
+ReactDOM.render(<Punkte />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-05",
+      trackId: "react",
+      title: "🖱️ Button mit onClick-Handler",
+      summary: "Reagiere auf Klicks mit dem onClick-Ereignis und aktualisiere den Zustand.",
+      minutes: 14,
+      xp: 55,
+      contentMd: `# onClick – Auf Klicks reagieren
+
+Mit dem \`onClick\`-Attribut kannst du auf Klicks reagieren:
+
+\`\`\`jsx
+const { useState } = React;
+
+function Zaehler() {
+  const [zahl, setZahl] = useState(0);
+
+  return (
+    <div>
+      <p>Zahl: {zahl}</p>
+      <button onClick={() => setZahl(zahl + 1)}>+1 klicken</button>
+    </div>
+  );
+}
+\`\`\`
+
+\`onClick={() => setZahl(zahl + 1)}\` ist eine **Pfeilfunktion**, die beim Klick ausgeführt wird.
+
+> 💡 Vergiss die Klammern \`()\` nach dem Pfeil nicht!`,
+      exercise: {
+        language: "react",
+        title: "Baue einen Klick-Zähler!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`KlickZaehler\` mit useState (Start: 0), einer Anzeige "Klicks: {klicks}" und einem Button mit \`onClick\`, der \`klicks\` um 1 erhöht.`,
+        starterCode: `const { useState } = React;
+
+function KlickZaehler() {
+  const [klicks, setKlicks] = useState(0);
+
+  return (
+    <div>
+      <p>Klicks: {klicks}</p>
+      <button onClick={___}>Klick mich!</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<KlickZaehler />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["onClick", "useState", "klicks + 1"] },
+        hintMd: "Ersetze `___` mit der Pfeilfunktion:\n\n```jsx\nonClick={() => setKlicks(klicks + 1)}\n```",
+        solutionCode: `const { useState } = React;
+
+function KlickZaehler() {
+  const [klicks, setKlicks] = useState(0);
+
+  return (
+    <div>
+      <p>Klicks: {klicks}</p>
+      <button onClick={() => setKlicks(klicks + 1)}>Klick mich!</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<KlickZaehler />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-06",
+      trackId: "react",
+      title: "📋 Listen rendern mit map()",
+      summary: "Rendere dynamische Listen aus Arrays mit der map()-Methode.",
+      minutes: 14,
+      xp: 55,
+      contentMd: `# Listen in React mit map()
+
+Um eine Liste von Dingen anzuzeigen, nutzt du die \`map()\`-Methode:
+
+\`\`\`jsx
+const tiere = ['Hund', 'Katze', 'Vogel'];
+
+function TierListe() {
+  return (
+    <ul>
+      {tiere.map((tier) => (
+        <li key={tier}>{tier}</li>
+      ))}
+    </ul>
+  );
+}
+\`\`\`
+
+\`map()\` geht durch jedes Element des Arrays und erstellt für jedes ein \`<li>\`-Element.
+
+> 💡 Der \`key\` muss eindeutig sein – oft nutzt man die ID aus einer Datenbank.`,
+      exercise: {
+        language: "react",
+        title: "Zeige eine Schülerliste an!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`SchuelerListe\`, die das Array \`schueler\` mit \`map()\` als \`<li>\`-Elemente in einer \`<ul>\` anzeigt.`,
+        starterCode: `const schueler = ['Mia', 'Tim', 'Lena', 'Max'];
+
+function SchuelerListe() {
+  return (
+    <ul>
+      {schueler.___(name => (
+        <li key={name}>{name}</li>
+      ))}
+    </ul>
+  );
+}
+
+ReactDOM.render(<SchuelerListe />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["map(", "<li", "key="] },
+        hintMd: "Ersetze `___` mit `map`:\n\n```jsx\n{schueler.map(name => (\n  <li key={name}>{name}</li>\n))}\n```",
+        solutionCode: `const schueler = ['Mia', 'Tim', 'Lena', 'Max'];
+
+function SchuelerListe() {
+  return (
+    <ul>
+      {schueler.map(name => (
+        <li key={name}>{name}</li>
+      ))}
+    </ul>
+  );
+}
+
+ReactDOM.render(<SchuelerListe />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-07",
+      trackId: "react",
+      title: "❓ Bedingtes Rendern",
+      summary: "Zeige Inhalte abhängig von einer Bedingung mit dem Ternary-Operator.",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# Bedingtes Rendern – Was wird angezeigt?
+
+Mit dem **Ternary-Operator** \`? :\` kannst du direkt in JSX Bedingungen einbauen:
+
+\`\`\`jsx
+function Ergebnis({ punkte }) {
+  return (
+    <p>
+      {punkte >= 50 ? '🎉 Bestanden!' : '😢 Nicht bestanden.'}
+    </p>
+  );
+}
+\`\`\`
+
+Das bedeutet: "Wenn \`punkte >= 50\`, zeige '🎉 Bestanden!', sonst '😢 Nicht bestanden.'".
+
+> 💡 \`? :\` sprich: "Wenn (?) dann (:) sonst".`,
+      exercise: {
+        language: "react",
+        title: "Bestanden oder nicht?",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`Benotung\`, die einen Prop \`punkte\` bekommt. Zeige "Super gemacht!" wenn \`punkte >= 80\`, sonst "Weiter üben!". Rendere \`<Benotung punkte={92} />\`.`,
+        starterCode: `function Benotung({ punkte }) {
+  return (
+    <p>
+      {punkte >= 80 ___ 'Super gemacht!' ___ 'Weiter üben!'}
+    </p>
+  );
+}
+
+ReactDOM.render(<Benotung punkte={92} />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["punkte >= 80", "?", ":"] },
+        hintMd: "Nutze den Ternary-Operator:\n\n```jsx\n{punkte >= 80 ? 'Super gemacht!' : 'Weiter üben!'}\n```",
+        solutionCode: `function Benotung({ punkte }) {
+  return (
+    <p>
+      {punkte >= 80 ? 'Super gemacht!' : 'Weiter üben!'}
+    </p>
+  );
+}
+
+ReactDOM.render(<Benotung punkte={92} />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-08",
+      trackId: "react",
+      title: "📝 Formulare und Eingaben",
+      summary: "Lies Eingaben aus Textfeldern mit kontrollierten Inputs und useState.",
+      minutes: 14,
+      xp: 55,
+      contentMd: `# Formulare in React – Kontrollierte Inputs
+
+Um Texteingaben zu verarbeiten, kombinierst du \`useState\` mit dem \`onChange\`-Ereignis:
+
+\`\`\`jsx
+const { useState } = React;
+
+function Namensfeld() {
+  const [name, setName] = useState('');
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Dein Name..."
+      />
+      <p>Hallo, {name}!</p>
+    </div>
+  );
+}
+\`\`\`
+
+\`e.target.value\` enthält den aktuell eingegebenen Text.
+
+> 💡 \`e\` steht für "Event" (Ereignis) – das Objekt mit allen Infos über das Ereignis.`,
+      exercise: {
+        language: "react",
+        title: "Baue ein Namens-Begrüßungsfeld!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`Begruessung\` mit einem Eingabefeld und einer Anzeige "Hallo, {name}!". Nutze \`useState\` und \`onChange\`.`,
+        starterCode: `const { useState } = React;
+
+function Begruessung() {
+  const [name, setName] = useState('');
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={___}
+        placeholder="Dein Name..."
+      />
+      <p>Hallo, {name}!</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<Begruessung />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["onChange", "e.target.value", "useState"] },
+        hintMd: "Ersetze `___` mit:\n\n```jsx\nonChange={(e) => setName(e.target.value)}\n```",
+        solutionCode: `const { useState } = React;
+
+function Begruessung() {
+  const [name, setName] = useState('');
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Dein Name..."
+      />
+      <p>Hallo, {name}!</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<Begruessung />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-09",
+      trackId: "react",
+      title: "⏱️ useEffect Hook",
+      summary: "Führe Aktionen aus, wenn sich die Komponente ändert, mit dem useEffect Hook.",
+      minutes: 14,
+      xp: 60,
+      contentMd: `# useEffect – Seiteneffekte in React
+
+Mit \`useEffect\` kannst du Code ausführen, wenn sich etwas in der Komponente ändert.
+
+\`\`\`jsx
+const { useState, useEffect } = React;
+
+function Timer() {
+  const [sekunden, setSekunden] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSekunden(s => s + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return <p>Sekunden: {sekunden}</p>;
+}
+\`\`\`
+
+Das leere Array \`[]\` bedeutet: "Führe diesen Effekt nur einmal aus (beim ersten Laden)".
+
+> 💡 Die \`return\`-Funktion im useEffect ist die **Cleanup-Funktion**.`,
+      exercise: {
+        language: "react",
+        title: "Seiteneffekt beim Laden!",
+        instructionsMd: `**Deine Aufgabe:**\n\nErstelle eine Komponente \`Nachricht\`, die \`useEffect\` nutzt, um beim ersten Laden \`text\` auf "Willkommen bei React!" zu setzen.`,
+        starterCode: `const { useState, useEffect } = React;
+
+function Nachricht() {
+  const [text, setText] = useState('Lade...');
+
+  useEffect(___, []);
+
+  return <p>{text}</p>;
+}
+
+ReactDOM.render(<Nachricht />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["useEffect", "useState", "setText"] },
+        hintMd: "Ersetze `___` mit einer Pfeilfunktion:\n\n```jsx\nuseEffect(() => {\n  setText('Willkommen bei React!');\n}, []);\n```",
+        solutionCode: `const { useState, useEffect } = React;
+
+function Nachricht() {
+  const [text, setText] = useState('Lade...');
+
+  useEffect(() => {
+    setText('Willkommen bei React!');
+  }, []);
+
+  return <p>{text}</p>;
+}
+
+ReactDOM.render(<Nachricht />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-10",
+      trackId: "react",
+      title: "🚀 Mini-App: Aufgabenliste",
+      summary: "Baue eine vollständige Mini-App mit allem, was du gelernt hast!",
+      minutes: 15,
+      xp: 80,
+      contentMd: `# Alles zusammen – Deine erste React-App!
+
+Jetzt kombinierst du alles: \`useState\`, \`map()\`, \`onChange\` und \`onClick\`.
+
+\`\`\`jsx
+const { useState } = React;
+
+function TodoApp() {
+  const [aufgaben, setAufgaben] = useState(['Hausaufgaben']);
+  const [eingabe, setEingabe] = useState('');
+
+  const hinzufuegen = () => {
+    if (eingabe) {
+      setAufgaben([...aufgaben, eingabe]);
+      setEingabe('');
+    }
+  };
+
+  return (
+    <div>
+      <input value={eingabe} onChange={e => setEingabe(e.target.value)} />
+      <button onClick={hinzufuegen}>Hinzufügen</button>
+      <ul>{aufgaben.map(a => <li key={a}>{a}</li>)}</ul>
+    </div>
+  );
+}
+\`\`\`
+
+> 💡 In React veränderst du Arrays nie direkt – du erstellst immer ein neues Array!`,
+      exercise: {
+        language: "react",
+        title: "Baue deine eigene Aufgabenliste!",
+        instructionsMd: `**Deine Aufgabe:**\n\nBaue eine \`TodoApp\` mit useState für \`aufgaben\` und \`eingabe\`, einem Textfeld mit \`onChange\`, einem Button mit \`onClick\` der die Eingabe hinzufügt, und einer Liste mit \`map()\`.`,
+        starterCode: `const { useState } = React;
+
+function TodoApp() {
+  const [aufgaben, setAufgaben] = useState([]);
+  const [eingabe, setEingabe] = useState('');
+
+  const hinzufuegen = () => {
+    if (eingabe) {
+      setAufgaben([___aufgaben, eingabe]);
+      setEingabe('');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Meine Aufgaben</h2>
+      <input
+        value={eingabe}
+        onChange={(e) => setEingabe(e.target.value)}
+        placeholder="Neue Aufgabe..."
+      />
+      <button onClick={___}>Hinzufügen</button>
+      <ul>
+        {aufgaben.map(aufgabe => (
+          <li key={aufgabe}>{aufgabe}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.render(<TodoApp />, document.getElementById('root'));`,
+        check: { kind: "contains", needles: ["useState", "map(", "onClick", "onChange", "...aufgaben"] },
+        hintMd: "Ersetze `___aufgaben` mit `...aufgaben` und `___` beim Button mit `hinzufuegen`.",
+        solutionCode: `const { useState } = React;
+
+function TodoApp() {
+  const [aufgaben, setAufgaben] = useState([]);
+  const [eingabe, setEingabe] = useState('');
+
+  const hinzufuegen = () => {
+    if (eingabe) {
+      setAufgaben([...aufgaben, eingabe]);
+      setEingabe('');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Meine Aufgaben</h2>
+      <input
+        value={eingabe}
+        onChange={(e) => setEingabe(e.target.value)}
+        placeholder="Neue Aufgabe..."
+      />
+      <button onClick={hinzufuegen}>Hinzufügen</button>
+      <ul>
+        {aufgaben.map(aufgabe => (
+          <li key={aufgabe}>{aufgabe}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.render(<TodoApp />, document.getElementById('root'));`,
+      },
+    },
+  ],
+};
+
+export const TRACKS: Track[] = [WEB, JS, PY, KI, SQL, REACT];
 
 export function getTrack(trackId: TrackId): Track {
   const track = TRACKS.find((t) => t.id === trackId);

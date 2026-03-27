@@ -6,6 +6,7 @@ import { Markdown } from "@/components/Markdown";
 import { CodeEditor } from "@/components/CodeEditor";
 import { SandboxRunner } from "@/components/SandboxRunner";
 import { PythonRunner } from "@/components/PythonRunner";
+import { SQLRunner } from "@/components/SQLRunner";
 import { useProgress } from "@/lib/progress";
 import { dbRecordAttempt } from "@/lib/db";
 import { getActiveProfileId } from "@/lib/profiles";
@@ -52,6 +53,9 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
   const [lastPyStdout, setLastPyStdout] = useState("");
   const [lastPyError, setLastPyError] = useState<string | undefined>(undefined);
   const [lastPyDone, setLastPyDone] = useState(false);
+  const [lastSqlStdout, setLastSqlStdout] = useState("");
+  const [lastSqlError, setLastSqlError] = useState<string | undefined>(undefined);
+  const [lastSqlDone, setLastSqlDone] = useState(false);
   const [pendingCheck, setPendingCheck] = useState(false);
   const [checkState, setCheckState] = useState<CheckState>({ status: "idle" });
 
@@ -60,6 +64,9 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
       return lesson.exercise.check.expected;
     }
     if (lesson.exercise.check.kind === "python_stdout_includes") {
+      return lesson.exercise.check.expected;
+    }
+    if (lesson.exercise.check.kind === "sql_result_includes") {
       return lesson.exercise.check.expected;
     }
     return null;
@@ -96,6 +103,17 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
           };
     }
 
+    if (check.kind === "sql_result_includes") {
+      const joined = normalize(`${lastSqlError ? `Fehler:\n${lastSqlError}\n` : ""}${lastSqlStdout}`);
+      return joined.includes(check.expected)
+        ? { ok: true as const }
+        : {
+            ok: false as const,
+            message:
+              "Das erwartete Ergebnis steht noch nicht in der Tabelle. Prüfe deine SQL-Abfrage.",
+          };
+    }
+
     return { ok: false as const, message: "Unbekannter Check." };
   }
 
@@ -104,10 +122,13 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
     setPendingCheck(false);
     setLastJsDone(false);
     setLastPyDone(false);
+    setLastSqlDone(false);
     setLastJsLogs([]);
     setLastJsErrors([]);
     setLastPyStdout("");
     setLastPyError(undefined);
+    setLastSqlStdout("");
+    setLastSqlError(undefined);
     setRunSignal((s) => s + 1);
   }
 
@@ -132,10 +153,13 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
     setPendingCheck(true);
     setLastJsDone(false);
     setLastPyDone(false);
+    setLastSqlDone(false);
     setLastJsLogs([]);
     setLastJsErrors([]);
     setLastPyStdout("");
     setLastPyError(undefined);
+    setLastSqlStdout("");
+    setLastSqlError(undefined);
     setRunSignal((s) => s + 1);
   }
 
@@ -144,6 +168,7 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
     const kind = lesson.exercise.check.kind;
     if (kind === "js_console_includes" && !lastJsDone) return;
     if (kind === "python_stdout_includes" && !lastPyDone) return;
+    if (kind === "sql_result_includes" && !lastSqlDone) return;
     const res = validateFromOutputs();
     const timeSpent = Math.round((Date.now() - startedAtRef.current) / 1000);
     void dbRecordAttempt(getActiveProfileId(), lesson.id, lesson.trackId, res.ok, timeSpent, attemptCountRef.current);
@@ -164,6 +189,9 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
     lastPyStdout,
     lastPyError,
     lastPyDone,
+    lastSqlStdout,
+    lastSqlError,
+    lastSqlDone,
   ]);
 
   return (
@@ -297,6 +325,20 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
           />
         ) : null}
 
+        {lesson.exercise.language === "react" ? (
+          <SandboxRunner
+            key={`react_${runSignal}`}
+            mode="react"
+            code={code}
+            runSignal={runSignal}
+            onResult={(r) => {
+              setLastJsLogs(r.logs);
+              setLastJsErrors(r.errors);
+              setLastJsDone(r.done);
+            }}
+          />
+        ) : null}
+
         {lesson.exercise.language === "python" ? (
           <PythonRunner
             key={`py_${runSignal}`}
@@ -306,6 +348,19 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
               setLastPyStdout(r.stdout);
               setLastPyError(r.error);
               setLastPyDone(true);
+            }}
+          />
+        ) : null}
+
+        {lesson.exercise.language === "sql" ? (
+          <SQLRunner
+            key={`sql_${runSignal}`}
+            code={code}
+            runSignal={runSignal}
+            onResult={(r) => {
+              setLastSqlStdout(r.stdout);
+              setLastSqlError(r.error);
+              setLastSqlDone(r.done);
             }}
           />
         ) : null}

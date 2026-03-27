@@ -24,6 +24,8 @@ const TRACK_STYLES: Record<string, { gradient: string; border: string; badge: st
   js:     { gradient: "from-amber-500/20 to-amber-500/5",    border: "border-amber-500/40",    badge: "text-amber-300",   bar: "bg-amber-500"  },
   python: { gradient: "from-emerald-500/20 to-emerald-500/5",border: "border-emerald-500/40",  badge: "text-emerald-300", bar: "bg-emerald-500"},
   ki:     { gradient: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40",   badge: "text-violet-300",  bar: "bg-violet-500" },
+  sql:    { gradient: "from-sky-500/20 to-sky-500/5",         border: "border-sky-500/40",       badge: "text-sky-300",     bar: "bg-sky-500"    },
+  react:  { gradient: "from-rose-500/20 to-rose-500/5",       border: "border-rose-500/40",      badge: "text-rose-300",    bar: "bg-rose-500"   },
 };
 
 const LEVEL_TITLES = [

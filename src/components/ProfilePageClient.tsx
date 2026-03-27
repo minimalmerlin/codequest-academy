@@ -20,6 +20,8 @@ const TRACK_COLORS: Record<string, { bar: string; badge: string; text: string }>
   js:     { bar: "bg-amber-500",   badge: "border-amber-500/30 bg-amber-500/10 text-amber-300",    text: "text-amber-300" },
   python: { bar: "bg-emerald-500", badge: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300", text: "text-emerald-300" },
   ki:     { bar: "bg-violet-500",  badge: "border-violet-500/30 bg-violet-500/10 text-violet-300",  text: "text-violet-300" },
+  sql:    { bar: "bg-sky-500",     badge: "border-sky-500/30 bg-sky-500/10 text-sky-300",            text: "text-sky-300" },
+  react:  { bar: "bg-rose-500",    badge: "border-rose-500/30 bg-rose-500/10 text-rose-300",         text: "text-rose-300" },
 };
 
 export function ProfilePageClient() {

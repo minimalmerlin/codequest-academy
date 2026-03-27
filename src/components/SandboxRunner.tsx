@@ -14,7 +14,7 @@ export function SandboxRunner({
   runSignal,
   onResult,
 }: {
-  mode: "html" | "javascript";
+  mode: "html" | "javascript" | "react";
   code: string;
   runSignal: number;
   onResult?: (result: RunResult & { done: boolean }) => void;
@@ -29,6 +29,44 @@ export function SandboxRunner({
 
   const srcDoc = useMemo(() => {
     if (mode === "html") return code;
+
+    if (mode === "react") {
+      const user = escapeForScript(code);
+      return `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>React Sandbox</title>
+    <style>body{margin:0;padding:12px;font-family:sans-serif;background:#fff;color:#111}</style>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      (function() {
+        const runId = ${JSON.stringify(runId)};
+        function send(type, payload) {
+          parent.postMessage({ source: "codequest", runId, type, payload }, "*");
+        }
+        window.addEventListener("error", (e) => {
+          send("error", String(e.message || "Fehler"));
+          send("done", "");
+        });
+        try {
+          ${user}
+          send("done", "");
+        } catch(e) {
+          send("error", String(e && (e.stack || e.message) || e));
+          send("done", "");
+        }
+      })();
+    </script>
+  </body>
+</html>`;
+    }
 
     const user = escapeForScript(code);
     return `<!doctype html>
@@ -113,7 +151,7 @@ export function SandboxRunner({
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2 text-xs text-zinc-200">
         <div className="font-semibold">
-          {mode === "html" ? "🖼️ Vorschau" : "💻 Konsole"}
+          {mode === "html" ? "🖼️ Vorschau" : mode === "react" ? "⚛️ React Vorschau" : "💻 Konsole"}
         </div>
         {mode === "javascript" && hasRun ? (
           <div className="tabular-nums text-zinc-400">
