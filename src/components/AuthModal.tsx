@@ -2,12 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 
 type Tab = "signin" | "signup";
 
 export function AuthModal({ onClose }: { onClose: () => void }) {
   const { signIn, signUp } = useAuth();
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>("signin");
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
@@ -30,6 +32,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
         const { error: e } = await signIn(email, password);
         if (e) { setError(e.message); return; }
         onClose();
+        router.push("/dashboard");
       } else {
         const { error: e } = await signUp(email, password);
         if (e) { setError(e.message); return; }

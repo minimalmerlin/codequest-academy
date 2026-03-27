@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { ProgressPill } from "@/components/ProgressPill";
 import { ProfilePill } from "@/components/ProfilePill";
 import { AuthModal } from "@/components/AuthModal";
@@ -45,6 +46,8 @@ function AuthButton() {
 }
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
   return (
     <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0d0d1a]/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">

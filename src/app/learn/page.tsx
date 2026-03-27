@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TRACKS } from "@/lib/curriculum";
 import { TrackProgress } from "@/components/TrackProgress";
+import { AuthGuard } from "@/components/AuthGuard";
 
 export const metadata = {
   title: "Lernen – CodeQuest Academy",
@@ -15,6 +16,7 @@ const TRACK_STYLES: Record<string, { gradient: string; border: string; badge: st
 
 export default function LearnPage() {
   return (
+    <AuthGuard>
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-white">
@@ -58,5 +60,6 @@ export default function LearnPage() {
         </p>
       </div>
     </div>
+    </AuthGuard>
   );
 }

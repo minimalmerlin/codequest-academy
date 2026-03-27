@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { TrackId } from "@/lib/curriculum";
 import { getLesson, getTrack, TRACKS } from "@/lib/curriculum";
 import { LessonClient } from "@/components/LessonClient";
+import { AuthGuard } from "@/components/AuthGuard";
 
 export function generateStaticParams() {
   return TRACKS.flatMap((t) =>
@@ -26,21 +27,22 @@ export default async function LessonPage({
   if (!lesson) return notFound();
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <Link
-          href={`/learn/${track.id}`}
-          className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-200 hover:bg-white/10"
-        >
-          ← Zurück zu {track.title}
-        </Link>
-        <div className="text-xs text-zinc-400">
-          Track: <span className="font-semibold text-zinc-200">{track.id}</span>
+    <AuthGuard>
+      <div className="mx-auto w-full max-w-6xl px-4 py-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <Link
+            href={`/learn/${track.id}`}
+            className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-200 hover:bg-white/10"
+          >
+            ← Zurück zu {track.title}
+          </Link>
+          <div className="text-xs text-zinc-400">
+            Track: <span className="font-semibold text-zinc-200">{track.id}</span>
+          </div>
         </div>
+        <LessonClient lesson={lesson} />
       </div>
-
-      <LessonClient lesson={lesson} />
-    </div>
+    </AuthGuard>
   );
 }
 

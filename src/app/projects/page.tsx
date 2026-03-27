@@ -1,3 +1,4 @@
+import { AuthGuard } from "@/components/AuthGuard";
 import Link from "next/link";
 import { PROJECTS } from "@/lib/curriculum";
 
@@ -7,6 +8,7 @@ export const metadata = {
 
 export default function ProjectsPage() {
   return (
+    <AuthGuard>
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-semibold tracking-tight text-white">
         Projekte
@@ -68,6 +70,7 @@ export default function ProjectsPage() {
         </ol>
       </div>
     </div>
+    </AuthGuard>
   );
 }
 

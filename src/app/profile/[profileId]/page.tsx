@@ -1,4 +1,5 @@
 import { ProfilePageClient } from "@/components/ProfilePageClient";
+import { AuthGuard } from "@/components/AuthGuard";
 
 export default async function ProfilePage({
   params,
@@ -6,5 +7,9 @@ export default async function ProfilePage({
   params: Promise<{ profileId: string }>;
 }) {
   const { profileId } = await params;
-  return <ProfilePageClient profileId={profileId} />;
+  return (
+    <AuthGuard>
+      <ProfilePageClient profileId={profileId} />
+    </AuthGuard>
+  );
 }

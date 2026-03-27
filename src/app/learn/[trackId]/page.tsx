@@ -5,6 +5,7 @@ import { getTrack, TRACKS } from "@/lib/curriculum";
 import { LessonStatusPill } from "@/components/LessonStatusPill";
 import { LessonDifficultyBadge } from "@/components/LessonDifficultyBadge";
 import { TrackProgress } from "@/components/TrackProgress";
+import { AuthGuard } from "@/components/AuthGuard";
 
 export function generateStaticParams() {
   return TRACKS.map((t) => ({ trackId: t.id }));
@@ -21,6 +22,7 @@ export default async function TrackPage({
   if (!track) return notFound();
 
   return (
+    <AuthGuard>
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -75,6 +77,7 @@ export default async function TrackPage({
         </p>
       </div>
     </div>
+    </AuthGuard>
   );
 }
 
