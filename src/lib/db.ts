@@ -1,6 +1,7 @@
 /**
  * Database operations against Supabase.
- * All functions return silently on error or when Supabase is not configured.
+ * Errors are logged but never crash the app — Supabase is an async sync layer,
+ * localStorage is the source of truth.
  */
 
 import { supabase } from "@/lib/supabase";
@@ -16,30 +17,34 @@ export async function dbLoadProfiles(userId: string): Promise<ProfileShape[]> {
     .select("id, name, created_at")
     .eq("user_id", userId)
     .order("created_at");
-  if (error || !data) return [];
+  if (error) { console.warn("[db] dbLoadProfiles failed:", error.message); return []; }
+  if (!data) return [];
   return (data as Array<{ id: string; name: string; created_at: string }>)
     .map((p) => ({ id: p.id, name: p.name, createdAt: p.created_at }));
 }
 
 export async function dbUpsertProfile(userId: string, profile: ProfileShape): Promise<void> {
   if (!supabase) return;
-  await supabase.from("kid_profiles").upsert({
+  const { error } = await supabase.from("kid_profiles").upsert({
     id: profile.id,
     user_id: userId,
     name: profile.name,
     avatar_emoji: "🧒",
     created_at: profile.createdAt,
   });
+  if (error) console.warn("[db] dbUpsertProfile failed:", error.message);
 }
 
 export async function dbRenameProfile(profileId: string, name: string): Promise<void> {
   if (!supabase) return;
-  await supabase.from("kid_profiles").update({ name }).eq("id", profileId);
+  const { error } = await supabase.from("kid_profiles").update({ name }).eq("id", profileId);
+  if (error) console.warn("[db] dbRenameProfile failed:", error.message);
 }
 
 export async function dbDeleteProfile(profileId: string): Promise<void> {
   if (!supabase) return;
-  await supabase.from("kid_profiles").delete().eq("id", profileId);
+  const { error } = await supabase.from("kid_profiles").delete().eq("id", profileId);
+  if (error) console.warn("[db] dbDeleteProfile failed:", error.message);
 }
 
 // ─── Progress ─────────────────────────────────────────────────────────────────
@@ -58,7 +63,8 @@ export async function dbLoadProgress(profileId: string): Promise<DbProgress | nu
     .select("completed_lessons, xp, streak_days, last_completed_date")
     .eq("profile_id", profileId)
     .single();
-  if (error || !data) return null;
+  if (error) { console.warn("[db] dbLoadProgress failed:", error.message); return null; }
+  if (!data) return null;
   const row = data as { completed_lessons: Record<string, true> | null; xp: number; streak_days: number; last_completed_date: string | null };
   return {
     completedLessons: row.completed_lessons ?? {},
@@ -70,7 +76,7 @@ export async function dbLoadProgress(profileId: string): Promise<DbProgress | nu
 
 export async function dbSaveProgress(profileId: string, progress: DbProgress): Promise<void> {
   if (!supabase) return;
-  await supabase.from("profile_progress").upsert({
+  const { error } = await supabase.from("profile_progress").upsert({
     profile_id: profileId,
     completed_lessons: progress.completedLessons,
     xp: progress.xp,
@@ -78,6 +84,7 @@ export async function dbSaveProgress(profileId: string, progress: DbProgress): P
     last_completed_date: progress.lastCompletedDate ?? null,
     updated_at: new Date().toISOString(),
   });
+  if (error) console.warn("[db] dbSaveProgress failed:", error.message);
 }
 
 // ─── ML Data: Lesson Attempts ─────────────────────────────────────────────────
@@ -91,7 +98,7 @@ export async function dbRecordAttempt(
   attemptsCount: number,
 ): Promise<void> {
   if (!supabase) return;
-  await supabase.from("lesson_attempts").insert({
+  const { error } = await supabase.from("lesson_attempts").insert({
     profile_id: profileId,
     lesson_id: lessonId,
     track_id: trackId,
@@ -101,6 +108,7 @@ export async function dbRecordAttempt(
     attempts_count: attemptsCount,
     time_spent_seconds: timeSpentSeconds,
   });
+  if (error) console.warn("[db] dbRecordAttempt failed:", error.message);
 }
 
 // ─── ML: Adaptive Learning Data ───────────────────────────────────────────────
@@ -122,16 +130,15 @@ export type LearningStats = {
 export async function dbLoadLearningStats(): Promise<LearningStats[]> {
   if (!supabase) return [];
   const { data, error } = await supabase.rpc("get_my_learning_stats");
-  if (error || !data) return [];
+  if (error) { console.warn("[db] dbLoadLearningStats failed:", error.message); return []; }
+  if (!data) return [];
   return (data as Array<{
-    profile_id: string;
     lesson_id: string;
     track_id: string;
     total_attempts: number;
     avg_time_seconds: number;
     avg_attempts_session: number;
     success_rate_pct: number;
-    last_attempted_at: string;
   }>).map((row) => ({
     lessonId: row.lesson_id,
     trackId: row.track_id,

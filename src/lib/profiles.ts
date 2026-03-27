@@ -54,7 +54,13 @@ function writeProfiles(profiles: KidProfile[]) {
 
 function readProfiles(): KidProfile[] {
   const existing = safeParseProfiles(safeStorage.getItem(PROFILES_KEY));
+  // Garantiert niemals leeres Array — DEFAULT_PROFILE ist immer Fallback
   return existing.length > 0 ? existing : [DEFAULT_PROFILE];
+}
+
+function safeFirstProfile(profiles: KidProfile[]): KidProfile {
+  // Null-safe alternative zu profiles[0]! — verhindert crashes bei leerem Array
+  return profiles[0] ?? DEFAULT_PROFILE;
 }
 
 export function initializeProfiles() {
@@ -66,7 +72,7 @@ export function initializeProfiles() {
   const profiles = readProfiles();
   const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   if (!active || !profiles.some((p) => p.id === active)) {
-    safeStorage.setItem(ACTIVE_PROFILE_KEY, profiles[0]!.id);
+    safeStorage.setItem(ACTIVE_PROFILE_KEY, safeFirstProfile(profiles).id);
   }
   emit();
 }
@@ -86,7 +92,7 @@ export function getActiveProfileId() {
   if (typeof window === "undefined") return "kid-1";
   const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   const profiles = readProfiles();
-  return active && profiles.some((p) => p.id === active) ? active : profiles[0]!.id;
+  return active && profiles.some((p) => p.id === active) ? active : safeFirstProfile(profiles).id;
 }
 
 export function setActiveProfileId(profileId: string) {
@@ -102,7 +108,11 @@ export function addProfile(name: string) {
   const profiles = readProfiles();
   const cleaned = name.trim().slice(0, 32);
   if (!cleaned) return;
-  const id = `kid-${Math.random().toString(16).slice(2)}-${Date.now().toString(16)}`;
+  // Kryptografisch sichere ID — Math.random() ist vorhersagbar
+  const random = Array.from(crypto.getRandomValues(new Uint8Array(8)))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  const id = `kid-${random}`;
   const next: KidProfile = { id, name: cleaned, createdAt: new Date().toISOString() };
   writeProfiles([...profiles, next]);
   setActiveProfileId(id);
@@ -131,7 +141,7 @@ export function deleteProfile(profileId: string) {
   writeProfiles(next);
   const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   if (active === profileId) {
-    safeStorage.setItem(ACTIVE_PROFILE_KEY, next[0]!.id);
+    safeStorage.setItem(ACTIVE_PROFILE_KEY, safeFirstProfile(next).id);
   }
   emit();
   // Sync to Supabase if logged in
@@ -146,7 +156,7 @@ export function hydrateProfilesFromCloud(profiles: KidProfile[]) {
   safeStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
   const active = safeStorage.getItem(ACTIVE_PROFILE_KEY);
   if (!active || !profiles.some((p) => p.id === active)) {
-    safeStorage.setItem(ACTIVE_PROFILE_KEY, profiles[0]!.id);
+    safeStorage.setItem(ACTIVE_PROFILE_KEY, safeFirstProfile(profiles).id);
   }
   emit();
 }
