@@ -1,6 +1,7 @@
 import { AuthGuard } from "@/components/AuthGuard";
 import Link from "next/link";
 import { TRACKS } from "@/lib/curriculum";
+import { ParentsDashboardClient } from "@/components/ParentsDashboardClient";
 
 export const metadata = {
   title: "Für Eltern",
@@ -57,6 +58,8 @@ export default function ParentsPage() {
           </ul>
         </section>
       </div>
+
+      <ParentsDashboardClient />
 
       <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
         <h2 className="text-base font-semibold text-white">
