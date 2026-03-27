@@ -9,9 +9,9 @@ const TRACKS = [
   { emoji: "🌐", title: "Web-Basics",    desc: "HTML & CSS – baue deine erste Webseite",  color: "from-indigo-500/20 to-indigo-500/5",  border: "border-indigo-500/40",  badge: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",  quests: 25 },
   { emoji: "⚡", title: "JavaScript",    desc: "Interaktive Webseiten mit echtem Code",   color: "from-amber-500/20 to-amber-500/5",    border: "border-amber-500/40",    badge: "bg-amber-500/20 text-amber-300 border-amber-500/30",    quests: 25 },
   { emoji: "🐍", title: "Python",        desc: "Spiele, Rechner und KI-Grundlagen",       color: "from-emerald-500/20 to-emerald-500/5",border: "border-emerald-500/40",  badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",quests: 25 },
-  { emoji: "🤖", title: "KI-Abenteuer", desc: "ChatGPT & Gemini richtig nutzen",          color: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40",  badge: "bg-violet-500/20 text-violet-300 border-violet-500/30",  quests: 10 },
-  { emoji: "🗄️", title: "SQL & Daten",  desc: "Datenbanken abfragen wie ein Profi",       color: "from-sky-500/20 to-sky-500/5",         border: "border-sky-500/40",      badge: "bg-sky-500/20 text-sky-300 border-sky-500/30",          quests: 10 },
-  { emoji: "⚛️", title: "React",         desc: "Moderne UIs mit dem beliebtesten Framework",color: "from-rose-500/20 to-rose-500/5",      border: "border-rose-500/40",     badge: "bg-rose-500/20 text-rose-300 border-rose-500/30",       quests: 10 },
+  { emoji: "🤖", title: "KI-Abenteuer", desc: "ChatGPT & Gemini richtig nutzen",          color: "from-violet-500/20 to-violet-500/5",  border: "border-violet-500/40",  badge: "bg-violet-500/20 text-violet-300 border-violet-500/30",  quests: 20 },
+  { emoji: "🗄️", title: "SQL & Daten",  desc: "Datenbanken abfragen wie ein Profi",       color: "from-sky-500/20 to-sky-500/5",         border: "border-sky-500/40",      badge: "bg-sky-500/20 text-sky-300 border-sky-500/30",          quests: 20 },
+  { emoji: "⚛️", title: "React",         desc: "Moderne UIs mit dem beliebtesten Framework",color: "from-rose-500/20 to-rose-500/5",      border: "border-rose-500/40",     badge: "bg-rose-500/20 text-rose-300 border-rose-500/30",       quests: 20 },
 ];
 
 export default function LandingPage() {
@@ -87,7 +87,7 @@ export default function LandingPage() {
         {/* ── Stats ─────────────────────────────────────────────────────── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { emoji: "📚", zahl: "105+", text: "Quests" },
+            { emoji: "📚", zahl: "135+", text: "Quests" },
             { emoji: "🤖", zahl: "KI", text: "Übungsgenerator" },
             { emoji: "☁️", zahl: "Cloud", text: "Sync" },
             { emoji: "🏆", zahl: "∞", text: "Spaß" },

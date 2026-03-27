@@ -38,15 +38,33 @@ export function SandboxRunner({
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>React Sandbox</title>
-    <style>body{margin:0;padding:12px;font-family:sans-serif;background:#fff;color:#111}</style>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body{margin:0;padding:12px;font-family:sans-serif;background:#fff;color:#111}
+      .cq-err{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px;color:#991b1b;font-size:13px}
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <div id="cq-cdn-err" style="display:none" class="cq-err">
+      ⚠ React konnte nicht geladen werden. Bitte prüfe deine Internetverbindung und klicke nochmal auf Ausführen.
+    </div>
+    <script>
+      window.__cdnErrors = 0;
+      function onCdnError() {
+        window.__cdnErrors++;
+        if (window.__cdnErrors >= 1) {
+          document.getElementById('cq-cdn-err').style.display = 'block';
+          parent.postMessage({ source: "codequest", runId: ${JSON.stringify(runId)}, type: "error", payload: "React-Bibliotheken konnten nicht geladen werden (kein Internet?)" }, "*");
+          parent.postMessage({ source: "codequest", runId: ${JSON.stringify(runId)}, type: "done", payload: "" }, "*");
+        }
+      }
+    </script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js" onerror="onCdnError()"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" onerror="onCdnError()"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js" onerror="onCdnError()"></script>
     <script type="text/babel" data-presets="react">
       (function() {
+        if (window.__cdnErrors > 0) return;
         const runId = ${JSON.stringify(runId)};
         function send(type, payload) {
           parent.postMessage({ source: "codequest", runId, type, payload }, "*");

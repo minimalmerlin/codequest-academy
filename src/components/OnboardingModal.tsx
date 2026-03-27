@@ -73,7 +73,7 @@ export function OnboardingModal() {
 
         <div className="mt-6 grid grid-cols-3 gap-3 text-center">
           {[
-            { emoji: "📚", text: "105+ Quests" },
+            { emoji: "📚", text: "135+ Quests" },
             { emoji: "🏆", text: "XP & Level" },
             { emoji: "🤖", text: "KI-Hilfe" },
           ].map((f) => (

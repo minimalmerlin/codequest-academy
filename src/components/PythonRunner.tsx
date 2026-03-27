@@ -15,6 +15,7 @@ declare global {
 }
 
 let pyodidePromise: Promise<Pyodide> | null = null;
+let pyodideLoadFailed = false;
 
 function isPyodide(value: unknown): value is Pyodide {
   if (typeof value !== "object" || value === null) return false;
@@ -28,6 +29,11 @@ function errMsg(e: unknown) {
 }
 
 async function getPyodide() {
+  // Reset cache so the user can retry after a failed load
+  if (pyodideLoadFailed) {
+    pyodidePromise = null;
+    pyodideLoadFailed = false;
+  }
   if (pyodidePromise) return pyodidePromise;
   pyodidePromise = new Promise<Pyodide>(async (resolve, reject) => {
     try {
@@ -39,7 +45,7 @@ async function getPyodide() {
           s.async = true;
           s.onload = () => res();
           s.onerror = () =>
-            rej(new Error("Pyodide konnte nicht geladen werden."));
+            rej(new Error("Python konnte nicht geladen werden. Bitte prüfe deine Internetverbindung und klicke nochmal auf Ausführen."));
           document.head.appendChild(s);
         });
       }
@@ -56,6 +62,8 @@ async function getPyodide() {
       }
       resolve(loaded);
     } catch (e) {
+      pyodideLoadFailed = true;
+      pyodidePromise = null;
       reject(e);
     }
   });
@@ -133,7 +141,9 @@ export function PythonRunner({
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2 text-xs text-zinc-200">
         <div className="font-semibold">Ausgabe</div>
         <div className="text-zinc-400">
-          {status === "idle" ? "" : status}
+          {status === "loading" ? "⏳ Python wird geladen…" :
+           status === "running" ? "▶ Läuft…" :
+           status === "error" ? "⚠ Fehler" : ""}
         </div>
       </div>
       <pre className="h-72 overflow-auto bg-black/40 p-4 font-mono text-sm leading-6 text-zinc-50">

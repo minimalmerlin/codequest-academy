@@ -7,6 +7,20 @@ import { ProgressPill } from "@/components/ProgressPill";
 import { ProfilePill } from "@/components/ProfilePill";
 import { AuthModal } from "@/components/AuthModal";
 import { useAuth } from "@/lib/auth";
+import { useSyncStatus } from "@/components/SupabaseSync";
+
+function SyncIndicator() {
+  const status = useSyncStatus();
+  const { user } = useAuth();
+  if (!user) return null;
+  if (status === "syncing") return (
+    <span title="Synchronisiere…" className="text-xs text-zinc-500 animate-pulse select-none">☁</span>
+  );
+  if (status === "error") return (
+    <span title="Sync fehlgeschlagen – Daten werden lokal gespeichert" className="text-xs text-amber-500 select-none cursor-default">⚠</span>
+  );
+  return null;
+}
 
 function AuthButton() {
   const { user, loading, signOut } = useAuth();
@@ -80,6 +94,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <SyncIndicator />
           <AuthButton />
           <ProfilePill />
           <ProgressPill />

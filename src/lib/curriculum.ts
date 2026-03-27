@@ -6471,6 +6471,1237 @@ Object.entries(portfolio).forEach(([n, p]) => { const gut = p.length > 20; conso
 console.log(\`\\n🏆 Fertige Prompts: \${ok}/6\`);`,
       },
     },
+    {
+      id: "ki-11",
+      trackId: "ki" as const,
+      title: "Zero-Shot vs. Few-Shot Prompting",
+      summary: "Lerne wie Beispiele im Prompt die KI viel klüger machen!",
+      minutes: 12,
+      xp: 55,
+      contentMd: `# 🎯 Zero-Shot vs. Few-Shot Prompting
+
+> *"Würdest du jemandem erklären wie man Fahrrad fährt – nur mit Worten? Oder zeigst du es lieber vor? Manchmal hilft ein Beispiel mehr als tausend Worte!"*
+
+## Was bedeutet "Shot"?
+
+In der KI-Welt bedeutet "Shot" so viel wie **Beispiel**.
+
+| Technik | Was ist das? | Beispiel |
+|---------|-------------|---------|
+| **Zero-Shot** | Keine Beispiele – einfach fragen | "Übersetze: Hund" |
+| **One-Shot** | Ein Beispiel geben | "Hund → dog. Katze → ?" |
+| **Few-Shot** | Mehrere Beispiele geben | "Hund→dog, Katze→cat, Vogel→?" |
+
+## Wann benutze ich was?
+
+- **Zero-Shot** reicht für einfache Aufgaben
+- **Few-Shot** hilft wenn die KI das Format genau verstehen soll
+- Mehr Beispiele = KI versteht besser WAS du willst
+
+## Beispiel Few-Shot Prompt:
+
+\`\`\`
+Ich möchte Filmtitel lustig umschreiben.
+
+Beispiele:
+- "Titanic" → "Das große nasse Desaster"
+- "Die Eiskönigin" → "Mädchen friert alles ein und findet Freunde"
+
+Jetzt du: "Spider-Man"
+\`\`\`
+
+Die KI lernt aus den Beispielen welchen **Stil** und welches **Format** du willst.
+
+> 💡 **Tipp:** Je seltsamer dein gewünschtes Format, desto mehr Beispiele brauchst du!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Few-Shot Prompt bauen",
+        instructionsMd: `**Deine Aufgabe:**
+
+Baue einen **Few-Shot Prompt** der eine KI trainiert, Tiernamen in lustige Superhelden-Namen umzuwandeln.
+
+1. Füge mindestens **2 Beispiele** in \`beispiele\` ein (Format: \`{ tier: "...", held: "..." }\`)
+2. Füge deine **neue Anfrage** in \`neueAnfrage\` ein (ein Tiername)
+3. Baue den fertigen Prompt zusammen`,
+        starterCode: `// Few-Shot Prompt: Tier → Superheld
+const beispiele = [
+  { tier: "Hund", held: "Kapitän Pfote" },
+  { tier: "Katze", held: "___" },  // Füge ein zweites Beispiel ein!
+];
+
+const neueAnfrage = "___"; // Welches Tier soll ein Superheld werden?
+
+// Baue den Prompt zusammen:
+let prompt = "Wandle Tiernamen in lustige Superhelden-Namen um.\\n\\nBeispiele:\\n";
+beispiele.forEach(b => {
+  prompt += \`- \${b.tier} → \${b.held}\\n\`;
+});
+prompt += \`\\nJetzt du: \${neueAnfrage}\`;
+
+console.log("=== Mein Few-Shot Prompt ===");
+console.log(prompt);
+console.log("Anzahl Beispiele:", beispiele.length);`,
+        check: { kind: "contains" as const, needles: ["beispiele", "neueAnfrage", "Few-Shot"] },
+        hintMd: `Zweites Beispiel: \`{ tier: "Katze", held: "Die Schnurrende Rächerin" }\` — und für \`neueAnfrage\` schreibe z.B. \`"Hamster"\`. Vergiss nicht "Few-Shot" als Kommentar im Code!`,
+        solutionCode: `// Few-Shot Prompt: Tier → Superheld
+const beispiele = [
+  { tier: "Hund", held: "Kapitän Pfote" },
+  { tier: "Katze", held: "Die Schnurrende Rächerin" },
+  { tier: "Papagei", held: "Doktor Geräusch" },
+];
+
+const neueAnfrage = "Hamster";
+
+let prompt = "Wandle Tiernamen in lustige Superhelden-Namen um.\\n\\nBeispiele:\\n";
+beispiele.forEach(b => {
+  prompt += \`- \${b.tier} → \${b.held}\\n\`;
+});
+prompt += \`\\nJetzt du: \${neueAnfrage}\`;
+
+console.log("=== Mein Few-Shot Prompt ===");
+console.log(prompt);
+console.log("Anzahl Beispiele:", beispiele.length);`,
+      },
+    },
+    {
+      id: "ki-12",
+      trackId: "ki" as const,
+      title: "Chain-of-Thought Prompting",
+      summary: "Lass die KI laut denken – Schritt für Schritt zu besseren Antworten!",
+      minutes: 13,
+      xp: 60,
+      contentMd: `# 🧠 Chain-of-Thought Prompting
+
+> *"Wenn du einen schwierigen Mathe-Test hast, rechnest du auch nicht einfach direkt das Ergebnis auf – du zeigst jeden Schritt. Die KI ist genau gleich!"*
+
+## Was ist Chain-of-Thought?
+
+**Chain-of-Thought** (zu Deutsch: "Gedankenkette") bedeutet: Du bittest die KI, **jeden Denkschritt zu erklären** bevor sie die Antwort gibt.
+
+## Ohne Chain-of-Thought ❌:
+\`\`\`
+Frage: "Wenn ich 3 Äpfel habe und 2 dazubekomme, dann 1 verschenke – wie viele habe ich?"
+KI: "4"
+\`\`\`
+*Du weißt nicht ob die KI richtig gerechnet hat!*
+
+## Mit Chain-of-Thought ✅:
+\`\`\`
+Frage: "... Denke Schritt für Schritt."
+KI: "Schritt 1: Ich starte mit 3 Äpfeln.
+     Schritt 2: 3 + 2 = 5 Äpfel.
+     Schritt 3: 5 - 1 = 4 Äpfel.
+     Antwort: 4 Äpfel."
+\`\`\`
+
+## Magische Schlüsselwörter für Chain-of-Thought:
+- "Denke **Schritt für Schritt**"
+- "Erkläre **deinen Denkweg**"
+- "Zeige **wie du zur Antwort kommst**"
+- "**Begründe** jeden Schritt"
+
+## Wann ist es nützlich?
+- Bei Matheaufgaben
+- Bei logischen Rätseln
+- Wenn du die Erklärung verstehen willst
+- Beim Debuggen von Fehlern
+
+> 💡 **Tipp:** Füge einfach "Denke Schritt für Schritt" ans Ende deines Prompts – das allein verbessert die Antwortqualität enorm!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Gedankenkette bauen",
+        instructionsMd: `**Deine Aufgabe:**
+
+Simuliere einen Chain-of-Thought Denkprozess in JavaScript!
+
+1. Schreibe einen Prompt mit der Zauberformel "Schritt für Schritt" in \`meinPrompt\`
+2. Fülle das \`denkschritte\` Array mit mindestens **3 Denkschritten** aus (simuliere wie eine KI denken würde)
+3. Gib am Ende die \`antwort\` aus`,
+        starterCode: `// Chain-of-Thought: Aufgabe – Wie viele Beine haben 3 Hunde und 2 Spinnen?
+
+const meinPrompt = "Wie viele Beine haben 3 Hunde und 2 Spinnen zusammen? ___"; // Füge die Zauberformel ein!
+
+// Simuliere die Denkschritte einer KI:
+const denkschritte = [
+  "Schritt 1: Ein Hund hat ___ Beine. 3 Hunde haben ___ × ___ = ___ Beine.",
+  "Schritt 2: ___",  // Spinnen
+  "Schritt 3: ___",  // Zusammenrechnen
+];
+
+const antwort = "Zusammen haben sie ___ Beine.";
+
+console.log("Mein Prompt:", meinPrompt);
+console.log("\\n=== KI denkt... ===");
+denkschritte.forEach(s => console.log(s));
+console.log("\\n✅ Antwort:", antwort);`,
+        check: { kind: "contains" as const, needles: ["denkschritte", "Schritt", "Schritt für Schritt"] },
+        hintMd: `Zauberformel: \`"... Denke Schritt für Schritt."\` — Hund = 4 Beine, Spinne = 8 Beine. 3×4=12, 2×8=16, 12+16=28.`,
+        solutionCode: `const meinPrompt = "Wie viele Beine haben 3 Hunde und 2 Spinnen zusammen? Denke Schritt für Schritt.";
+
+const denkschritte = [
+  "Schritt 1: Ein Hund hat 4 Beine. 3 Hunde haben 3 × 4 = 12 Beine.",
+  "Schritt 2: Eine Spinne hat 8 Beine. 2 Spinnen haben 2 × 8 = 16 Beine.",
+  "Schritt 3: Zusammen: 12 + 16 = 28 Beine.",
+];
+
+const antwort = "Zusammen haben sie 28 Beine.";
+
+console.log("Mein Prompt:", meinPrompt);
+console.log("\\n=== KI denkt... ===");
+denkschritte.forEach(s => console.log(s));
+console.log("\\n✅ Antwort:", antwort);`,
+      },
+    },
+    {
+      id: "ki-13",
+      trackId: "ki" as const,
+      title: "Rollen-Prompting: Du bist ein Experte!",
+      summary: "Verwandle die KI in jeden Experten der Welt – von Arzt bis Zauberer!",
+      minutes: 12,
+      xp: 55,
+      contentMd: `# 🎭 Rollen-Prompting: Experten-Modus
+
+> *"Ein guter Regisseur sagt dem Schauspieler genau wer er spielen soll. Du bist der Regisseur – die KI ist dein Schauspieler!"*
+
+## Rollen-Prompting auf dem nächsten Level
+
+Du kennst schon einfache Rollen wie "Du bist ein Lehrer". Jetzt bauen wir **detaillierte Experten-Rollen**!
+
+## Einfache Rolle vs. Experten-Rolle:
+
+### Einfach ❌:
+\`\`\`
+"Du bist ein Arzt. Was soll ich tun wenn ich Kopfschmerzen habe?"
+\`\`\`
+
+### Experten-Rolle ✅:
+\`\`\`
+"Du bist Dr. Klugmann, ein freundlicher Kinderarzt mit 20 Jahren
+Erfahrung. Du erklärst Dinge immer einfach und mit Analogien.
+Du machst dir keine Sorgen und bist optimistisch.
+Aufgabe: Erkläre einem 10-jährigen warum man viel Wasser trinken soll."
+\`\`\`
+
+## Bauplan für Experten-Rollen:
+1. **Name + Beruf** der KI-Persona
+2. **Erfahrung** (wie lange, wo)
+3. **Persönlichkeit** (freundlich, streng, lustig)
+4. **Kommunikationsstil** (einfach, mit Beispielen, mit Witzen)
+5. **Deine Aufgabe** klar formuliert
+
+## Kreative Rollen-Ideen:
+- 🧙 "Du bist Merlin der Zauberer – erkläre Physik mit Magie"
+- 🏴‍☠️ "Du bist Käpt'n Wissen – erkläre Geschichte wie ein Pirat"
+- 🤖 "Du bist ein Roboter aus der Zukunft – beschreibe wie 2100 aussieht"
+- 🦁 "Du bist ein Löwe der sprechen kann – erkläre das Leben in der Savanne"
+
+> 💡 **Tipp:** Je detaillierter die Rolle, desto konsistenter und interessanter die Antworten!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Experten-Persona erstellen",
+        instructionsMd: `**Deine Aufgabe:**
+
+Erstelle eine **detaillierte Experten-Persona** als JavaScript-Objekt und baue daraus einen vollständigen Rollen-Prompt!
+
+1. Fülle alle Felder des \`persona\` Objekts aus (Name, Beruf, Erfahrung, Stil, Persönlichkeit)
+2. Schreibe die \`aufgabe\` die diese Persona lösen soll
+3. Der fertige \`rollenPrompt\` soll automatisch zusammengebaut werden`,
+        starterCode: `// Baue deine Experten-Persona:
+const persona = {
+  name: "___",           // z.B. "Professor Sternklar"
+  beruf: "___",          // z.B. "Astronaut und Weltraumforscher"
+  erfahrung: "___",      // z.B. "30 Jahre Weltraumabenteuer"
+  persoenlichkeit: "___", // z.B. "abenteuerlustig und begeistert"
+  stil: "___",           // z.B. "erklärt mit spannenden Geschichten"
+};
+
+const aufgabe = "Erkläre einem Kind warum der Mond manchmal rund und manchmal wie eine Banane aussieht.";
+
+// Baue den Rollen-Prompt automatisch zusammen:
+const rollenPrompt = \`Du bist \${persona.name}, ein \${persona.beruf} mit \${persona.erfahrung} Erfahrung. Du bist \${persona.persoenlichkeit} und \${persona.stil}. Aufgabe: \${aufgabe}\`;
+
+console.log("=== Meine Experten-Persona ===");
+console.log("Name:", persona.name);
+console.log("Beruf:", persona.beruf);
+console.log("\\n=== Fertiger Rollen-Prompt ===");
+console.log(rollenPrompt);`,
+        check: { kind: "contains" as const, needles: ["persona", "rollenPrompt", "Du bist"] },
+        hintMd: `Beispiel: \`name: "Professor Sternklar"\`, \`beruf: "Astronaut"\`, \`stil: "erklärt mit spannenden Weltraum-Abenteuern"\``,
+        solutionCode: `const persona = {
+  name: "Professor Sternklar",
+  beruf: "Astronaut und Weltraumforscher",
+  erfahrung: "30 Jahren",
+  persoenlichkeit: "abenteuerlustig und total begeistert von allem was leuchtet",
+  stil: "erklärt komplizierte Dinge mit spannenden Geschichten und Analogien",
+};
+
+const aufgabe = "Erkläre einem Kind warum der Mond manchmal rund und manchmal wie eine Banane aussieht.";
+
+const rollenPrompt = \`Du bist \${persona.name}, ein \${persona.beruf} mit \${persona.erfahrung} Erfahrung. Du bist \${persona.persoenlichkeit} und \${persona.stil}. Aufgabe: \${aufgabe}\`;
+
+console.log("=== Meine Experten-Persona ===");
+console.log("Name:", persona.name);
+console.log("Beruf:", persona.beruf);
+console.log("\\n=== Fertiger Rollen-Prompt ===");
+console.log(rollenPrompt);`,
+      },
+    },
+    {
+      id: "ki-14",
+      trackId: "ki" as const,
+      title: "KI-Halluzinationen erkennen",
+      summary: "KIs erfinden manchmal Dinge – lerne wie du Fehler erkennst und prüfst!",
+      minutes: 13,
+      xp: 60,
+      contentMd: `# 🔍 KI-Halluzinationen erkennen
+
+> *"Stell dir vor dein Freund erzählt dir eine Geschichte – aber manchmal erfindet er Teile einfach dazu. Du würdest nachfragen! Mit KI ist es genauso."*
+
+## Was ist eine Halluzination?
+
+Eine **KI-Halluzination** ist wenn eine KI eine Aussage macht die **falsch** oder **erfunden** ist – aber so klingt als wäre sie wahr.
+
+## Beispiele für Halluzinationen:
+- KI erfindet Bücher die nie geschrieben wurden
+- KI nennt falsche Jahreszahlen bei historischen Ereignissen
+- KI erfindet Personen oder Zitate
+- KI beschreibt Fakten die gar nicht stimmen
+
+## Warum passiert das?
+
+KIs werden auf riesigen Mengen Text trainiert. Sie "raten" immer den wahrscheinlichsten nächsten Text – manchmal ist das Raten falsch!
+
+## Halluzinations-Alarm 🚨 – Wann aufpassen?
+
+| Verdächtig | Warum |
+|-----------|-------|
+| Sehr genaue Zahlen (z.B. "37,4%") | Woher weiß die KI das so genau? |
+| Unbekannte Quellen oder Bücher | Vielleicht erfunden! |
+| Historische Details | Oft vermischt die KI Fakten |
+| Aktuelle Ereignisse | KI-Wissen hat ein Enddatum |
+
+## So prüfst du KI-Antworten:
+1. **Suche nach** der Information in Wikipedia oder Büchern
+2. **Frage die KI:** "Woher weißt du das? Bist du sicher?"
+3. **Vergleiche** mit anderen Quellen
+4. Bei wichtigen Themen: **Experten fragen**
+
+> 💡 **Regel:** Vertraue einer KI nie blind – besonders bei Fakten, Zahlen und Namen!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Halluzinations-Detektor",
+        instructionsMd: `**Deine Aufgabe:**
+
+Baue einen **Halluzinations-Detektor**! Analysiere KI-Antworten und markiere verdächtige Aussagen.
+
+1. Setze bei jeder Aussage \`verdaechtig: true\` oder \`false\`
+2. Schreibe für jede verdächtige Aussage einen \`grund\` warum sie verdächtig ist
+3. Das Wort "Halluzination" muss als Kommentar irgendwo im Code stehen`,
+        starterCode: `// Halluzinations-Detektor
+// KI hat diese Antworten gegeben – was ist verdächtig?
+const antworten = [
+  {
+    text: "Der Eiffelturm wurde 1889 gebaut.",
+    verdaechtig: false,
+    grund: "Bekannte Tatsache, leicht prüfbar"
+  },
+  {
+    text: "Das Buch 'Der Quantendrache' von Prof. Müller beweist dass KI Emotionen hat.",
+    verdaechtig: ___,  // true oder false?
+    grund: "___"       // Warum verdächtig?
+  },
+  {
+    text: "Genau 73,6% aller Deutschen nutzen täglich KI.",
+    verdaechtig: ___,
+    grund: "___"
+  },
+  {
+    text: "Wasser besteht aus Wasserstoff und Sauerstoff.",
+    verdaechtig: false,
+    grund: "Grundlegende Chemie, vielfach bestätigt"
+  },
+  {
+    text: "Einstein sagte 1955: 'KI wird die Welt retten'.",
+    verdaechtig: ___,
+    grund: "___"
+  },
+];
+
+const verdaechtige = antworten.filter(a => a.verdaechtig);
+console.log(\`🚨 Halluzination-Risiko: \${verdaechtige.length}/\${antworten.length} verdächtig\`);
+verdaechtige.forEach(a => {
+  console.log("❌ VERDÄCHTIG:", a.text.substring(0, 50) + "...");
+  console.log("   Grund:", a.grund);
+});`,
+        check: { kind: "contains" as const, needles: ["verdaechtig", "verdaechtige", "Halluzination"] },
+        hintMd: `Verdächtig: erfundene Buchtitel, zu genaue Statistiken (73,6%), falsche Zitate von historischen Personen (Einstein starb 1955, KI gab es kaum).`,
+        solutionCode: `// Halluzinations-Detektor – prüft KI-Aussagen auf Glaubwürdigkeit
+const antworten = [
+  {
+    text: "Der Eiffelturm wurde 1889 gebaut.",
+    verdaechtig: false,
+    grund: "Bekannte Tatsache, leicht prüfbar"
+  },
+  {
+    text: "Das Buch 'Der Quantendrache' von Prof. Müller beweist dass KI Emotionen hat.",
+    verdaechtig: true,
+    grund: "Dieses Buch existiert wahrscheinlich nicht – typische Halluzination!"
+  },
+  {
+    text: "Genau 73,6% aller Deutschen nutzen täglich KI.",
+    verdaechtig: true,
+    grund: "Zu genaue Zahl ohne Quelle – sehr verdächtig"
+  },
+  {
+    text: "Wasser besteht aus Wasserstoff und Sauerstoff.",
+    verdaechtig: false,
+    grund: "Grundlegende Chemie, vielfach bestätigt"
+  },
+  {
+    text: "Einstein sagte 1955: 'KI wird die Welt retten'.",
+    verdaechtig: true,
+    grund: "Einstein starb 1955, KI in dem Sinne gab es kaum – erfundenes Zitat"
+  },
+];
+
+const verdaechtige = antworten.filter(a => a.verdaechtig);
+console.log(\`🚨 Halluzination-Risiko: \${verdaechtige.length}/\${antworten.length} verdächtig\`);
+verdaechtige.forEach(a => {
+  console.log("❌ VERDÄCHTIG:", a.text.substring(0, 50) + "...");
+  console.log("   Grund:", a.grund);
+});`,
+      },
+    },
+    {
+      id: "ki-15",
+      trackId: "ki" as const,
+      title: "Prompts iterativ verbessern",
+      summary: "Gute Prompts entstehen nicht sofort – übe die gleiche Aufgabe 3x besser zu formulieren!",
+      minutes: 15,
+      xp: 65,
+      contentMd: `# 🔄 Prompts iterativ verbessern
+
+> *"Kein Autor schreibt beim ersten Versuch ein perfektes Buch. Kein Programmierer schreibt beim ersten Versuch perfekten Code. Kein Prompt ist beim ersten Versuch perfekt!"*
+
+## Iteration = Verbesserung durch Wiederholung
+
+Das Geheimnis guter Prompts: Du schreibst **mehrere Versionen** und machst jede besser als die letzte.
+
+## Der Verbesserungs-Kreislauf:
+
+\`\`\`
+Version 1 → Ergebnis anschauen → Was fehlt? → Version 2 → ...
+\`\`\`
+
+## Beispiel: Prompt für eine Geschichte verbessern
+
+### Version 1 (schlecht):
+\`\`\`
+"Schreibe eine Geschichte."
+\`\`\`
+
+### Version 2 (besser):
+\`\`\`
+"Schreibe eine spannende Geschichte über einen Jungen
+der einen Drachen trifft."
+\`\`\`
+
+### Version 3 (gut):
+\`\`\`
+"Du bist ein Kinderbuchautor. Schreibe eine spannende
+200-Wort-Geschichte für 10-Jährige über einen schüchternen
+Jungen der einen freundlichen Drachen trifft. Die Geschichte
+soll mit einer Überraschung enden."
+\`\`\`
+
+## Was verbessert sich von Version zu Version?
+| Was fehlt | Was ich hinzufüge |
+|-----------|------------------|
+| Thema | Drache + Junge |
+| Länge | 200 Wörter |
+| Zielgruppe | 10-Jährige |
+| Rolle für KI | Kinderbuchautor |
+| Struktur | Mit Überraschungsende |
+
+> 💡 **Tipp:** Frage dich nach jedem Prompt: "Was weiß die KI noch nicht?" – das kommt in die nächste Version!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "3 Versionen – 3x besser!",
+        instructionsMd: `**Deine Aufgabe:**
+
+Verbessere denselben Prompt **3 Mal**! Das Thema ist: "Erkläre mir wie das Internet funktioniert."
+
+1. \`version1\`: Sehr einfacher, vager Prompt (kurz)
+2. \`version2\`: Etwas besser – füge Zielgruppe und Format hinzu
+3. \`version3\`: Vollständig – Rolle + Kontext + Format + Länge + Stil
+
+Jede Version soll **länger** sein als die vorherige!`,
+        starterCode: `// Aufgabe: Erkläre wie das Internet funktioniert
+// Verbessere den Prompt 3 Mal!
+
+const version1 = "Erkläre das Internet.";
+
+const version2 = "Erkläre mir wie das Internet funktioniert. ___";
+// Füge hinzu: für wen (Alter), wie viele Punkte
+
+const version3 = "___";
+// Vollständig: Rolle + Kontext + Format + Länge + Stil
+
+// Auswertung:
+const versionen = [version1, version2, version3];
+versionen.forEach((v, i) => {
+  console.log(\`Version \${i + 1} (\${v.length} Zeichen): \${v.substring(0, 60)}...\`);
+});
+
+// Verbesserungs-Check:
+const verbessert = version2.length > version1.length && version3.length > version2.length;
+console.log("\\n✅ Jede Version ist länger:", verbessert);
+console.log("Verbesserung v1→v3:", version3.length - version1.length, "mehr Zeichen");`,
+        check: { kind: "contains" as const, needles: ["version1", "version2", "version3"] },
+        hintMd: `Version 3 Beispiel: "Du bist ein Informatiklehrer. Ich bin 12 Jahre alt. Erkläre mir wie das Internet funktioniert in 5 einfachen Schritten mit je einer Analogie aus dem Alltag. Maximal 200 Wörter."`,
+        solutionCode: `const version1 = "Erkläre das Internet.";
+
+const version2 = "Erkläre mir wie das Internet funktioniert. Ich bin 11 Jahre alt. Nenn mir 3 wichtige Punkte.";
+
+const version3 = "Du bist ein freundlicher Informatiklehrer. Ich bin 11 Jahre alt und habe noch nie über Technik nachgedacht. Erkläre mir wie das Internet funktioniert in 5 einfachen Schritten. Nutze für jeden Schritt eine Analogie aus dem Alltag. Maximal 150 Wörter, einfache Sprache.";
+
+const versionen = [version1, version2, version3];
+versionen.forEach((v, i) => {
+  console.log(\`Version \${i + 1} (\${v.length} Zeichen): \${v.substring(0, 60)}...\`);
+});
+
+const verbessert = version2.length > version1.length && version3.length > version2.length;
+console.log("\\n✅ Jede Version ist länger:", verbessert);
+console.log("Verbesserung v1→v3:", version3.length - version1.length, "mehr Zeichen");`,
+      },
+    },
+    {
+      id: "ki-16",
+      trackId: "ki" as const,
+      title: "KI für Code-Erklärungen nutzen",
+      summary: "Lass die KI Code erklären, kommentieren und verbessern – dein KI-Coding-Buddy!",
+      minutes: 13,
+      xp: 60,
+      contentMd: `# 💻 KI als Coding-Buddy
+
+> *"Früher musste man Stunden googeln um einen Code-Fehler zu verstehen. Mit KI erklärst du den Code einfach – und bekommst die Antwort in Sekunden!"*
+
+## KI kann mit Code helfen!
+
+Du kannst einer KI **JavaScript-Code zeigen** und sie fragen:
+- Was macht dieser Code?
+- Warum funktioniert das nicht?
+- Wie kann ich das verbessern?
+- Erkläre mir diese Zeile
+
+## Prompt-Formeln für Code:
+
+### Code erklären lassen:
+\`\`\`
+"Erkläre mir diesen JavaScript-Code Zeile für Zeile
+in einfacher Sprache. Ich bin Anfänger:
+
+const zahlen = [1, 2, 3];
+const doppelt = zahlen.map(z => z * 2);
+console.log(doppelt);"
+\`\`\`
+
+### Fehler finden lassen:
+\`\`\`
+"Dieser Code funktioniert nicht. Finde den Fehler
+und erkläre warum:
+
+let name = 'Alex'
+console.log('Hallo ' + Name);"
+\`\`\`
+
+### Code verbessern lassen:
+\`\`\`
+"Schreibe diesen Code einfacher und kommentiere
+jede Zeile auf Deutsch:"
+\`\`\`
+
+## Was eine KI SEHR gut kann:
+- ✅ Einfachen Code erklären
+- ✅ Kleine Fehler finden (Tippfehler, falsche Syntax)
+- ✅ Code kommentieren
+- ✅ Einfachere Alternativen vorschlagen
+
+## Was du immer selbst prüfen solltest:
+- ⚠️ Ob der erklärte Code wirklich das tut was die KI sagt
+- ⚠️ Ob der Code sicher ist
+
+> 💡 **Tipp:** Gib der KI immer den **kompletten Code** – nicht nur eine Zeile. Kontext ist alles!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Code-Erklärung mit KI",
+        instructionsMd: `**Deine Aufgabe:**
+
+Schreibe Prompts die eine KI bitten, Code zu erklären und zu verbessern!
+
+1. Fülle \`erklaerungsPrompt\` aus – bitte die KI den Code Zeile für Zeile zu erklären
+2. Fülle \`fehlerPrompt\` aus – bitte die KI den Fehler im Buggy-Code zu finden
+3. Korrigiere den Fehler im Buggy-Code selbst in \`korrigierterCode\``,
+        starterCode: `// Der Code der erklärt werden soll:
+const codeBeispiel = \`
+const tiere = ["Hund", "Katze", "Vogel"];
+const grossbuchstaben = tiere.map(t => t.toUpperCase());
+console.log(grossbuchstaben);
+\`;
+
+// Prompt um den Code zu erklären:
+const erklaerungsPrompt = "Erkläre mir diesen JavaScript-Code ___ in einfacher Sprache für Anfänger: " + codeBeispiel;
+// Tipp: Füge ein wie die Erklärung sein soll (Zeile für Zeile? Kurz? Mit Beispiel?)
+
+// Buggy Code mit einem Fehler:
+const buggyCode = \`
+let begruessung = "Hallo";
+console.log(begruessung + " " + Name);  // Fehler: Name vs name
+\`;
+
+// Prompt um den Fehler zu finden:
+const fehlerPrompt = "___";
+// Erkläre der KI was das Problem ist und was sie tun soll
+
+// Korrigierter Code – behebe den Fehler:
+const korrigierterCode = \`
+let begruessung = "Hallo";
+let ___ = "Alex";
+console.log(begruessung + " " + ___);
+\`;
+
+console.log("Erklärungs-Prompt:", erklaerungsPrompt.substring(0, 70) + "...");
+console.log("Fehler-Prompt:", fehlerPrompt.substring(0, 70) + "...");
+console.log("Korrigierter Code vorhanden:", korrigierterCode.length > 20);`,
+        check: { kind: "contains" as const, needles: ["erklaerungsPrompt", "fehlerPrompt", "korrigierterCode"] },
+        hintMd: `Fehler-Prompt: "Dieser JavaScript-Code hat einen Fehler. Finde ihn und erkläre warum: [code]" — Der Fehler: \`Name\` sollte \`name\` heißen (JavaScript unterscheidet Groß- und Kleinschreibung!).`,
+        solutionCode: `const codeBeispiel = \`
+const tiere = ["Hund", "Katze", "Vogel"];
+const grossbuchstaben = tiere.map(t => t.toUpperCase());
+console.log(grossbuchstaben);
+\`;
+
+const erklaerungsPrompt = "Erkläre mir diesen JavaScript-Code Zeile für Zeile auf Deutsch. Ich bin Anfänger: " + codeBeispiel;
+
+const buggyCode = \`
+let begruessung = "Hallo";
+console.log(begruessung + " " + Name);
+\`;
+
+const fehlerPrompt = "Dieser JavaScript-Code hat einen Fehler. Finde ihn, erkläre warum er falsch ist und zeig die korrigierte Version: " + buggyCode;
+
+const korrigierterCode = \`
+let begruessung = "Hallo";
+let name = "Alex";
+console.log(begruessung + " " + name);
+\`;
+
+console.log("Erklärungs-Prompt:", erklaerungsPrompt.substring(0, 70) + "...");
+console.log("Fehler-Prompt:", fehlerPrompt.substring(0, 70) + "...");
+console.log("Korrigierter Code vorhanden:", korrigierterCode.length > 20);`,
+      },
+    },
+    {
+      id: "ki-17",
+      trackId: "ki" as const,
+      title: "KI-Bias und Fairness",
+      summary: "KIs können unfair sein ohne es zu wissen – lerne was Bias bedeutet und wie man es erkennt!",
+      minutes: 14,
+      xp: 65,
+      contentMd: `# ⚖️ KI-Bias und Fairness
+
+> *"Stell dir vor dein Lehrer gibt immer denselben Schülern bessere Noten – egal was sie schreiben. Das wäre unfair. KIs können ähnliche 'blinde Flecken' haben!"*
+
+## Was ist Bias?
+
+**Bias** (zu Deutsch: Voreingenommenheit) bedeutet: Die KI behandelt nicht alle Menschen oder Gruppen gleich fair.
+
+## Woher kommt Bias?
+
+KIs lernen aus riesigen Mengen Text die Menschen geschrieben haben. Und Menschen haben manchmal Vorurteile – diese können in die KI übergehen!
+
+## Beispiele für KI-Bias:
+- Eine KI nennt bei "Arzt" häufiger einen Mann als eine Frau
+- Eine KI übersetzt Berufe geschlechterspezifisch falsch
+- Eine KI versteht bestimmte Dialekte oder Sprachen schlechter
+- Eine KI assoziiert bestimmte Namen mit positiven oder negativen Eigenschaften
+
+## Warum ist das wichtig?
+
+| Situation | Wenn KI unfair ist |
+|-----------|-------------------|
+| Bewerbungen prüfen | Manche Menschen werden benachteiligt |
+| Medizinische Diagnosen | Manche Gruppen werden schlechter behandelt |
+| Nachrichten filtern | Bestimmte Meinungen werden bevorzugt |
+
+## Wie erkenne ich Bias?
+
+1. **Frage die KI dasselbe** mit unterschiedlichen Namen (Max vs. Fatima)
+2. **Vergleiche Antworten** zu verschiedenen Gruppen
+3. **Frage kritisch:** Warum antwortet die KI so?
+
+## Was können wir tun?
+
+- ✅ KI-Antworten kritisch hinterfragen
+- ✅ Verschiedene Quellen nutzen
+- ✅ Diversität in Trainings-Daten fordern
+- ✅ Über Bias sprechen und aufklären
+
+> 💡 **Merke:** KI ist kein neutraler Spiegel – sie spiegelt die Welt so wie Menschen sie beschrieben haben. Mit allen Fehlern.`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Bias-Detektor",
+        instructionsMd: `**Deine Aufgabe:**
+
+Baue einen **Bias-Test** der prüft ob eine KI unterschiedlich auf verschiedene Namen reagieren würde!
+
+1. Fülle das \`testSzenarien\` Array mit mindestens **3 Szenarien** (gleiche Frage, verschiedene Namen)
+2. Bewerte: \`sollteGleichSein: true\` wenn die KI fair antworten sollte
+3. Schreibe eine \`biasHypothese\` was du erwartest`,
+        starterCode: `// Bias-Test: Gleiche Frage, verschiedene Namen
+const testSzenarien = [
+  {
+    frage: "Ist ___ ein guter Kandidat für die Stelle als Ingenieur?",
+    name1: "Max Müller",
+    name2: "Fatima Al-Hassan",
+    sollteGleichSein: true,
+    warum: "Gleiche Qualifikationen sollten gleich bewertet werden – Bias!"
+  },
+  {
+    frage: "___ möchte Schulsprecherin werden. Ist das eine gute Idee?",
+    name1: "___",  // Füge einen Namen ein
+    name2: "___",  // Füge einen anderen Namen ein
+    sollteGleichSein: ___,
+    warum: "___"
+  },
+  {
+    frage: "Beschreibe ___ als zukünftige Ärztin.",
+    name1: "___",
+    name2: "___",
+    sollteGleichSein: ___,
+    warum: "___"
+  },
+];
+
+const biasHypothese = "___"; // Was vermutest du? Wird die KI fair sein?
+
+console.log("=== Bias-Test Szenarien ===");
+testSzenarien.forEach((s, i) => {
+  console.log(\`\\nSzenario \${i + 1}:\`);
+  console.log("Vergleich:", s.name1, "vs", s.name2);
+  console.log("Sollte gleich sein:", s.sollteGleichSein);
+  console.log("Warum:", s.warum);
+});
+console.log("\\nMeine Hypothese:", biasHypothese);`,
+        check: { kind: "contains" as const, needles: ["testSzenarien", "sollteGleichSein", "biasHypothese"] },
+        hintMd: `Füge verschiedene Namen ein (z.B. "Emma" vs. "Aysha", "Tom" vs. "Björn"). Deine Hypothese: "Ich vermute die KI könnte unterschiedlich auf Namen aus verschiedenen Kulturen reagieren."`,
+        solutionCode: `const testSzenarien = [
+  {
+    frage: "Ist ___ ein guter Kandidat für die Stelle als Ingenieur?",
+    name1: "Max Müller",
+    name2: "Fatima Al-Hassan",
+    sollteGleichSein: true,
+    warum: "Gleiche Qualifikationen sollten gleich bewertet werden – Bias!"
+  },
+  {
+    frage: "___ möchte Schulsprecherin werden. Ist das eine gute Idee?",
+    name1: "Emma Schmidt",
+    name2: "Aysha Yilmaz",
+    sollteGleichSein: true,
+    warum: "Herkunft und Name sollten keine Rolle spielen"
+  },
+  {
+    frage: "Beschreibe ___ als zukünftige Ärztin.",
+    name1: "Maria Bauer",
+    name2: "Björn Karlsson",
+    sollteGleichSein: true,
+    warum: "Derselbe Beruf sollte unabhängig vom Namen gleich beschrieben werden"
+  },
+];
+
+const biasHypothese = "Ich vermute die KI könnte unbewusst unterschiedlich auf Namen aus verschiedenen Kulturen reagieren, obwohl alle Menschen gleich fair behandelt werden sollten.";
+
+console.log("=== Bias-Test Szenarien ===");
+testSzenarien.forEach((s, i) => {
+  console.log(\`\\nSzenario \${i + 1}:\`);
+  console.log("Vergleich:", s.name1, "vs", s.name2);
+  console.log("Sollte gleich sein:", s.sollteGleichSein);
+  console.log("Warum:", s.warum);
+});
+console.log("\\nMeine Hypothese:", biasHypothese);`,
+      },
+    },
+    {
+      id: "ki-18",
+      trackId: "ki" as const,
+      title: "KI im Alltag – wo steckt KI überall?",
+      summary: "KI ist überall – in deinem Handy, in der Schule, im Supermarkt. Entdecke die versteckte KI!",
+      minutes: 10,
+      xp: 50,
+      contentMd: `# 🌍 KI ist überall!
+
+> *"KI ist wie Elektrizität – du siehst sie nicht direkt, aber fast alles was du benutzt läuft damit!"*
+
+## KI in deinem Alltag
+
+Du denkst vielleicht KI ist nur ChatGPT. Aber KI steckt in viel mehr!
+
+## Wo du täglich auf KI triffst:
+
+### 📱 Dein Handy:
+- **Autocomplete** – schlägt nächstes Wort vor
+- **Gesichts-Entsperrung** – erkennt dein Gesicht
+- **Kamera** – verbessert Fotos automatisch
+- **Sprachassistent** – Siri, Google Assistent
+
+### 🎵 Streaming:
+- **YouTube** empfiehlt Videos die du magst
+- **Spotify** erstellt Playlisten für dich
+- **Netflix** wählt Serien die passen
+
+### 🛒 Shopping:
+- **Amazon** zeigt dir was du kaufen könntest
+- **Supermarkt** optimiert Lager mit KI
+- **Preise** werden durch KI angepasst
+
+### 🏥 Gesundheit:
+- **Diagnose-Hilfe** – KI findet Krankheiten auf Röntgenbildern
+- **Sportuhren** erkennen ob du läufst oder schläfst
+
+### 🚗 Verkehr:
+- **Google Maps** berechnet besten Weg
+- **Ampeln** die den Verkehr optimieren
+- **Autos** die selbst einparken
+
+### 🎮 Spiele:
+- **Gegner-KI** in Computerspielen
+- **NPC-Dialoge** in Rollenspielen
+
+> 💡 **Fun Fact:** Das Netflix-Empfehlungssystem spart Netflix über 1 Milliarde Dollar pro Jahr an verlorenen Abonnenten!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "KI-Entdecker-Karte",
+        instructionsMd: `**Deine Aufgabe:**
+
+Erstelle eine **KI-Entdecker-Karte** deines Alltags! Finde in jeder Kategorie mindestens eine KI-Anwendung.
+
+1. Fülle alle leeren Felder in \`meinKIAlltag\` aus (mind. 5 Kategorien mit je 1 Beispiel)
+2. Schreibe bei jeder KI-Anwendung was sie genau macht (\`was\`)
+3. Gib an ob du das gewusst hast (\`wussteIchNicht: true/false\`)`,
+        starterCode: `const meinKIAlltag = {
+  handy: {
+    anwendung: "Autocomplete beim Tippen",
+    was: "Schlägt das nächste Wort vor während ich schreibe",
+    wussteIchNicht: false,
+  },
+  streaming: {
+    anwendung: "___",  // Welche Plattform + was sie empfiehlt
+    was: "___",
+    wussteIchNicht: ___,
+  },
+  zuhause: {
+    anwendung: "___",
+    was: "___",
+    wussteIchNicht: ___,
+  },
+  schule: {
+    anwendung: "___",
+    was: "___",
+    wussteIchNicht: ___,
+  },
+  draussen: {
+    anwendung: "___",  // Verkehr, Navi, etc.
+    was: "___",
+    wussteIchNicht: ___,
+  },
+};
+
+// Auswertung:
+const kategorien = Object.keys(meinKIAlltag);
+const ueberraschungen = Object.values(meinKIAlltag).filter(k => k.wussteIchNicht);
+
+console.log(\`🤖 KI in \${kategorien.length} Lebensbereichen gefunden!\`);
+kategorien.forEach(k => {
+  const info = meinKIAlltag[k];
+  console.log(\`\\n📍 \${k.toUpperCase()}: \${info.anwendung}\`);
+  console.log(\`   → \${info.was}\`);
+});
+console.log(\`\\n💡 \${ueberraschungen.length} davon wusste ich nicht!\`);`,
+        check: { kind: "contains" as const, needles: ["meinKIAlltag", "wussteIchNicht", "anwendung"] },
+        hintMd: `Beispiele: streaming = "YouTube empfiehlt Videos die ich mag", zuhause = "Smart-Speaker erkennt meine Stimme", schule = "Rechtschreibprüfung in der Textverarbeitung".`,
+        solutionCode: `const meinKIAlltag = {
+  handy: {
+    anwendung: "Autocomplete beim Tippen",
+    was: "Schlägt das nächste Wort vor während ich schreibe",
+    wussteIchNicht: false,
+  },
+  streaming: {
+    anwendung: "YouTube empfiehlt Videos",
+    was: "Analysiert was ich schaue und schlägt ähnliche Videos vor",
+    wussteIchNicht: false,
+  },
+  zuhause: {
+    anwendung: "Smart-Speaker",
+    was: "Erkennt meine Stimme und antwortet auf Fragen",
+    wussteIchNicht: true,
+  },
+  schule: {
+    anwendung: "Rechtschreibprüfung",
+    was: "Erkennt Fehler und schlägt Korrekturen vor",
+    wussteIchNicht: true,
+  },
+  draussen: {
+    anwendung: "Google Maps Navigation",
+    was: "Berechnet schnellste Route basierend auf Echtzeit-Verkehr",
+    wussteIchNicht: false,
+  },
+};
+
+const kategorien = Object.keys(meinKIAlltag);
+const ueberraschungen = Object.values(meinKIAlltag).filter(k => k.wussteIchNicht);
+
+console.log(\`🤖 KI in \${kategorien.length} Lebensbereichen gefunden!\`);
+kategorien.forEach(k => {
+  const info = meinKIAlltag[k];
+  console.log(\`\\n📍 \${k.toUpperCase()}: \${info.anwendung}\`);
+  console.log(\`   → \${info.was}\`);
+});
+console.log(\`\\n💡 \${ueberraschungen.length} davon wusste ich nicht!\`);`,
+      },
+    },
+    {
+      id: "ki-19",
+      trackId: "ki" as const,
+      title: "Eigenen KI-Assistenten designen",
+      summary: "Erfinde deinen eigenen KI-Assistenten mit einem System-Prompt – du bist der Entwickler!",
+      minutes: 15,
+      xp: 70,
+      contentMd: `# 🛠️ Eigenen KI-Assistenten designen
+
+> *"Hinter jedem KI-Chatbot steckt ein geheimer 'System-Prompt' der definiert wer die KI ist. Heute wirst du einer schreiben!"*
+
+## Was ist ein System-Prompt?
+
+Ein **System-Prompt** ist ein versteckter Prompt der **vor dem Gespräch** an die KI gesendet wird. Er legt fest:
+- Wie die KI heißt
+- Was ihre Persönlichkeit ist
+- Was sie tun soll und was nicht
+- Wie sie antwortet
+
+## Beispiel System-Prompt für einen Lern-Assistenten:
+
+\`\`\`
+Du bist "LernMax", ein freundlicher KI-Assistent für Schüler
+zwischen 10 und 14 Jahren.
+
+Deine Persönlichkeit:
+- Du bist geduldig und ermutigend
+- Du erklärst immer in einfacher Sprache
+- Du nutzt viele Beispiele aus dem Alltag
+
+Deine Regeln:
+- Antworte IMMER auf Deutsch
+- Wenn du etwas nicht weißt, sage es ehrlich
+- Gib keine Hausaufgaben-Antworten direkt – erkläre stattdessen
+- Frage nach ob das Kind die Erklärung verstanden hat
+
+Themen die du beherrschst:
+- Mathe, Deutsch, Englisch, Sachkunde
+\`\`\`
+
+## Bausteine eines guten System-Prompts:
+
+| Baustein | Beispiel |
+|----------|---------|
+| **Name** | "Du bist MaxBot" |
+| **Zweck** | "Du hilfst Kindern beim Lernen" |
+| **Persönlichkeit** | "Du bist lustig und geduldig" |
+| **Regeln** | "Antworte immer auf Deutsch" |
+| **Grenzen** | "Sprich NICHT über Gewalt" |
+| **Fähigkeiten** | "Du kennst dich mit Mathe aus" |
+
+> 💡 **Profi-Tipp:** Gute System-Prompts sind präzise aber nicht zu lang. Zu viele Regeln verwirren die KI!`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Dein eigener KI-Assistent",
+        instructionsMd: `**Deine Aufgabe:**
+
+Designe deinen **eigenen KI-Assistenten** mit einem vollständigen System-Prompt!
+
+1. Fülle das \`assistent\` Objekt komplett aus (Name, Zweck, Persönlichkeit, Regeln, Fähigkeiten)
+2. Füge mindestens **3 Regeln** und **3 Fähigkeiten** hinzu
+3. Baue daraus automatisch den \`systemPrompt\` String`,
+        starterCode: `// Designe deinen KI-Assistenten:
+const assistent = {
+  name: "___",         // Name deines Assistenten
+  zweck: "___",        // Was soll er tun?
+  zielgruppe: "Kinder zwischen 10 und 14 Jahren",
+  persoenlichkeit: ["___", "___", "___"], // 3 Eigenschaften
+  regeln: [
+    "Antworte immer auf Deutsch",
+    "___",   // Regel 2
+    "___",   // Regel 3
+  ],
+  faehigkeiten: [
+    "___",   // Was kann er?
+    "___",
+    "___",
+  ],
+  verboten: "___",  // Was darf er NIEMALS tun?
+};
+
+// Baue den System-Prompt automatisch:
+const systemPrompt = \`
+Du bist "\${assistent.name}", \${assistent.zweck}
+
+Zielgruppe: \${assistent.zielgruppe}
+
+Deine Persönlichkeit:
+\${assistent.persoenlichkeit.map(p => "- " + p).join("\\n")}
+
+Deine Regeln:
+\${assistent.regeln.map(r => "- " + r).join("\\n")}
+
+Deine Fähigkeiten:
+\${assistent.faehigkeiten.map(f => "- " + f).join("\\n")}
+
+VERBOTEN: \${assistent.verboten}
+\`.trim();
+
+console.log("=== Mein KI-Assistent ===");
+console.log("Name:", assistent.name);
+console.log("Regeln:", assistent.regeln.length);
+console.log("\\n=== System-Prompt ===");
+console.log(systemPrompt);`,
+        check: { kind: "contains" as const, needles: ["assistent", "systemPrompt", "regeln", "faehigkeiten"] },
+        hintMd: `Beispiel: name = "CodeBot", zweck = "hilft Kindern beim Programmieren lernen", persoenlichkeit = ["geduldig", "motivierend", "erklärt mit Beispielen"], verboten = "Beleidigungen oder unpassende Inhalte"`,
+        solutionCode: `const assistent = {
+  name: "LernStar",
+  zweck: "hilft Kindern beim Lernen für die Schule",
+  zielgruppe: "Kinder zwischen 10 und 14 Jahren",
+  persoenlichkeit: ["geduldig und ermutigend", "erklärt mit lustigen Beispielen", "feiert kleine Erfolge"],
+  regeln: [
+    "Antworte immer auf Deutsch",
+    "Gib keine direkten Hausaufgaben-Antworten – erkläre stattdessen",
+    "Frage nach ob das Kind verstanden hat",
+  ],
+  faehigkeiten: [
+    "Mathe und Geometrie erklären",
+    "Deutsch-Aufsätze verbessern helfen",
+    "Englisch-Vokabeln üben",
+  ],
+  verboten: "Persönliche Daten abfragen oder unpassende Inhalte zeigen",
+};
+
+const systemPrompt = \`
+Du bist "\${assistent.name}", \${assistent.zweck}
+
+Zielgruppe: \${assistent.zielgruppe}
+
+Deine Persönlichkeit:
+\${assistent.persoenlichkeit.map(p => "- " + p).join("\\n")}
+
+Deine Regeln:
+\${assistent.regeln.map(r => "- " + r).join("\\n")}
+
+Deine Fähigkeiten:
+\${assistent.faehigkeiten.map(f => "- " + f).join("\\n")}
+
+VERBOTEN: \${assistent.verboten}
+\`.trim();
+
+console.log("=== Mein KI-Assistent ===");
+console.log("Name:", assistent.name);
+console.log("Regeln:", assistent.regeln.length);
+console.log("\\n=== System-Prompt ===");
+console.log(systemPrompt);`,
+      },
+    },
+    {
+      id: "ki-20",
+      trackId: "ki" as const,
+      title: "🏆 Boss Quest: Kompletter KI-Workflow",
+      summary: "Zeige alles was du über KI gelernt hast – System-Prompt, User-Prompt und Sicherheitscheck in einem!",
+      minutes: 30,
+      xp: 150,
+      contentMd: `# 🏆 Boss Quest: Kompletter KI-Workflow
+
+> *"Ein echter KI-Ingenieur baut nicht nur Prompts – er baut ganze Systeme. Heute bist du der Ingenieur!"*
+
+## Was du heute baust:
+
+Ein **komplettes KI-System** mit drei Teilen:
+
+### Teil 1: System-Prompt
+Definiert was deine KI ist und wie sie sich verhält.
+
+### Teil 2: User-Prompt Pipeline
+Verschiedene Prompt-Techniken kombiniert:
+- Few-Shot Beispiele
+- Chain-of-Thought Anweisung
+- Rollen-Kontext
+
+### Teil 3: Sicherheits-Check
+Automatische Prüfung ob Prompts sicher sind.
+
+## Der vollständige Workflow:
+
+\`\`\`
+[System-Prompt] → definiert die KI
+      ↓
+[User-Prompt] → Few-Shot + Chain-of-Thought + Kontext
+      ↓
+[Sicherheits-Check] → Prüft auf gefährliche Inhalte
+      ↓
+[Ausgabe] → Bereinigte, sichere Antwort
+\`\`\`
+
+## Checkliste für deinen Boss Quest:
+- ✅ System-Prompt mit Name, Regeln, Persönlichkeit
+- ✅ Few-Shot Prompt mit mindestens 2 Beispielen
+- ✅ Chain-of-Thought Anweisung
+- ✅ Sicherheits-Filter der verbotene Wörter erkennt
+- ✅ Vollständige Ausgabe des Systems
+
+## Was ein KI-Profi weiß:
+
+| Konzept | Bedeutung |
+|---------|----------|
+| System-Prompt | Geheime Grundeinstellung der KI |
+| Few-Shot | Lernen durch Beispiele |
+| Chain-of-Thought | Schritt-für-Schritt denken |
+| Halluzination | KI erfindet falsche Fakten |
+| Bias | Unfaire Vorurteile in der KI |
+| Safety Filter | Sicherheitsprüfung für Prompts |
+
+> 💡 **Du hast das KI-Track abgeschlossen! Du bist jetzt ein KI-Prompt-Ingenieur!**`,
+      exercise: {
+        language: "javascript" as const,
+        title: "Vollständiges KI-System bauen",
+        instructionsMd: `**Deine finale Aufgabe:**
+
+Baue ein **komplettes KI-Workflow-System** mit allen drei Teilen!
+
+**Teil 1 – System-Prompt:** Designe einen KI-Assistenten (Name, Zweck, Regeln)
+
+**Teil 2 – Prompt-Pipeline:** Baue einen Prompt der Few-Shot + Chain-of-Thought kombiniert
+
+**Teil 3 – Sicherheits-Check:** Schreibe eine Funktion die Prompts auf verbotene Begriffe prüft
+
+Alle drei Teile müssen vorhanden und funktionsfähig sein!`,
+        starterCode: `// ============================================
+// 🏆 BOSS QUEST: Kompletter KI-Workflow
+// ============================================
+
+// --- TEIL 1: SYSTEM-PROMPT ---
+const systemPrompt = {
+  name: "___",
+  zweck: "___",
+  persoenlichkeit: ["___", "___"],
+  regeln: [
+    "Antworte immer auf Deutsch",
+    "___",
+    "___",
+  ],
+  verboten: ["Passwörter", "Adressen", "___"],
+};
+
+// --- TEIL 2: PROMPT-PIPELINE (Few-Shot + Chain-of-Thought) ---
+const fewShotBeispiele = [
+  { eingabe: "Was ist 2 + 2?", ausgabe: "Schritt 1: 2 + 2 = 4. Antwort: 4" },
+  { eingabe: "___", ausgabe: "___" },  // Zweites Beispiel!
+];
+
+const userAnfrage = "Was ist 15 × 3?";
+
+// Baue den vollständigen Prompt:
+let vollstaendigerPrompt = \`System: Du bist \${systemPrompt.name}. \${systemPrompt.zweck}\\n\\n\`;
+vollstaendigerPrompt += "Beispiele:\\n";
+fewShotBeispiele.forEach(b => {
+  vollstaendigerPrompt += \`Frage: \${b.eingabe}\\nAntwort: \${b.ausgabe}\\n\\n\`;
+});
+vollstaendigerPrompt += \`Frage: \${userAnfrage}\\nDenke Schritt für Schritt und zeige deinen Rechenweg.\`;
+
+// --- TEIL 3: SICHERHEITS-CHECK ---
+function sicherheitsCheck(prompt) {
+  const verboteneWoerter = ["Passwort", "Adresse", "Telefon", ...systemPrompt.verboten];
+  const gefunden = verboteneWoerter.filter(w =>
+    prompt.toLowerCase().includes(w.toLowerCase())
+  );
+  return {
+    sicher: gefunden.length === 0,
+    gefundeneProbleme: gefunden,
+  };
+}
+
+// --- AUSGABE ---
+const check = sicherheitsCheck(vollstaendigerPrompt);
+console.log("=== 🤖 KI-SYSTEM GESTARTET ===");
+console.log("Assistent:", systemPrompt.name);
+console.log("Regeln:", systemPrompt.regeln.length);
+console.log("\\n=== 📝 VOLLSTÄNDIGER PROMPT ===");
+console.log(vollstaendigerPrompt);
+console.log("\\n=== 🔒 SICHERHEITS-CHECK ===");
+console.log("Sicher:", check.sicher ? "✅ JA" : "❌ NEIN");
+if (!check.sicher) console.log("Probleme:", check.gefundeneProbleme);`,
+        check: { kind: "contains" as const, needles: ["systemPrompt", "fewShotBeispiele", "sicherheitsCheck", "vollstaendigerPrompt"] },
+        hintMd: `Zweites Few-Shot Beispiel: \`{ eingabe: "Was ist 10 ÷ 2?", ausgabe: "Schritt 1: 10 ÷ 2 = 5. Antwort: 5" }\` — Vergiss nicht alle drei Lücken im systemPrompt zu füllen!`,
+        solutionCode: `// ============================================
+// 🏆 BOSS QUEST: Kompletter KI-Workflow
+// ============================================
+
+// --- TEIL 1: SYSTEM-PROMPT ---
+const systemPrompt = {
+  name: "MathStar",
+  zweck: "hilft Schülerinnen und Schülern beim Mathematik lernen",
+  persoenlichkeit: ["geduldig und ermutigend", "erklärt jeden Schritt genau"],
+  regeln: [
+    "Antworte immer auf Deutsch",
+    "Zeige immer den Lösungsweg Schritt für Schritt",
+    "Frage nach ob das Kind verstanden hat",
+  ],
+  verboten: ["Passwörter", "Adressen", "persönliche Daten"],
+};
+
+// --- TEIL 2: PROMPT-PIPELINE ---
+const fewShotBeispiele = [
+  { eingabe: "Was ist 2 + 2?", ausgabe: "Schritt 1: 2 + 2 = 4. Antwort: 4" },
+  { eingabe: "Was ist 10 ÷ 2?", ausgabe: "Schritt 1: 10 ÷ 2 = 5. Antwort: 5" },
+];
+
+const userAnfrage = "Was ist 15 × 3?";
+
+let vollstaendigerPrompt = \`System: Du bist \${systemPrompt.name}. \${systemPrompt.zweck}\\n\\n\`;
+vollstaendigerPrompt += "Beispiele:\\n";
+fewShotBeispiele.forEach(b => {
+  vollstaendigerPrompt += \`Frage: \${b.eingabe}\\nAntwort: \${b.ausgabe}\\n\\n\`;
+});
+vollstaendigerPrompt += \`Frage: \${userAnfrage}\\nDenke Schritt für Schritt und zeige deinen Rechenweg.\`;
+
+// --- TEIL 3: SICHERHEITS-CHECK ---
+function sicherheitsCheck(prompt) {
+  const verboteneWoerter = ["Passwort", "Adresse", "Telefon", ...systemPrompt.verboten];
+  const gefunden = verboteneWoerter.filter(w =>
+    prompt.toLowerCase().includes(w.toLowerCase())
+  );
+  return {
+    sicher: gefunden.length === 0,
+    gefundeneProbleme: gefunden,
+  };
+}
+
+// --- AUSGABE ---
+const check = sicherheitsCheck(vollstaendigerPrompt);
+console.log("=== 🤖 KI-SYSTEM GESTARTET ===");
+console.log("Assistent:", systemPrompt.name);
+console.log("Regeln:", systemPrompt.regeln.length);
+console.log("\\n=== 📝 VOLLSTÄNDIGER PROMPT ===");
+console.log(vollstaendigerPrompt);
+console.log("\\n=== 🔒 SICHERHEITS-CHECK ===");
+console.log("Sicher:", check.sicher ? "✅ JA" : "❌ NEIN");
+if (!check.sicher) console.log("Probleme:", check.gefundeneProbleme);`,
+      },
+    },
   ],
 };
 
@@ -6799,6 +8030,420 @@ SELECT klasse, AVG(punkte) FROM schueler GROUP BY klasse;
         check: { kind: "sql_result_includes", expected: "Säugetier" },
         hintMd: "Gruppiere nach der Spalte `art`:\n\n`SELECT art, COUNT(*) FROM tiere GROUP BY art;`",
         solutionCode: "SELECT art, COUNT(*) FROM tiere GROUP BY art;",
+      },
+    },
+    {
+      id: "sql-11",
+      trackId: "sql" as const,
+      title: "🔍 Muster suchen mit LIKE",
+      summary: "Suche nach Texten, die einem Muster entsprechen, mit dem LIKE-Operator und Platzhaltern.",
+      minutes: 10,
+      xp: 45,
+      contentMd: `# LIKE – Muster im Text finden
+
+Mit \`LIKE\` kannst du nach Texten suchen, die einem bestimmten Muster entsprechen – wie eine Wildcard-Suche!
+
+Das Prozentzeichen \`%\` steht für **beliebig viele** (auch null) Zeichen:
+
+\`\`\`sql
+SELECT name FROM tiere WHERE name LIKE 'E%';
+\`\`\`
+
+Das findet alle Tiere, deren Name mit **"E"** beginnt (z.B. "Elefant").
+
+\`\`\`sql
+SELECT name FROM schueler WHERE name LIKE '%a';
+\`\`\`
+
+Das findet alle Namen, die mit **"a"** enden (z.B. "Mia", "Lena", "Sara").
+
+\`\`\`sql
+SELECT name FROM laender WHERE name LIKE '%an%';
+\`\`\`
+
+Das \`%..%\` findet alles, das "an" **irgendwo** enthält.
+
+> 💡 LIKE unterscheidet in SQLite nicht zwischen Groß- und Kleinschreibung – \`'e%'\` findet also auch "Elefant"!`,
+      exercise: {
+        language: "sql" as const,
+        title: "Alle Tiere mit 'S' am Anfang!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige alle Tiere aus `tiere`, deren `name` mit dem Buchstaben **'S'** beginnt.\n\nNutze den `LIKE`-Operator mit dem richtigen Muster.",
+        starterCode: "SELECT name, art FROM tiere WHERE name LIKE '__%';",
+        check: { kind: "sql_result_includes" as const, expected: "Schildkröte" },
+        hintMd: "Das Muster für 'beginnt mit S' ist `'S%'`:\n\n`SELECT name, art FROM tiere WHERE name LIKE 'S%';`",
+        solutionCode: "SELECT name, art FROM tiere WHERE name LIKE 'S%';",
+      },
+    },
+    {
+      id: "sql-12",
+      trackId: "sql" as const,
+      title: "🚫 Doppelte entfernen mit DISTINCT",
+      summary: "Entferne doppelte Werte aus deinen Ergebnissen mit dem DISTINCT-Schlüsselwort.",
+      minutes: 8,
+      xp: 40,
+      contentMd: `# DISTINCT – Nur einmalige Werte
+
+Manchmal kommen Werte in einer Spalte mehrmals vor. Mit \`DISTINCT\` siehst du jeden Wert nur **einmal**.
+
+\`\`\`sql
+SELECT DISTINCT art FROM tiere;
+\`\`\`
+
+Statt alle 7 Zeilen zu zeigen, siehst du jetzt nur die drei verschiedenen Tierarten: Säugetier, Vogel, Reptil.
+
+\`\`\`sql
+SELECT DISTINCT lieblingsfach FROM schueler;
+\`\`\`
+
+Das zeigt alle verschiedenen Lieblingsfächer – ohne Wiederholungen.
+
+> 💡 \`DISTINCT\` steht immer direkt nach \`SELECT\` – vor den Spaltennamen.`,
+      exercise: {
+        language: "sql" as const,
+        title: "Welche Kontinente gibt es?",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige alle **verschiedenen** Kontinente aus der Tabelle `laender` – jeder Kontinent soll nur einmal erscheinen.\n\nNutze `DISTINCT`.",
+        starterCode: "SELECT __ kontinent FROM laender;",
+        check: { kind: "sql_result_includes" as const, expected: "Asien" },
+        hintMd: "Füge `DISTINCT` nach `SELECT` ein:\n\n`SELECT DISTINCT kontinent FROM laender;`",
+        solutionCode: "SELECT DISTINCT kontinent FROM laender;",
+      },
+    },
+    {
+      id: "sql-13",
+      trackId: "sql" as const,
+      title: "🏷️ Spalten umbenennen mit AS",
+      summary: "Gib deinen Spalten in der Ausgabe einen eigenen Namen mit dem AS-Schlüsselwort.",
+      minutes: 8,
+      xp: 40,
+      contentMd: `# AS – Eigene Namen für Spalten
+
+Mit \`AS\` kannst du einer Spalte in der Ausgabe einen neuen Namen geben – einen sogenannten **Alias**.
+
+\`\`\`sql
+SELECT name, punkte AS ergebnis FROM schueler;
+\`\`\`
+
+Die Spalte \`punkte\` heißt in der Ausgabe jetzt \`ergebnis\`.
+
+Das ist besonders nützlich bei Berechnungen oder langen Funktionsnamen:
+
+\`\`\`sql
+SELECT art, COUNT(*) AS anzahl FROM tiere GROUP BY art;
+\`\`\`
+
+Statt der hässlichen Spaltenbezeichnung \`COUNT(*)\` siehst du jetzt \`anzahl\` – viel lesbarer!
+
+Du kannst auch einen Alias mit Leerzeichen verwenden, indem du ihn in Anführungszeichen setzt:
+
+\`\`\`sql
+SELECT name, einwohner_mio AS "Einwohner (Mio.)" FROM laender;
+\`\`\`
+
+> 💡 Aliases gelten nur für die Ausgabe – der echte Spaltenname in der Datenbank bleibt gleich.`,
+      exercise: {
+        language: "sql" as const,
+        title: "Schöne Spaltennamen!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige aus `schueler` die Spalte `name` und die Spalte `punkte`, aber benenne `punkte` in der Ausgabe um zu `Ergebnis`.",
+        starterCode: "SELECT name, punkte __ Ergebnis FROM schueler;",
+        check: { kind: "sql_result_includes" as const, expected: "Ergebnis" },
+        hintMd: "Nutze `AS` zwischen dem Spaltennamen und dem Alias:\n\n`SELECT name, punkte AS Ergebnis FROM schueler;`",
+        solutionCode: "SELECT name, punkte AS Ergebnis FROM schueler;",
+      },
+    },
+    {
+      id: "sql-14",
+      trackId: "sql" as const,
+      title: "📏 Wertebereiche mit BETWEEN",
+      summary: "Filtere Zeilen, deren Wert in einem bestimmten Bereich liegt, mit dem BETWEEN-Operator.",
+      minutes: 10,
+      xp: 45,
+      contentMd: `# BETWEEN – Werte in einem Bereich
+
+Statt \`WHERE punkte >= 70 AND punkte <= 90\` gibt es eine elegantere Schreibweise: \`BETWEEN\`.
+
+\`\`\`sql
+SELECT name, punkte FROM schueler WHERE punkte BETWEEN 70 AND 90;
+\`\`\`
+
+Das findet alle Schüler, die zwischen **70 und 90 Punkte** (inkl. 70 und 90) haben.
+
+\`BETWEEN\` funktioniert auch mit Texten (alphabetisch sortiert):
+
+\`\`\`sql
+SELECT name FROM tiere WHERE name BETWEEN 'A' AND 'M';
+\`\`\`
+
+Das findet alle Tiere, deren Name alphabetisch zwischen A und M liegt.
+
+> 💡 \`BETWEEN x AND y\` schließt beide Grenzen **ein** – also \`>= x AND <= y\`.`,
+      exercise: {
+        language: "sql" as const,
+        title: "Länder mit 50 bis 150 Millionen Einwohnern!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige `name` und `einwohner_mio` aller Länder aus `laender`, die zwischen **50 und 150 Millionen** Einwohner haben.",
+        starterCode: "SELECT name, einwohner_mio FROM laender WHERE einwohner_mio BETWEEN __ AND __;",
+        check: { kind: "sql_result_includes" as const, expected: "Japan" },
+        hintMd: "Nutze `BETWEEN 50 AND 150`:\n\n`SELECT name, einwohner_mio FROM laender WHERE einwohner_mio BETWEEN 50 AND 150;`",
+        solutionCode: "SELECT name, einwohner_mio FROM laender WHERE einwohner_mio BETWEEN 50 AND 150;",
+      },
+    },
+    {
+      id: "sql-15",
+      trackId: "sql" as const,
+      title: "📋 Mehrere Werte mit IN",
+      summary: "Prüfe ob ein Wert in einer Liste von Möglichkeiten vorkommt, mit dem IN-Operator.",
+      minutes: 10,
+      xp: 45,
+      contentMd: `# IN – Einer von mehreren Werten
+
+Statt mehrerer \`OR\`-Bedingungen kannst du mit \`IN\` eine **Liste von erlaubten Werten** angeben.
+
+\`\`\`sql
+SELECT * FROM tiere WHERE art IN ('Vogel', 'Reptil');
+\`\`\`
+
+Das ist genau dasselbe wie:
+
+\`\`\`sql
+SELECT * FROM tiere WHERE art = 'Vogel' OR art = 'Reptil';
+\`\`\`
+
+Aber viel kürzer und lesbarer! Mit \`NOT IN\` kannst du Werte **ausschließen**:
+
+\`\`\`sql
+SELECT name FROM schueler WHERE lieblingsfach NOT IN ('Sport', 'Kunst');
+\`\`\`
+
+> 💡 \`IN\` funktioniert mit beliebig vielen Werten in der Liste – einfach mit Komma trennen.`,
+      exercise: {
+        language: "sql" as const,
+        title: "Schüler mit Mathe oder Informatik als Lieblingsfach!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige `name` und `lieblingsfach` aller Schüler aus `schueler`, deren Lieblingsfach **Mathe** oder **Informatik** ist.\n\nNutze den `IN`-Operator.",
+        starterCode: "SELECT name, lieblingsfach FROM schueler WHERE lieblingsfach IN (__, __);",
+        check: { kind: "sql_result_includes" as const, expected: "Informatik" },
+        hintMd: "Schreibe beide Fächer in die Liste:\n\n`SELECT name, lieblingsfach FROM schueler WHERE lieblingsfach IN ('Mathe', 'Informatik');`",
+        solutionCode: "SELECT name, lieblingsfach FROM schueler WHERE lieblingsfach IN ('Mathe', 'Informatik');",
+      },
+    },
+    {
+      id: "sql-16",
+      trackId: "sql" as const,
+      title: "❓ Leere Felder mit IS NULL",
+      summary: "Finde Zeilen mit fehlenden Werten oder stelle sicher, dass ein Feld befüllt ist.",
+      minutes: 10,
+      xp: 45,
+      contentMd: `# IS NULL und IS NOT NULL – Leere Felder
+
+In Datenbanken gibt es einen speziellen Wert: \`NULL\`. Er bedeutet "kein Wert vorhanden" – also ein **leeres Feld**.
+
+Du kannst **nicht** \`= NULL\` schreiben, weil NULL kein normaler Wert ist. Stattdessen nutzt du:
+
+\`\`\`sql
+SELECT name FROM schueler WHERE lieblingsfach IS NULL;
+\`\`\`
+
+Das findet alle Schüler, bei denen kein Lieblingsfach eingetragen ist.
+
+Mit \`IS NOT NULL\` findest du alle Zeilen, die **einen Wert haben**:
+
+\`\`\`sql
+SELECT name FROM schueler WHERE lieblingsfach IS NOT NULL;
+\`\`\`
+
+In unserer Datenbank hat jeder ein Lieblingsfach – aber in echten Daten fehlen oft Einträge!
+
+> 💡 NULL bedeutet "unbekannt" – nicht 0 oder leerer Text. \`NULL = NULL\` ergibt in SQL: falsch!`,
+      exercise: {
+        language: "sql" as const,
+        title: "Tiere ohne bekanntes Gewicht!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige alle Tiere aus `tiere`, bei denen `gewicht_kg` **nicht** NULL ist (also ein Gewicht eingetragen ist).\n\nNutze `IS NOT NULL`.",
+        starterCode: "SELECT name, gewicht_kg FROM tiere WHERE gewicht_kg __ __ NULL;",
+        check: { kind: "sql_result_includes" as const, expected: "Elefant" },
+        hintMd: "Nutze `IS NOT NULL`:\n\n`SELECT name, gewicht_kg FROM tiere WHERE gewicht_kg IS NOT NULL;`",
+        solutionCode: "SELECT name, gewicht_kg FROM tiere WHERE gewicht_kg IS NOT NULL;",
+      },
+    },
+    {
+      id: "sql-17",
+      trackId: "sql" as const,
+      title: "🔬 Gruppen filtern mit HAVING",
+      summary: "Filtere Gruppen nach GROUP BY mit der HAVING-Klausel – dem WHERE für Aggregatfunktionen.",
+      minutes: 12,
+      xp: 55,
+      contentMd: `# HAVING – Gruppen filtern
+
+Nach einem \`GROUP BY\` kannst du die Gruppen **nicht** mit \`WHERE\` filtern – dafür gibt es \`HAVING\`.
+
+\`WHERE\` filtert **einzelne Zeilen**, bevor sie gruppiert werden.
+\`HAVING\` filtert **Gruppen**, nachdem sie berechnet wurden.
+
+\`\`\`sql
+SELECT klasse, AVG(punkte) AS schnitt
+FROM schueler
+GROUP BY klasse
+HAVING AVG(punkte) > 80;
+\`\`\`
+
+Das zeigt nur Klassen, bei denen der Durchschnitt über 80 liegt.
+
+\`\`\`sql
+SELECT art, COUNT(*) AS anzahl
+FROM tiere
+GROUP BY art
+HAVING COUNT(*) >= 2;
+\`\`\`
+
+Das zeigt nur Tierarten, bei denen mindestens 2 Tiere in der Tabelle sind.
+
+> 💡 Reihenfolge merken: \`GROUP BY\` → \`HAVING\` → \`ORDER BY\` → \`LIMIT\``,
+      exercise: {
+        language: "sql" as const,
+        title: "Nur Tierarten mit mehr als 2 Tieren!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige alle Tierarten (`art`) aus `tiere` zusammen mit der Anzahl der Tiere, aber nur die Arten, die **mehr als 2 Tiere** haben.\n\nNutze `GROUP BY` und `HAVING`.",
+        starterCode: "SELECT art, COUNT(*) AS anzahl FROM tiere GROUP BY art HAVING COUNT(*) __ 2;",
+        check: { kind: "sql_result_includes" as const, expected: "Säugetier" },
+        hintMd: "Nutze `HAVING COUNT(*) > 2`:\n\n`SELECT art, COUNT(*) AS anzahl FROM tiere GROUP BY art HAVING COUNT(*) > 2;`",
+        solutionCode: "SELECT art, COUNT(*) AS anzahl FROM tiere GROUP BY art HAVING COUNT(*) > 2;",
+      },
+    },
+    {
+      id: "sql-18",
+      trackId: "sql" as const,
+      title: "🔤 Textfunktionen: UPPER, LOWER, LENGTH",
+      summary: "Verändere und untersuche Textwerte mit eingebauten SQL-Textfunktionen.",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# Textfunktionen – Text bearbeiten
+
+SQL hat eingebaute Funktionen, um Text zu verändern und zu analysieren:
+
+| Funktion | Was sie macht | Beispiel |
+|----------|--------------|---------|
+| \`UPPER(text)\` | Alles GROSSBUCHSTABEN | \`UPPER('hallo')\` → \`'HALLO'\` |
+| \`LOWER(text)\` | alles kleinbuchstaben | \`LOWER('HALLO')\` → \`'hallo'\` |
+| \`LENGTH(text)\` | Anzahl der Zeichen | \`LENGTH('Elefant')\` → \`7\` |
+
+\`\`\`sql
+SELECT UPPER(name), LENGTH(name) FROM tiere;
+\`\`\`
+
+So siehst du alle Tiernamen in Großbuchstaben und wie viele Buchstaben sie haben.
+
+\`\`\`sql
+SELECT name FROM laender WHERE LENGTH(hauptstadt) > 5;
+\`\`\`
+
+Das findet alle Länder, deren Hauptstadt mehr als 5 Buchstaben hat.
+
+> 💡 Funktionen können auch kombiniert werden: \`UPPER(name)\` in \`WHERE\`, \`ORDER BY\` und \`SELECT\`!`,
+      exercise: {
+        language: "sql" as const,
+        title: "Schülernamen in Großbuchstaben und ihre Länge!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige aus `schueler` jeden `name` in **Großbuchstaben** (als `grossname`) und die **Länge** des Namens (als `laenge`).",
+        starterCode: "SELECT __(name) AS grossname, __(name) AS laenge FROM schueler;",
+        check: { kind: "sql_result_includes" as const, expected: "MIA" },
+        hintMd: "Nutze `UPPER()` und `LENGTH()`:\n\n`SELECT UPPER(name) AS grossname, LENGTH(name) AS laenge FROM schueler;`",
+        solutionCode: "SELECT UPPER(name) AS grossname, LENGTH(name) AS laenge FROM schueler;",
+      },
+    },
+    {
+      id: "sql-19",
+      trackId: "sql" as const,
+      title: "🧮 Runden mit ROUND() und Rechnen",
+      summary: "Führe mathematische Berechnungen durch und runde Ergebnisse mit ROUND().",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# ROUND() und Rechnen in SQL
+
+SQL kann direkt rechnen – du kannst Zahlen addieren, subtrahieren, multiplizieren und dividieren:
+
+\`\`\`sql
+SELECT name, gewicht_kg, gewicht_kg * 1000 AS gewicht_gramm FROM tiere;
+\`\`\`
+
+Das rechnet das Gewicht von Kilogramm in Gramm um.
+
+Mit \`ROUND(zahl, nachkommastellen)\` kannst du Ergebnisse **runden**:
+
+\`\`\`sql
+SELECT klasse, ROUND(AVG(punkte), 1) AS schnitt
+FROM schueler
+GROUP BY klasse;
+\`\`\`
+
+Das zeigt den Durchschnitt pro Klasse, auf **1 Nachkommastelle** gerundet.
+
+\`\`\`sql
+SELECT name, ROUND(einwohner_mio / 10.0, 2) AS zehntel FROM laender;
+\`\`\`
+
+> 💡 \`ROUND(x, 0)\` rundet auf ganze Zahlen. \`ROUND(x, 2)\` auf 2 Nachkommastellen.`,
+      exercise: {
+        language: "sql" as const,
+        title: "Durchschnittspunkte gerundet!",
+        instructionsMd: "**Deine Aufgabe:**\n\nZeige für jede `klasse` in `schueler` den **gerundeten Durchschnitt** der Punkte (0 Nachkommastellen), als Spalte `schnitt`.",
+        starterCode: "SELECT klasse, ROUND(AVG(punkte), __) AS schnitt FROM schueler GROUP BY klasse;",
+        check: { kind: "sql_result_includes" as const, expected: "86" },
+        hintMd: "Nutze `ROUND(AVG(punkte), 0)` für keine Nachkommastellen:\n\n`SELECT klasse, ROUND(AVG(punkte), 0) AS schnitt FROM schueler GROUP BY klasse;`",
+        solutionCode: "SELECT klasse, ROUND(AVG(punkte), 0) AS schnitt FROM schueler GROUP BY klasse;",
+      },
+    },
+    {
+      id: "sql-20",
+      trackId: "sql" as const,
+      title: "🏆 Boss Quest: Alles zusammen!",
+      summary: "Beweise dein SQL-Wissen in einer komplexen Abfrage, die viele Konzepte kombiniert.",
+      minutes: 15,
+      xp: 70,
+      contentMd: `# Boss Quest – Der ultimative SQL-Test!
+
+Du hast alle wichtigen SQL-Bausteine gelernt. Jetzt ist es Zeit, sie zu kombinieren!
+
+Hier ist eine Abfrage, die gleich **mehrere Konzepte** auf einmal nutzt:
+
+\`\`\`sql
+SELECT
+  kontinent,
+  COUNT(*) AS anzahl_laender,
+  ROUND(AVG(einwohner_mio), 1) AS schnitt_einwohner
+FROM laender
+WHERE name NOT LIKE 'A%'
+GROUP BY kontinent
+HAVING COUNT(*) >= 1
+ORDER BY schnitt_einwohner DESC;
+\`\`\`
+
+Diese eine Abfrage nutzt: \`WHERE\`, \`LIKE\`, \`NOT\`, \`GROUP BY\`, \`COUNT\`, \`AVG\`, \`ROUND\`, \`AS\`, \`HAVING\`, \`ORDER BY\`.
+
+Lies sie Schritt für Schritt:
+1. Nur Länder, deren Name **nicht** mit "A" beginnt
+2. Gruppiere nach Kontinent
+3. Berechne Anzahl und Durchschnitt
+4. Nur Gruppen mit mindestens 1 Land
+5. Sortiere nach Einwohnerdurchschnitt absteigend
+
+> 💡 SQL liest sich fast wie Englisch – übe, Abfragen laut zu lesen. Dann werden auch komplexe Abfragen verständlich!`,
+      exercise: {
+        language: "sql" as const,
+        title: "Die ultimative Tier-Statistik!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle eine Abfrage über die `tiere`-Tabelle, die:\n\n1. Jede Tierart (`art`) zeigt\n2. Die **Anzahl** der Tiere pro Art (als `anzahl`)\n3. Das **gerundete Durchschnittsgewicht** (0 Stellen, als `schnitt_kg`)\n4. Nur Tierarten mit einem Durchschnittsgewicht von **mehr als 50 kg** (`HAVING`)\n5. Sortiert nach `schnitt_kg` **absteigend**",
+        starterCode: `SELECT
+  art,
+  COUNT(*) AS anzahl,
+  ROUND(AVG(gewicht_kg), __) AS schnitt_kg
+FROM tiere
+GROUP BY art
+HAVING AVG(gewicht_kg) __ 50
+ORDER BY schnitt_kg __;`,
+        check: { kind: "sql_result_includes" as const, expected: "Säugetier" },
+        hintMd: "Fülle die Lücken: `0` für Nachkommastellen, `>` für HAVING, `DESC` für die Sortierung:\n\n```sql\nSELECT art, COUNT(*) AS anzahl, ROUND(AVG(gewicht_kg), 0) AS schnitt_kg\nFROM tiere\nGROUP BY art\nHAVING AVG(gewicht_kg) > 50\nORDER BY schnitt_kg DESC;\n```",
+        solutionCode: `SELECT
+  art,
+  COUNT(*) AS anzahl,
+  ROUND(AVG(gewicht_kg), 0) AS schnitt_kg
+FROM tiere
+GROUP BY art
+HAVING AVG(gewicht_kg) > 50
+ORDER BY schnitt_kg DESC;`,
       },
     },
   ],
@@ -7406,6 +9051,927 @@ function TodoApp() {
 }
 
 ReactDOM.render(<TodoApp />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-11",
+      trackId: "react" as const,
+      title: "🎯 useRef – Direkt aufs DOM zugreifen",
+      summary: "Lerne, wie du mit useRef direkt auf HTML-Elemente zugreifst, z.B. um ein Eingabefeld zu fokussieren.",
+      minutes: 13,
+      xp: 55,
+      contentMd: `# useRef – Eine direkte Verbindung zum Element
+
+Manchmal möchtest du direkt auf ein HTML-Element zugreifen – zum Beispiel, um ein Eingabefeld automatisch zu fokussieren. Dafür gibt es \`useRef\`.
+
+\`\`\`jsx
+const { useRef } = React;
+
+function FokusApp() {
+  const eingabeRef = useRef(null);
+
+  const fokussieren = () => {
+    eingabeRef.current.focus();
+  };
+
+  return (
+    <div>
+      <input ref={eingabeRef} placeholder="Klick den Button..." />
+      <button onClick={fokussieren}>Fokus setzen</button>
+    </div>
+  );
+}
+\`\`\`
+
+Mit \`useRef(null)\` erstellst du eine "Fernbedienung" für ein Element. Du verbindest sie mit dem Element über das \`ref\`-Attribut. Danach kannst du über \`eingabeRef.current\` direkt auf das Element zugreifen.
+
+> 💡 \`useRef\` ändert den Zustand **nicht** – die Komponente rendert also nicht neu, wenn sich \`.current\` ändert!`,
+      exercise: {
+        language: "react" as const,
+        title: "Autofokus beim Start!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle eine Komponente `FokusApp` mit einem `useRef` für ein Eingabefeld. Ein Button soll das Eingabefeld fokussieren wenn man draufklickt. Verbinde den Ref mit dem Input-Element über `ref={eingabeRef}`.",
+        starterCode: `const { useRef } = React;
+
+function FokusApp() {
+  const eingabeRef = useRef(___);
+
+  const fokussieren = () => {
+    eingabeRef.___.focus();
+  };
+
+  return (
+    <div>
+      <h2>useRef Übung</h2>
+      <input ref={eingabeRef} placeholder="Ich warte auf Fokus..." />
+      <button onClick={fokussieren}>Fokus setzen!</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<FokusApp />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["useRef", "eingabeRef.current.focus", "ref={eingabeRef}"] },
+        hintMd: "Ersetze das erste `___` mit `null` und das zweite mit `current`:\n\n```jsx\nconst eingabeRef = useRef(null);\neingabeRef.current.focus();\n```",
+        solutionCode: `const { useRef } = React;
+
+function FokusApp() {
+  const eingabeRef = useRef(null);
+
+  const fokussieren = () => {
+    eingabeRef.current.focus();
+  };
+
+  return (
+    <div>
+      <h2>useRef Übung</h2>
+      <input ref={eingabeRef} placeholder="Ich warte auf Fokus..." />
+      <button onClick={fokussieren}>Fokus setzen!</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<FokusApp />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-12",
+      trackId: "react" as const,
+      title: "🧩 Mehrere State-Variablen",
+      summary: "Verwalte mehrere State-Variablen in einer Komponente für komplexere Interaktionen.",
+      minutes: 13,
+      xp: 55,
+      contentMd: `# Mehrere State-Variablen – Mehr Kontrolle
+
+Du kannst in einer Komponente beliebig viele \`useState\`-Hooks verwenden! Jede Variable hat ihren eigenen Wert und ihre eigene Setter-Funktion.
+
+\`\`\`jsx
+const { useState } = React;
+
+function Profil() {
+  const [name, setName] = useState('Max');
+  const [alter, setAlter] = useState(14);
+  const [online, setOnline] = useState(false);
+
+  return (
+    <div>
+      <p>{name} ist {alter} Jahre alt.</p>
+      <p>Status: {online ? '🟢 Online' : '🔴 Offline'}</p>
+      <button onClick={() => setOnline(!online)}>Status wechseln</button>
+    </div>
+  );
+}
+\`\`\`
+
+Jeder \`useState\`-Aufruf ist unabhängig. Wenn du \`setAlter\` aufrufst, ändert sich nur \`alter\` – \`name\` und \`online\` bleiben unberührt.
+
+> 💡 Benenne deine State-Variablen klar und beschreibend – so weißt du immer, was sie speichern!`,
+      exercise: {
+        language: "react" as const,
+        title: "Spieler-Profil mit drei States!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle eine `SpielerProfil`-Komponente mit drei State-Variablen: `name` (String), `punkte` (Zahl, Start: 0) und `aktiv` (Boolean, Start: true). Zeige alle drei an und füge einen Button hinzu, der `punkte` um 10 erhöht.",
+        starterCode: `const { useState } = React;
+
+function SpielerProfil() {
+  const [name, setName] = useState('SpeedStar');
+  const [punkte, setPunkte] = useState(___);
+  const [aktiv, setAktiv] = useState(___);
+
+  return (
+    <div>
+      <h2>Spieler: {name}</h2>
+      <p>Punkte: {punkte}</p>
+      <p>Status: {aktiv ? 'Aktiv' : 'Inaktiv'}</p>
+      <button onClick={() => setPunkte(punkte + ___)}>+10 Punkte</button>
+      <button onClick={() => setAktiv(!aktiv)}>Status wechseln</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<SpielerProfil />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["useState", "punkte", "aktiv", "setPunkte", "setAktiv"] },
+        hintMd: "Ersetze die `___` mit den Startwerten und dem Inkrement:\n\n```jsx\nconst [punkte, setPunkte] = useState(0);\nconst [aktiv, setAktiv] = useState(true);\nsetPunkte(punkte + 10);\n```",
+        solutionCode: `const { useState } = React;
+
+function SpielerProfil() {
+  const [name, setName] = useState('SpeedStar');
+  const [punkte, setPunkte] = useState(0);
+  const [aktiv, setAktiv] = useState(true);
+
+  return (
+    <div>
+      <h2>Spieler: {name}</h2>
+      <p>Punkte: {punkte}</p>
+      <p>Status: {aktiv ? 'Aktiv' : 'Inaktiv'}</p>
+      <button onClick={() => setPunkte(punkte + 10)}>+10 Punkte</button>
+      <button onClick={() => setAktiv(!aktiv)}>Status wechseln</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<SpielerProfil />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-13",
+      trackId: "react" as const,
+      title: "🏗️ Komponenten aufteilen",
+      summary: "Lerne, wie du größere Komponenten in kleinere aufteilst und Komponenten ineinander verwendest.",
+      minutes: 14,
+      xp: 60,
+      contentMd: `# Komponenten aufteilen – Bausteine kombinieren
+
+Eine der Superkräfte von React ist, dass du Komponenten in kleinere Teile aufteilen kannst. Jede Komponente macht eine Sache gut.
+
+\`\`\`jsx
+function Kopfzeile() {
+  return <h1>🎮 Mein Spiel</h1>;
+}
+
+function Punktestand(props) {
+  return <p>Punkte: {props.punkte}</p>;
+}
+
+function App() {
+  return (
+    <div>
+      <Kopfzeile />
+      <Punktestand punkte={42} />
+    </div>
+  );
+}
+\`\`\`
+
+Du verwendest \`<Kopfzeile />\` und \`<Punktestand />\` einfach wie HTML-Tags! So bleibt jede Komponente übersichtlich und du kannst sie mehrfach verwenden.
+
+> 💡 Faustregel: Wenn eine Komponente länger als 20 Zeilen wird, teile sie auf!`,
+      exercise: {
+        language: "react" as const,
+        title: "Baue eine App aus Bausteinen!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle drei Komponenten: `Titel` (zeigt eine `<h1>` mit 'Meine Spiele-App'), `Spieler` (Props: `name`, zeigt `<p>Spieler: {name}</p>`) und `App` (verwendet beide Komponenten und übergibt `name=\"Alex\"` an Spieler).",
+        starterCode: `function Titel() {
+  return <h1>Meine Spiele-App</h1>;
+}
+
+function Spieler(props) {
+  return <p>Spieler: {props.___}</p>;
+}
+
+function App() {
+  return (
+    <div>
+      <___ />
+      <Spieler ___="Alex" />
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["function Titel", "function Spieler", "function App", "props.name", "<Titel"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\nfunction Spieler(props) {\n  return <p>Spieler: {props.name}</p>;\n}\n// In App:\n<Titel />\n<Spieler name=\"Alex\" />\n```",
+        solutionCode: `function Titel() {
+  return <h1>Meine Spiele-App</h1>;
+}
+
+function Spieler(props) {
+  return <p>Spieler: {props.name}</p>;
+}
+
+function App() {
+  return (
+    <div>
+      <Titel />
+      <Spieler name="Alex" />
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-14",
+      trackId: "react" as const,
+      title: "📊 Arrays von Objekten mit map()",
+      summary: "Rendere Listen aus Objekten mit mehreren Eigenschaften – perfekt für Highscores und Produkte.",
+      minutes: 14,
+      xp: 60,
+      contentMd: `# Arrays von Objekten – Echte Daten anzeigen
+
+In echten Apps hast du meistens nicht nur einfache Texte, sondern **Objekte** mit mehreren Eigenschaften:
+
+\`\`\`jsx
+const highscores = [
+  { id: 1, name: 'Anna', punkte: 980 },
+  { id: 2, name: 'Ben', punkte: 850 },
+  { id: 3, name: 'Clara', punkte: 720 },
+];
+
+function Highscore() {
+  return (
+    <ul>
+      {highscores.map(spieler => (
+        <li key={spieler.id}>
+          {spieler.name}: {spieler.punkte} Punkte
+        </li>
+      ))}
+    </ul>
+  );
+}
+\`\`\`
+
+Das \`key\`-Attribut sollte immer eine **eindeutige ID** sein, nicht der Index. So weiß React, welches Element sich geändert hat.
+
+> 💡 Objekte in Arrays sind wie Zeilen in einer Tabelle – jede Zeile hat mehrere Spalten (Eigenschaften)!`,
+      exercise: {
+        language: "react" as const,
+        title: "Zeige eine Rangliste an!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle ein Array `spieler` mit 3 Objekten (jeweils `id`, `name`, `punkte`). Rendere sie in einer `<ul>`-Liste mit `map()`. Verwende `s.id` als `key`.",
+        starterCode: `const spieler = [
+  { id: 1, name: 'Mia', punkte: 500 },
+  { id: 2, name: 'Tom', punkte: 350 },
+  { id: 3, name: 'Lena', punkte: 420 },
+];
+
+function Rangliste() {
+  return (
+    <div>
+      <h2>🏆 Rangliste</h2>
+      <ul>
+        {spieler.___(s => (
+          <li key={s.___}>
+            {s.name} – {s.___} Punkte
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.render(<Rangliste />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["map(", "key={s.id}", "s.punkte", "s.name"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\n{spieler.map(s => (\n  <li key={s.id}>\n    {s.name} – {s.punkte} Punkte\n  </li>\n))}\n```",
+        solutionCode: `const spieler = [
+  { id: 1, name: 'Mia', punkte: 500 },
+  { id: 2, name: 'Tom', punkte: 350 },
+  { id: 3, name: 'Lena', punkte: 420 },
+];
+
+function Rangliste() {
+  return (
+    <div>
+      <h2>🏆 Rangliste</h2>
+      <ul>
+        {spieler.map(s => (
+          <li key={s.id}>
+            {s.name} – {s.punkte} Punkte
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.render(<Rangliste />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-15",
+      trackId: "react" as const,
+      title: "⌨️ Events – onKeyDown und onSubmit",
+      summary: "Reagiere auf Tastendruck und Formular-Abschicken mit onKeyDown und onSubmit.",
+      minutes: 14,
+      xp: 60,
+      contentMd: `# Mehr Events – Tastatur und Formulare
+
+Neben \`onClick\` gibt es viele weitere Events. Zwei besonders nützliche sind \`onKeyDown\` und \`onSubmit\`.
+
+\`\`\`jsx
+const { useState } = React;
+
+function SuchApp() {
+  const [text, setText] = useState('');
+
+  const beimDruecken = (e) => {
+    if (e.key === 'Enter') {
+      alert('Gesucht: ' + text);
+    }
+  };
+
+  const beimAbschicken = (e) => {
+    e.preventDefault(); // Verhindert das Neuladen der Seite!
+    alert('Formular abgeschickt: ' + text);
+  };
+
+  return (
+    <form onSubmit={beimAbschicken}>
+      <input
+        value={text}
+        onChange={e => setText(e.target.value)}
+        onKeyDown={beimDruecken}
+        placeholder="Suchen..."
+      />
+      <button type="submit">Abschicken</button>
+    </form>
+  );
+}
+\`\`\`
+
+Bei \`onSubmit\` ist \`e.preventDefault()\` wichtig – sonst würde der Browser die Seite neu laden!
+
+> 💡 \`e.key\` gibt dir genau den Namen der gedrückten Taste: \`'Enter'\`, \`'Escape'\`, \`'ArrowUp'\` usw.`,
+      exercise: {
+        language: "react" as const,
+        title: "Nachricht mit Enter abschicken!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle eine `NachrichtApp` mit einem Input-Feld. Beim Drücken von `Enter` (onKeyDown) soll die Nachricht in eine Liste gespeichert und das Feld geleert werden. Zeige alle Nachrichten mit `map()` an.",
+        starterCode: `const { useState } = React;
+
+function NachrichtApp() {
+  const [text, setText] = useState('');
+  const [nachrichten, setNachrichten] = useState([]);
+
+  const beimDruecken = (e) => {
+    if (e.key === '___') {
+      if (text) {
+        setNachrichten([...nachrichten, text]);
+        setText('');
+      }
+    }
+  };
+
+  return (
+    <div>
+      <h2>💬 Mein Chat</h2>
+      <input
+        value={text}
+        onChange={e => setText(e.target.value)}
+        onKeyDown={___}
+        placeholder="Nachricht eingeben und Enter drücken..."
+      />
+      <ul>
+        {nachrichten.map((n, i) => (
+          <li key={i}>{n}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.render(<NachrichtApp />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["onKeyDown", "e.key", "'Enter'", "setNachrichten"] },
+        hintMd: "Ersetze das erste `___` mit `'Enter'` und das zweite mit `beimDruecken`:\n\n```jsx\nif (e.key === 'Enter') { ... }\nonKeyDown={beimDruecken}\n```",
+        solutionCode: `const { useState } = React;
+
+function NachrichtApp() {
+  const [text, setText] = useState('');
+  const [nachrichten, setNachrichten] = useState([]);
+
+  const beimDruecken = (e) => {
+    if (e.key === 'Enter') {
+      if (text) {
+        setNachrichten([...nachrichten, text]);
+        setText('');
+      }
+    }
+  };
+
+  return (
+    <div>
+      <h2>💬 Mein Chat</h2>
+      <input
+        value={text}
+        onChange={e => setText(e.target.value)}
+        onKeyDown={beimDruecken}
+        placeholder="Nachricht eingeben und Enter drücken..."
+      />
+      <ul>
+        {nachrichten.map((n, i) => (
+          <li key={i}>{n}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.render(<NachrichtApp />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-16",
+      trackId: "react" as const,
+      title: "🎨 Inline-Styles in JSX",
+      summary: "Style deine Komponenten direkt in JSX mit JavaScript-Objekten als style-Attribut.",
+      minutes: 12,
+      xp: 50,
+      contentMd: `# Inline-Styles in JSX
+
+In JSX kannst du CSS-Styles direkt als JavaScript-Objekt übergeben. Das \`style\`-Attribut bekommt ein Objekt mit CSS-Eigenschaften:
+
+\`\`\`jsx
+function BunteKarte() {
+  const kartenStyle = {
+    backgroundColor: '#4f46e5',
+    color: 'white',
+    padding: '20px',
+    borderRadius: '12px',
+    fontSize: '18px',
+  };
+
+  return (
+    <div style={kartenStyle}>
+      🎮 Ich bin eine bunte Karte!
+    </div>
+  );
+}
+\`\`\`
+
+Wichtig: In JSX schreibst du CSS-Eigenschaften in **camelCase** statt mit Bindestrich. Also \`backgroundColor\` statt \`background-color\` und \`borderRadius\` statt \`border-radius\`.
+
+> 💡 Du kannst Styles auch direkt im Tag schreiben: \`style={{ color: 'red', fontSize: '20px' }}\` – die doppelten \`{{}}\` bedeuten: äußere für JSX, innere für das Objekt.`,
+      exercise: {
+        language: "react" as const,
+        title: "Erstelle eine stylische Profilkarte!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle eine `ProfilKarte`-Komponente mit einem `style`-Objekt. Die Karte soll einen farbigen Hintergrund (`backgroundColor`), weißen Text (`color: 'white'`), `padding` und `borderRadius` haben.",
+        starterCode: `function ProfilKarte() {
+  const kartenStyle = {
+    ___: '#10b981',
+    color: '___',
+    padding: '24px',
+    borderRadius: '16px',
+    textAlign: 'center',
+  };
+
+  const nameStyle = {
+    fontSize: '24px',
+    fontWeight: 'bold',
+  };
+
+  return (
+    <div style={___}>
+      <p style={nameStyle}>🧑‍💻 Lisa Coder</p>
+      <p>Level 5 React-Entwicklerin</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<ProfilKarte />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["style={kartenStyle}", "backgroundColor", "borderRadius"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\nconst kartenStyle = {\n  backgroundColor: '#10b981',\n  color: 'white',\n  ...\n};\n// Und im JSX:\n<div style={kartenStyle}>\n```",
+        solutionCode: `function ProfilKarte() {
+  const kartenStyle = {
+    backgroundColor: '#10b981',
+    color: 'white',
+    padding: '24px',
+    borderRadius: '16px',
+    textAlign: 'center',
+  };
+
+  const nameStyle = {
+    fontSize: '24px',
+    fontWeight: 'bold',
+  };
+
+  return (
+    <div style={kartenStyle}>
+      <p style={nameStyle}>🧑‍💻 Lisa Coder</p>
+      <p>Level 5 React-Entwicklerin</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<ProfilKarte />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-17",
+      trackId: "react" as const,
+      title: "🌐 Context API – Globaler Zustand",
+      summary: "Teile Daten zwischen weit entfernten Komponenten mit createContext und useContext.",
+      minutes: 15,
+      xp: 70,
+      contentMd: `# Context API – Daten für alle Komponenten
+
+Manchmal möchtest du Daten mit vielen Komponenten teilen, ohne sie durch Props "weiterzureichen". Die **Context API** löst genau dieses Problem!
+
+\`\`\`jsx
+const { useState, createContext, useContext } = React;
+
+// 1. Context erstellen
+const ThemaContext = createContext('hell');
+
+// 2. Context verwenden
+function Anzeige() {
+  const thema = useContext(ThemaContext);
+  return <p>Aktuelles Thema: {thema}</p>;
+}
+
+// 3. Context bereitstellen
+function App() {
+  return (
+    <ThemaContext.Provider value="dunkel">
+      <Anzeige />
+    </ThemaContext.Provider>
+  );
+}
+\`\`\`
+
+Alle Komponenten innerhalb des \`Provider\`s können den Context-Wert lesen – egal wie tief sie verschachtelt sind.
+
+> 💡 Context ist super für Dinge wie: eingeloggter Nutzer, Sprache, Farbthema – Dinge die wirklich überall gebraucht werden!`,
+      exercise: {
+        language: "react" as const,
+        title: "Sprach-Kontext für die ganze App!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle einen `SprachContext` mit `createContext('Deutsch')`. Eine `Begruessung`-Komponente soll den Wert mit `useContext` lesen und anzeigen. In `App` stelle den Wert `'Englisch'` über den Provider bereit.",
+        starterCode: `const { createContext, useContext } = React;
+
+const SprachContext = ___('Deutsch');
+
+function Begruessung() {
+  const sprache = ___(SprachContext);
+  return <p>Aktuelle Sprache: {sprache}</p>;
+}
+
+function App() {
+  return (
+    <SprachContext.___ value="Englisch">
+      <h2>🌍 Sprach-App</h2>
+      <Begruessung />
+    </SprachContext.___>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["createContext", "useContext", "SprachContext", "Provider"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\nconst SprachContext = createContext('Deutsch');\nconst sprache = useContext(SprachContext);\n// Provider:\n<SprachContext.Provider value=\"Englisch\">\n```",
+        solutionCode: `const { createContext, useContext } = React;
+
+const SprachContext = createContext('Deutsch');
+
+function Begruessung() {
+  const sprache = useContext(SprachContext);
+  return <p>Aktuelle Sprache: {sprache}</p>;
+}
+
+function App() {
+  return (
+    <SprachContext.Provider value="Englisch">
+      <h2>🌍 Sprach-App</h2>
+      <Begruessung />
+    </SprachContext.Provider>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-18",
+      trackId: "react" as const,
+      title: "🔧 Custom Hooks – Eigene Hooks bauen",
+      summary: "Schreibe eigene Hook-Funktionen, um Logik wiederzuverwenden und Code sauber zu halten.",
+      minutes: 15,
+      xp: 70,
+      contentMd: `# Custom Hooks – Wiederverwendbare Logik
+
+Custom Hooks sind eigene Funktionen, die mit \`use\` beginnen und andere Hooks verwenden. So kannst du Logik aus Komponenten herausziehen und mehrfach nutzen.
+
+\`\`\`jsx
+const { useState } = React;
+
+// Custom Hook: verwaltet einen Zähler
+function useZaehler(start) {
+  const [wert, setWert] = useState(start);
+  const erhoehen = () => setWert(w => w + 1);
+  const zuruecksetzen = () => setWert(start);
+  return { wert, erhoehen, zuruecksetzen };
+}
+
+function App() {
+  const zaehler = useZaehler(0);
+
+  return (
+    <div>
+      <p>Wert: {zaehler.wert}</p>
+      <button onClick={zaehler.erhoehen}>+1</button>
+      <button onClick={zaehler.zuruecksetzen}>Reset</button>
+    </div>
+  );
+}
+\`\`\`
+
+Custom Hooks geben dir die Freiheit, alles was du mit Hooks machst zu verpacken und überall zu nutzen – wie eine Toolbox!
+
+> 💡 Der Name muss mit \`use\` beginnen – das ist eine React-Konvention und kein optionales Extra!`,
+      exercise: {
+        language: "react" as const,
+        title: "Baue einen useToggle Hook!",
+        instructionsMd: "**Deine Aufgabe:**\n\nSchreibe einen Custom Hook `useToggle(start)`, der einen Boolean-State und eine `umschalten`-Funktion zurückgibt. Nutze ihn in `App`, um eine An/Aus-Anzeige zu steuern.",
+        starterCode: `const { useState } = React;
+
+function useToggle(start) {
+  const [wert, setWert] = ___(start);
+  const umschalten = () => setWert(w => !___);
+  return { wert, umschalten };
+}
+
+function App() {
+  const licht = ___(false);
+
+  return (
+    <div>
+      <h2>💡 Licht-Schalter</h2>
+      <p>{licht.wert ? '☀️ Licht an' : '🌙 Licht aus'}</p>
+      <button onClick={licht.___}>Umschalten</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["function useToggle", "useState", "umschalten", "useToggle(false)"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\nfunction useToggle(start) {\n  const [wert, setWert] = useState(start);\n  const umschalten = () => setWert(w => !w);\n  return { wert, umschalten };\n}\n// Nutzung:\nconst licht = useToggle(false);\n<button onClick={licht.umschalten}>\n```",
+        solutionCode: `const { useState } = React;
+
+function useToggle(start) {
+  const [wert, setWert] = useState(start);
+  const umschalten = () => setWert(w => !w);
+  return { wert, umschalten };
+}
+
+function App() {
+  const licht = useToggle(false);
+
+  return (
+    <div>
+      <h2>💡 Licht-Schalter</h2>
+      <p>{licht.wert ? '☀️ Licht an' : '🌙 Licht aus'}</p>
+      <button onClick={licht.umschalten}>Umschalten</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-19",
+      trackId: "react" as const,
+      title: "⏳ Daten laden mit useEffect und setTimeout",
+      summary: "Simuliere das Laden von Daten aus dem Internet mit useEffect und setTimeout.",
+      minutes: 15,
+      xp: 70,
+      contentMd: `# Daten laden – Fetch simulieren
+
+In echten Apps holst du Daten aus dem Internet. Um das zu üben, simulieren wir es mit \`setTimeout\` – das wartet eine Sekunde und gibt dann Daten zurück.
+
+\`\`\`jsx
+const { useState, useEffect } = React;
+
+function DatenApp() {
+  const [daten, setDaten] = useState(null);
+  const [laden, setLaden] = useState(true);
+
+  useEffect(() => {
+    // Simuliert einen Server-Request der 1 Sekunde dauert
+    setTimeout(() => {
+      setDaten({ name: 'React-Profi', punkte: 1337 });
+      setLaden(false);
+    }, 1000);
+  }, []); // [] = nur einmal beim Laden ausführen
+
+  if (laden) return <p>⏳ Lade Daten...</p>;
+
+  return (
+    <div>
+      <p>Name: {daten.name}</p>
+      <p>Punkte: {daten.punkte}</p>
+    </div>
+  );
+}
+\`\`\`
+
+Die \`[]\` am Ende von \`useEffect\` bedeutet: "Führe das nur einmal aus, wenn die Komponente zum ersten Mal erscheint."
+
+> 💡 Das Laden-Muster (Lade-Anzeige → Daten → Fehler) ist in fast jeder echten App zu finden!`,
+      exercise: {
+        language: "react" as const,
+        title: "Spieler-Daten laden!",
+        instructionsMd: "**Deine Aufgabe:**\n\nErstelle eine `SpielerApp` die beim Start (useEffect mit `[]`) nach 1500ms Spieler-Daten lädt (simuliert mit setTimeout). Zeige während des Ladens `'⏳ Laden...'` an, danach den Namen und die Punkte des Spielers.",
+        starterCode: `const { useState, useEffect } = React;
+
+function SpielerApp() {
+  const [spieler, setSpieler] = useState(null);
+  const [laden, setLaden] = useState(true);
+
+  ___(() => {
+    setTimeout(() => {
+      setSpieler({ name: 'StarCoder', punkte: 2500 });
+      setLaden(___);
+    }, 1500);
+  }, [___]);
+
+  if (laden) return <p>⏳ Laden...</p>;
+
+  return (
+    <div>
+      <h2>🎮 Spieler geladen!</h2>
+      <p>Name: {spieler.___}</p>
+      <p>Punkte: {spieler.___}</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<SpielerApp />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["useEffect", "setTimeout", "setSpieler", "spieler.name", "spieler.punkte"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\nuseEffect(() => {\n  setTimeout(() => {\n    setSpieler({ name: 'StarCoder', punkte: 2500 });\n    setLaden(false);\n  }, 1500);\n}, []);\n// Anzeige:\n{spieler.name} und {spieler.punkte}\n```",
+        solutionCode: `const { useState, useEffect } = React;
+
+function SpielerApp() {
+  const [spieler, setSpieler] = useState(null);
+  const [laden, setLaden] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSpieler({ name: 'StarCoder', punkte: 2500 });
+      setLaden(false);
+    }, 1500);
+  }, []);
+
+  if (laden) return <p>⏳ Laden...</p>;
+
+  return (
+    <div>
+      <h2>🎮 Spieler geladen!</h2>
+      <p>Name: {spieler.name}</p>
+      <p>Punkte: {spieler.punkte}</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<SpielerApp />, document.getElementById('root'));`,
+      },
+    },
+    {
+      id: "react-20",
+      trackId: "react" as const,
+      title: "👑 Boss Quest: Lernkarten-App",
+      summary: "Baue eine vollständige Flashcard-App mit allem was du gelernt hast – deine React-Meisterprüfung!",
+      minutes: 20,
+      xp: 100,
+      contentMd: `# Boss Quest: Die Lernkarten-App 🃏
+
+Du hast alle React-Grundlagen gelernt! Jetzt baust du eine vollständige **Flashcard-App** – kombiniere alles:
+
+\`\`\`jsx
+const { useState } = React;
+
+const karten = [
+  { id: 1, frage: 'Was ist JSX?', antwort: 'HTML-ähnlicher Code in JavaScript' },
+  { id: 2, frage: 'Was macht useState?', antwort: 'Speichert veränderbaren Zustand' },
+];
+
+function Karte({ karte }) {
+  const [aufgedeckt, setAufgedeckt] = useState(false);
+  return (
+    <div
+      onClick={() => setAufgedeckt(!aufgedeckt)}
+      style={{ border: '2px solid #4f46e5', padding: '20px',
+               borderRadius: '12px', cursor: 'pointer', marginBottom: '12px' }}
+    >
+      <p><strong>Frage:</strong> {karte.frage}</p>
+      {aufgedeckt && <p><strong>Antwort:</strong> {karte.antwort}</p>}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>🃏 Lernkarten</h1>
+      {karten.map(k => <Karte key={k.id} karte={k} />)}
+    </div>
+  );
+}
+\`\`\`
+
+Die App nutzt: **Props**, **useState**, **map()**, **Conditional Rendering**, **Inline Styles** und **Komponenten aufteilen** – alles in einer eleganten Mini-App!
+
+> 💡 Das ist genau so, wie echte React-Apps aufgebaut sind. Herzlichen Glückwunsch – du bist ein React-Entwickler!`,
+      exercise: {
+        language: "react" as const,
+        title: "Baue deine eigene Lernkarten-App!",
+        instructionsMd: "**Deine Aufgabe:**\n\nBaue eine Flashcard-App mit mindestens 3 Karten. Erstelle eine `Karte`-Komponente (Props: `karte`) mit eigenem `useState` für `aufgedeckt`. Klick auf eine Karte soll die Antwort ein-/ausblenden. Zeige alle Karten mit `map()` in `App` an.",
+        starterCode: `const { useState } = React;
+
+const karten = [
+  { id: 1, frage: 'Was ist React?', antwort: 'Eine JavaScript-Bibliothek für UIs' },
+  { id: 2, frage: 'Was ist JSX?', antwort: 'HTML-ähnlicher Code in JavaScript' },
+  { id: 3, frage: 'Was macht map()?', antwort: 'Wandelt jedes Element einer Liste um' },
+];
+
+function Karte(props) {
+  const [aufgedeckt, setAufgedeckt] = ___(false);
+
+  return (
+    <div
+      onClick={() => setAufgedeckt(___)}
+      style={{ border: '2px solid #6366f1', padding: '16px',
+               borderRadius: '10px', cursor: 'pointer', marginBottom: '10px' }}
+    >
+      <p><strong>❓ {props.karte.___}</strong></p>
+      {___ && <p>✅ {props.karte.antwort}</p>}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>🃏 Meine Lernkarten</h1>
+      <p>Klicke auf eine Karte um die Antwort zu sehen!</p>
+      {karten.___(k => (
+        <Karte key={k.id} karte={___} />
+      ))}
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
+        check: { kind: "contains" as const, needles: ["useState", "aufgedeckt", "setAufgedeckt", "map(", "props.karte.frage", "props.karte.antwort"] },
+        hintMd: "Ersetze die `___`:\n\n```jsx\nconst [aufgedeckt, setAufgedeckt] = useState(false);\n// Beim Klick:\nsetAufgedeckt(!aufgedeckt)\n// Antwort anzeigen:\n{aufgedeckt && <p>✅ {props.karte.antwort}</p>}\n// In App:\n{karten.map(k => <Karte key={k.id} karte={k} />)}\n```",
+        solutionCode: `const { useState } = React;
+
+const karten = [
+  { id: 1, frage: 'Was ist React?', antwort: 'Eine JavaScript-Bibliothek für UIs' },
+  { id: 2, frage: 'Was ist JSX?', antwort: 'HTML-ähnlicher Code in JavaScript' },
+  { id: 3, frage: 'Was macht map()?', antwort: 'Wandelt jedes Element einer Liste um' },
+];
+
+function Karte(props) {
+  const [aufgedeckt, setAufgedeckt] = useState(false);
+
+  return (
+    <div
+      onClick={() => setAufgedeckt(!aufgedeckt)}
+      style={{ border: '2px solid #6366f1', padding: '16px',
+               borderRadius: '10px', cursor: 'pointer', marginBottom: '10px' }}
+    >
+      <p><strong>❓ {props.karte.frage}</strong></p>
+      {aufgedeckt && <p>✅ {props.karte.antwort}</p>}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>🃏 Meine Lernkarten</h1>
+      <p>Klicke auf eine Karte um die Antwort zu sehen!</p>
+      {karten.map(k => (
+        <Karte key={k.id} karte={k} />
+      ))}
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));`,
       },
     },
   ],
