@@ -37,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
+      <body className="min-h-full flex flex-col text-[#f9fafb]" style={{ background: "#111827" }}>
         <SupabaseSync />
         <OnboardingModal />
         <MinecraftBg />
@@ -45,16 +45,15 @@ export default function RootLayout({
         <main className="flex-1">
           <ErrorBoundary>{children}</ErrorBoundary>
         </main>
-        <footer className="border-t border-white/10 py-10">
-          <div className="mx-auto w-full max-w-6xl px-4 text-sm text-zinc-300">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="font-pixel text-[9px] leading-loose">⛏️ CodeQuest Academy</p>
-              <nav className="flex flex-wrap gap-4 text-xs text-zinc-400">
-                <a href="/pricing" className="hover:text-zinc-200">⭐ Preise</a>
-                <a href="/impressum" className="hover:text-zinc-200">Impressum</a>
-                <a href="/datenschutz" className="hover:text-zinc-200">Datenschutz</a>
-                <a href="/agb" className="hover:text-zinc-200">AGB</a>
-                <a href="/billing" className="hover:text-zinc-200">Abonnement</a>
+        <footer className="py-8" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="mx-auto w-full max-w-6xl px-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-[12px] font-bold" style={{ color: "#6b7280" }}>
+              <p>🚀 CodeQuest Academy</p>
+              <nav className="flex flex-wrap gap-5">
+                <a href="/impressum" className="hover:text-white transition-colors">Impressum</a>
+                <a href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</a>
+                <a href="/agb" className="hover:text-white transition-colors">AGB</a>
+                <a href="/billing" className="hover:text-white transition-colors">Abonnement</a>
               </nav>
             </div>
           </div>

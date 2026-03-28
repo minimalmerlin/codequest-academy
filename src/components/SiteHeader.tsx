@@ -33,13 +33,14 @@ function AuthButton() {
   if (user) {
     return (
       <div className="flex items-center gap-2">
-        <span className="hidden text-xs text-zinc-400 sm:inline truncate max-w-[140px]">
+        <span className="hidden text-[12px] font-bold sm:inline truncate max-w-[140px]" style={{ color: "#6b7280" }}>
           {user.email}
         </span>
         <button
           type="button"
           onClick={() => void signOut()}
           className="btn-pixel btn-pixel--stone px-3 py-2"
+          style={{ fontSize: "12px" }}
         >
           Abmelden
         </button>
@@ -53,8 +54,9 @@ function AuthButton() {
         type="button"
         onClick={() => setShowModal(true)}
         className="btn-pixel btn-pixel--green px-3 py-2"
+        style={{ fontSize: "13px" }}
       >
-        🔑 Anmelden
+        Anmelden
       </button>
       {showModal && <AuthModal onClose={() => setShowModal(false)} />}
     </>
@@ -65,42 +67,58 @@ export function SiteHeader() {
   const pathname = usePathname();
   if (pathname === "/") return null;
   return (
-    <header className="sticky top-0 z-20 border-b-2 border-[#5D8A34]/50 bg-[#0d0d1a]/95">
+    <header
+      className="sticky top-0 z-20 backdrop-blur-md"
+      style={{
+        background: "rgba(17,24,39,0.95)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="group flex items-center gap-2 px-2 py-1"
+            className="group flex items-center gap-2 px-1 py-1"
           >
-            <span className="inline-flex h-9 w-9 items-center justify-center block-card block-card--grass text-lg">
-              ⛏️
-            </span>
-            <span className="font-pixel text-[10px] leading-relaxed text-white hidden sm:inline">
-              CodeQuest <span className="text-[#44F7E0]">Academy</span>
+            <span className="text-xl">🚀</span>
+            <span className="font-extrabold text-[14px] text-white hidden sm:inline">
+              CodeQuest <span style={{ color: "#58cc02" }}>Academy</span>
             </span>
           </Link>
-          <nav className="hidden items-center gap-1 sm:flex">
+          <nav className="hidden items-center gap-0.5 sm:flex">
             <Link
               href="/dashboard"
-              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+              className="px-3 py-2 text-[13px] font-bold rounded-xl transition-colors"
+              style={{ color: "#9ca3af" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#f9fafb")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#9ca3af")}
             >
               🏠 HQ
             </Link>
             <Link
               href="/learn"
-              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+              className="px-3 py-2 text-[13px] font-bold rounded-xl transition-colors"
+              style={{ color: "#9ca3af" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#f9fafb")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#9ca3af")}
             >
               🌍 Welten
             </Link>
             <Link
               href="/projects"
-              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+              className="px-3 py-2 text-[13px] font-bold rounded-xl transition-colors"
+              style={{ color: "#9ca3af" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#f9fafb")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#9ca3af")}
             >
               🛠️ Bau
             </Link>
             <Link
               href="/parents"
-              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+              className="px-3 py-2 text-[13px] font-bold rounded-xl transition-colors"
+              style={{ color: "#9ca3af" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#f9fafb")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#9ca3af")}
             >
               👨‍👩‍👧 Eltern
             </Link>
