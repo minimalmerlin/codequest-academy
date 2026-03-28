@@ -36,18 +36,6 @@ function AuthButton() {
         <span className="hidden text-xs text-zinc-400 sm:inline truncate max-w-[140px]">
           {user.email}
         </span>
-        {isPremium ? (
-          <span className="font-pixel text-[7px] leading-none bg-[#FFD700] text-black px-2 py-1 hidden sm:inline">
-            ⭐ PREMIUM
-          </span>
-        ) : (
-          <Link
-            href="/pricing"
-            className="btn-pixel btn-pixel--gold px-3 py-2 hidden sm:inline-flex items-center gap-1"
-          >
-            ⭐ Upgrade
-          </Link>
-        )}
         <button
           type="button"
           onClick={() => void signOut()}
@@ -61,12 +49,6 @@ function AuthButton() {
 
   return (
     <>
-      <Link
-        href="/pricing"
-        className="btn-pixel btn-pixel--gold px-3 py-2 hidden sm:inline-flex items-center gap-1"
-      >
-        ⭐ Preise
-      </Link>
       <button
         type="button"
         onClick={() => setShowModal(true)}
@@ -121,12 +103,6 @@ export function SiteHeader() {
               className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
             >
               👨‍👩‍👧 Eltern
-            </Link>
-            <Link
-              href="/pricing"
-              className="px-3 py-2 text-xs text-[#FFD700] hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
-            >
-              ⭐ Preise
             </Link>
           </nav>
         </div>

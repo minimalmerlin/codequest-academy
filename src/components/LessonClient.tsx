@@ -208,11 +208,6 @@ export function LessonClient({ lesson, isFree = true }: { lesson: Lesson; isFree
     lastSqlDone,
   ]);
 
-  // Paywall: nicht-freie Lektion + kein Premium-Abo + Auth-Loading abgeschlossen
-  if (!isFree && !subLoading && !isPremium) {
-    return <PaywallOverlay />;
-  }
-
   return (
     <>
     <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">

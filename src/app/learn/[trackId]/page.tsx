@@ -76,11 +76,7 @@ export default async function TrackPage({
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <LessonDifficultyBadge lessonId={l.id} />
-                  {idx >= 2 ? (
-                    <span className="status-pill--open text-[8px]">🔒 Premium</span>
-                  ) : (
-                    <LessonStatusPill lessonId={l.id} />
-                  )}
+                  <LessonStatusPill lessonId={l.id} />
                 </div>
               </div>
             </Link>
