@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "subscription",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest.academy"}/billing?success=1`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest.academy"}/pricing`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest-academy-sable.vercel.app"}/billing?success=1`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest-academy-sable.vercel.app"}/pricing`,
       allow_promotion_codes: true,
       metadata: { supabase_user_id: user.id },
     });

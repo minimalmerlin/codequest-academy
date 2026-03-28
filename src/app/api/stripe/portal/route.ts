@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest.academy"}/billing`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest-academy-sable.vercel.app"}/billing`,
     });
 
     return NextResponse.json({ url: portalSession.url });
