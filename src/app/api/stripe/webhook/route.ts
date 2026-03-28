@@ -3,9 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import type Stripe from "stripe";
 
-// Raw body ist für Stripe-Signaturprüfung zwingend erforderlich
-export const config = { api: { bodyParser: false } };
-
+// App Router liest body als Text — kein bodyParser config nötig
 async function upsertSubscription(
   userId: string,
   customerId: string,
