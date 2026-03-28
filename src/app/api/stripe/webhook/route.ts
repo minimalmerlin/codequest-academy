@@ -24,7 +24,12 @@ async function upsertSubscription(
     }, { onConflict: "user_id" });
 }
 
+export async function GET() {
+  return NextResponse.json({ ok: true, method: "GET" });
+}
+
 export async function POST(req: NextRequest) {
+  console.log("[webhook] POST empfangen");
   const body = await req.text();
   const sig = req.headers.get("stripe-signature") ?? "";
 
