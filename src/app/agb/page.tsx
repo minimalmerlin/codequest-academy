@@ -56,7 +56,8 @@ export default function AgbPage() {
             <li><strong className="text-zinc-200">9,99 € / Monat</strong> (monatlich kündbar, keine Mindestlaufzeit)</li>
           </ul>
           <p className="mt-2">
-            Alle Preise sind Endpreise inkl. der gesetzlichen Mehrwertsteuer.
+            Alle Preise sind Endpreise. Der Anbieter ist Kleinunternehmer gem. § 19 UStG;
+            es wird keine Mehrwertsteuer ausgewiesen.
           </p>
           <p className="mt-2">
             Die Zahlung erfolgt über Stripe. Verfügbare Zahlungsmittel: Kreditkarte,
