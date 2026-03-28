@@ -30,10 +30,10 @@ export default function ImpressumPage() {
         </section>
 
         <section>
-          <h2 className="font-semibold text-white mb-2">Umsatzsteuer</h2>
+          <h2 className="font-semibold text-white mb-2">Umsatzsteuer-Identifikationsnummer</h2>
           <p>
-            Merlin Mechler ist Kleinunternehmer im Sinne von § 19 Abs. 1 UStG.
-            Es wird daher keine Umsatzsteuer in Rechnung gestellt.
+            Gemäß § 27a Umsatzsteuergesetz:<br />
+            USt-IdNr.: bitte ergänzen (z.&nbsp;B. DE123456789)
           </p>
         </section>
 

@@ -44,6 +44,8 @@ export async function POST(req: NextRequest) {
       success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest.academy"}/billing?success=1`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://codequest.academy"}/pricing`,
       allow_promotion_codes: true,
+      tax_id_collection: { enabled: true },
+      automatic_tax: { enabled: true },
       metadata: { supabase_user_id: user.id },
     });
 
