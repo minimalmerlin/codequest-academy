@@ -7,6 +7,7 @@ import { ProgressPill } from "@/components/ProgressPill";
 import { ProfilePill } from "@/components/ProfilePill";
 import { AuthModal } from "@/components/AuthModal";
 import { useAuth } from "@/lib/auth";
+import { useSubscription } from "@/lib/subscription";
 import { useSyncStatus } from "@/components/SupabaseSync";
 
 function SyncIndicator() {
@@ -14,16 +15,17 @@ function SyncIndicator() {
   const { user } = useAuth();
   if (!user) return null;
   if (status === "syncing") return (
-    <span title="Synchronisiere…" className="text-xs text-zinc-500 animate-pulse select-none">☁</span>
+    <span title="Synchronisiere…" className="pixel-blink text-xs text-zinc-500 select-none">☁</span>
   );
   if (status === "error") return (
-    <span title="Sync fehlgeschlagen – Daten werden lokal gespeichert" className="text-xs text-amber-500 select-none cursor-default">⚠</span>
+    <span title="Sync fehlgeschlagen – Daten werden lokal gespeichert" className="pixel-shake text-xs text-amber-500 select-none cursor-default">⚠</span>
   );
   return null;
 }
 
 function AuthButton() {
   const { user, loading, signOut } = useAuth();
+  const { isPremium } = useSubscription();
   const [showModal, setShowModal] = useState(false);
 
   if (loading) return null;
@@ -34,10 +36,22 @@ function AuthButton() {
         <span className="hidden text-xs text-zinc-400 sm:inline truncate max-w-[140px]">
           {user.email}
         </span>
+        {isPremium ? (
+          <span className="font-pixel text-[7px] leading-none bg-[#FFD700] text-black px-2 py-1 hidden sm:inline">
+            ⭐ PREMIUM
+          </span>
+        ) : (
+          <Link
+            href="/pricing"
+            className="btn-pixel btn-pixel--gold px-3 py-2 hidden sm:inline-flex items-center gap-1"
+          >
+            ⭐ Upgrade
+          </Link>
+        )}
         <button
           type="button"
           onClick={() => void signOut()}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-zinc-300 hover:bg-white/10"
+          className="btn-pixel btn-pixel--stone px-3 py-2"
         >
           Abmelden
         </button>
@@ -47,10 +61,16 @@ function AuthButton() {
 
   return (
     <>
+      <Link
+        href="/pricing"
+        className="btn-pixel btn-pixel--gold px-3 py-2 hidden sm:inline-flex items-center gap-1"
+      >
+        ⭐ Preise
+      </Link>
       <button
         type="button"
         onClick={() => setShowModal(true)}
-        className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-3 py-2 text-xs font-bold text-white shadow-sm shadow-violet-500/30 hover:opacity-90 transition-opacity"
+        className="btn-pixel btn-pixel--green px-3 py-2"
       >
         🔑 Anmelden
       </button>
@@ -63,32 +83,50 @@ export function SiteHeader() {
   const pathname = usePathname();
   if (pathname === "/") return null;
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0d0d1a]/90 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b-2 border-[#5D8A34]/50 bg-[#0d0d1a]/95">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="group flex items-center gap-2 rounded-2xl px-2 py-1 hover:bg-white/5"
+            className="group flex items-center gap-2 px-2 py-1"
           >
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 text-lg shadow-lg shadow-violet-500/30">
-              🚀
+            <span className="inline-flex h-9 w-9 items-center justify-center block-card block-card--grass text-lg">
+              ⛏️
             </span>
-            <span className="text-base font-bold text-white hidden sm:inline">
-              CodeQuest <span className="text-violet-400">Academy</span>
+            <span className="font-pixel text-[10px] leading-relaxed text-white hidden sm:inline">
+              CodeQuest <span className="text-[#44F7E0]">Academy</span>
             </span>
           </Link>
-          <nav className="hidden items-center gap-1 text-sm sm:flex">
-            <Link href="/dashboard" className="rounded-xl px-3 py-2 text-zinc-300 hover:bg-white/5 hover:text-white font-medium">
-              🏠 Dashboard
+          <nav className="hidden items-center gap-1 sm:flex">
+            <Link
+              href="/dashboard"
+              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+            >
+              🏠 HQ
             </Link>
-            <Link href="/learn" className="rounded-xl px-3 py-2 text-zinc-300 hover:bg-white/5 hover:text-white font-medium">
-              📚 Lernen
+            <Link
+              href="/learn"
+              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+            >
+              🌍 Welten
             </Link>
-            <Link href="/projects" className="rounded-xl px-3 py-2 text-zinc-300 hover:bg-white/5 hover:text-white font-medium">
-              🛠️ Projekte
+            <Link
+              href="/projects"
+              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+            >
+              🛠️ Bau
             </Link>
-            <Link href="/parents" className="rounded-xl px-3 py-2 text-zinc-300 hover:bg-white/5 hover:text-white font-medium">
+            <Link
+              href="/parents"
+              className="px-3 py-2 text-xs text-zinc-300 hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+            >
               👨‍👩‍👧 Eltern
+            </Link>
+            <Link
+              href="/pricing"
+              className="px-3 py-2 text-xs text-[#FFD700] hover:text-[#FFD700] border-b-2 border-transparent hover:border-[#FFD700] transition-colors font-semibold"
+            >
+              ⭐ Preise
             </Link>
           </nav>
         </div>

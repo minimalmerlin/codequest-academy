@@ -21,10 +21,12 @@ export default async function LessonPage({
   const track = TRACKS.find((t) => t.id === trackId) ? getTrack(trackId) : null;
   if (!track) return notFound();
 
-  const lesson = track.lessons.find((l) => l.id === lessonId)
-    ? getLesson(trackId, lessonId)
-    : null;
+  const lessonIndex = track.lessons.findIndex((l) => l.id === lessonId);
+  const lesson = lessonIndex >= 0 ? getLesson(trackId, lessonId) : null;
   if (!lesson) return notFound();
+
+  // Erste 2 Lektionen pro Track sind kostenlos
+  const isFree = lessonIndex < 2;
 
   return (
     <AuthGuard>
@@ -40,7 +42,7 @@ export default async function LessonPage({
             Track: <span className="font-semibold text-zinc-200">{track.id}</span>
           </div>
         </div>
-        <LessonClient lesson={lesson} />
+        <LessonClient lesson={lesson} isFree={isFree} />
       </div>
     </AuthGuard>
   );

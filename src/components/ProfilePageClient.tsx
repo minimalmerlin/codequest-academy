@@ -14,20 +14,19 @@ import {
 import { useProgress } from "@/lib/progress";
 import { useAdaptiveLearning } from "@/lib/adaptive";
 
-// Captured at module load — used as fallback for profiles with "init" createdAt
 const MODULE_LOAD_TIME = Date.now();
 
-const TRACK_COLORS: Record<string, { bar: string; badge: string; text: string }> = {
-  web:    { bar: "bg-indigo-500",  badge: "border-indigo-500/30 bg-indigo-500/10 text-indigo-300",  text: "text-indigo-300" },
-  js:     { bar: "bg-amber-500",   badge: "border-amber-500/30 bg-amber-500/10 text-amber-300",    text: "text-amber-300" },
-  python: { bar: "bg-emerald-500", badge: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300", text: "text-emerald-300" },
-  ki:     { bar: "bg-violet-500",  badge: "border-violet-500/30 bg-violet-500/10 text-violet-300",  text: "text-violet-300" },
-  sql:    { bar: "bg-sky-500",     badge: "border-sky-500/30 bg-sky-500/10 text-sky-300",            text: "text-sky-300" },
-  react:  { bar: "bg-rose-500",    badge: "border-rose-500/30 bg-rose-500/10 text-rose-300",         text: "text-rose-300" },
+// Minecraft-Farben pro Track
+const TRACK_COLORS: Record<string, { bar: string; fillClass: string; badge: string; text: string }> = {
+  web:    { bar: "#5D8A34", fillClass: "hud-bar-fill--green",   badge: "block-card--grass",   text: "text-[#5D8A34]" },
+  js:     { bar: "#FFD700", fillClass: "hud-bar-fill--gold",    badge: "block-card--gold",    text: "text-[#FFD700]" },
+  python: { bar: "#A0522D", fillClass: "hud-bar-fill--gold",    badge: "block-card--wood",    text: "text-[#A0522D]" },
+  ki:     { bar: "#00A2FF", fillClass: "hud-bar-fill--blue",    badge: "block-card--blue",    text: "text-[#00A2FF]" },
+  sql:    { bar: "#7F7F7F", fillClass: "hud-bar-fill",          badge: "block-card--stone",   text: "text-[#7F7F7F]" },
+  react:  { bar: "#44F7E0", fillClass: "hud-bar-fill--blue",    badge: "block-card--diamond", text: "text-[#44F7E0]" },
 };
 
 export function ProfilePageClient() {
-  // ── Reactive profile list ───────────────────────────────────────────────────
   const profiles = useSyncExternalStore(
     subscribeProfiles,
     getProfilesSnapshot,
@@ -40,15 +39,9 @@ export function ProfilePageClient() {
   );
 
   const profile = profiles.find((p) => p.id === profileId);
-
-  // ── Progress + Adaptive data ────────────────────────────────────────────────
   const { progress, level, trackStats, badges } = useProgress();
   const { loading: adaptiveLoading, weakAreas } = useAdaptiveLearning();
-
-  // ── Certificate modal ───────────────────────────────────────────────────────
   const [certTrack, setCertTrack] = useState<Track | null>(null);
-
-  // ── Name editing ────────────────────────────────────────────────────────────
   const [editing, setEditing] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,8 +72,8 @@ export function ProfilePageClient() {
     return (
       <div className="mx-auto w-full max-w-lg px-4 py-20 text-center">
         <p className="text-zinc-400">Profil nicht gefunden.</p>
-        <Link href="/dashboard" className="mt-4 inline-block text-sm text-violet-400 underline">
-          ← Zum Dashboard
+        <Link href="/dashboard" className="mt-4 inline-block text-sm text-[#44F7E0] underline">
+          ← Zum Spieler-HQ
         </Link>
       </div>
     );
@@ -95,15 +88,14 @@ export function ProfilePageClient() {
     <>
     <div className="mx-auto w-full max-w-2xl px-4 py-10 space-y-6">
 
-      {/* ── Back ──────────────────────────────────────────────────────────── */}
       <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white">
-        ← Dashboard
+        ← Spieler-HQ
       </Link>
 
-      {/* ── Profile Header ────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      {/* ── Profil-Header ─────────────────────────────────────────────────── */}
+      <div className="block-card block-card--stone p-6">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 text-3xl shadow-lg shadow-violet-500/30">
+          <div className="block-card block-card--grass flex h-16 w-16 items-center justify-center text-3xl shadow-lg">
             🧒
           </div>
           <div className="flex-1 min-w-0">
@@ -118,32 +110,19 @@ export function ProfilePageClient() {
                     if (e.key === "Escape") setEditing(false);
                   }}
                   maxLength={32}
-                  className="rounded-xl border border-violet-500/50 bg-black/30 px-3 py-1.5 text-xl font-bold text-white outline-none focus:ring-2 focus:ring-violet-500/50 w-full max-w-xs"
+                  className="crafting-panel bg-transparent px-3 py-1.5 text-xl font-bold text-white outline-none focus:ring-2 focus:ring-[#44F7E0]/40 w-full max-w-xs"
                 />
-                <button
-                  type="button"
-                  onClick={saveName}
-                  className="rounded-xl bg-violet-600 px-3 py-1.5 text-sm font-bold text-white hover:bg-violet-500"
-                >
+                <button type="button" onClick={saveName} className="btn-pixel btn-pixel--green px-3 py-1.5 text-sm">
                   Speichern
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setEditing(false)}
-                  className="rounded-xl border border-white/10 px-3 py-1.5 text-sm text-zinc-400 hover:text-white"
-                >
+                <button type="button" onClick={() => setEditing(false)} className="btn-pixel btn-pixel--stone px-3 py-1.5 text-sm">
                   Abbrechen
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold text-white truncate">{profile.name}</h1>
-                <button
-                  type="button"
-                  onClick={startEdit}
-                  className="rounded-lg p-1 text-zinc-500 hover:text-white hover:bg-white/10 transition-colors"
-                  title="Name ändern"
-                >
+                <button type="button" onClick={startEdit} className="text-zinc-500 hover:text-white transition-colors" title="Name ändern">
                   ✏️
                 </button>
               </div>
@@ -154,39 +133,36 @@ export function ProfilePageClient() {
           </div>
         </div>
 
-        {/* XP Level Bar */}
+        {/* XP HUD-Bar */}
         <div className="mt-5">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-semibold text-violet-300">Level {level}</span>
+            <span className="font-pixel text-[9px] leading-relaxed text-[#FFD700]">Level {level}</span>
             <span className="text-xs text-zinc-400">{xpToNextLevel} XP bis Level {level + 1}</span>
           </div>
-          <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-500"
-              style={{ width: `${xpProgress}%` }}
-            />
+          <div className="hud-bar-track">
+            <div className="hud-bar-fill hud-bar-fill--xp" style={{ width: `${xpProgress}%` }} />
           </div>
         </div>
       </div>
 
-      {/* ── Stats Row ─────────────────────────────────────────────────────── */}
+      {/* ── Stats ─────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
-          { label: "Gesamt XP", value: progress.xp.toLocaleString("de-DE"), icon: "⭐" },
-          { label: "Streak", value: `${progress.streakDays} Tage`, icon: "🔥" },
-          { label: "Quests", value: `${totalCompleted}/${totalLessons}`, icon: "✅" },
-        ].map(({ label, value, icon }) => (
-          <div key={label} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
+          { label: "Gesamt XP", value: progress.xp.toLocaleString("de-DE"), icon: "💎", card: "block-card--gold" },
+          { label: "Streak", value: `${progress.streakDays} Tage`, icon: "🔥", card: "block-card--red" },
+          { label: "Missionen", value: `${totalCompleted}/${totalLessons}`, icon: "✅", card: "block-card--grass" },
+        ].map(({ label, value, icon, card }) => (
+          <div key={label} className={`block-card ${card} p-4 text-center`}>
             <div className="text-2xl mb-1">{icon}</div>
-            <div className="text-lg font-bold text-white">{value}</div>
+            <div className="font-pixel text-lg leading-loose text-white">{value}</div>
             <div className="text-xs text-zinc-400 mt-0.5">{label}</div>
           </div>
         ))}
       </div>
 
-      {/* ── Track Progress ────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 className="text-base font-bold text-white mb-4">📚 Fortschritt pro Track</h2>
+      {/* ── Track-Fortschritt ─────────────────────────────────────────────── */}
+      <div className="block-card block-card--stone p-6">
+        <h2 className="font-pixel text-[10px] leading-relaxed text-white mb-4">📚 Fortschritt pro Welt</h2>
         <div className="space-y-4">
           {TRACKS.map((track) => {
             const { completed, total } = trackStats(track.id);
@@ -200,16 +176,14 @@ export function ProfilePageClient() {
                     <span>{track.emoji}</span>
                     <span className={`text-sm font-semibold ${colors.text}`}>{track.title}</span>
                     {hasBadge && (
-                      <span className={`rounded-full border px-1.5 py-0.5 text-xs font-bold ${colors.badge}`}>
-                        🏆 Abgeschlossen
-                      </span>
+                      <span className="status-pill--done text-[9px]">🏆 Gemeistert</span>
                     )}
                   </div>
-                  <span className="text-xs text-zinc-400">{completed}/{total} Quests</span>
+                  <span className="text-xs text-zinc-400">{completed}/{total}</span>
                 </div>
-                <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+                <div className="hud-bar-track">
                   <div
-                    className={`h-full rounded-full ${colors.bar} transition-all duration-500`}
+                    className={`hud-bar-fill ${colors.fillClass}`}
                     style={{ width: `${pct}%` }}
                   />
                 </div>
@@ -219,23 +193,21 @@ export function ProfilePageClient() {
         </div>
       </div>
 
-      {/* ── Difficulty Stats ──────────────────────────────────────────────── */}
+      {/* ── Lern-Analyse ──────────────────────────────────────────────────── */}
       {!adaptiveLoading && (
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h2 className="text-base font-bold text-white mb-4">🧠 Lern-Analyse</h2>
+        <div className="block-card block-card--stone p-6">
+          <h2 className="font-pixel text-[10px] leading-relaxed text-white mb-4">🧠 Lern-Analyse</h2>
           {weakAreas.length === 0 ? (
             <p className="text-sm text-zinc-400">
-              Noch nicht genug Daten. Schließe mindestens 2 Quests ab um deine persönliche Analyse zu sehen.
+              Noch nicht genug Daten. Schließe mindestens 2 Missionen ab um deine persönliche Analyse zu sehen.
             </p>
           ) : (
             <div className="space-y-3">
-              <p className="text-xs text-zinc-400 mb-3">
-                Quests wo du noch Übungsbedarf hast:
-              </p>
+              <p className="text-xs text-zinc-400 mb-3">Missionen wo du noch Übungsbedarf hast:</p>
               {weakAreas.slice(0, 5).map((area) => {
                 const diff = area.difficulty;
                 return (
-                  <div key={area.lesson.id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3">
+                  <div key={area.lesson.id} className="block-card block-card--dirt flex items-center justify-between gap-3 px-4 py-3">
                     <div>
                       <div className="text-sm font-semibold text-white">{area.lesson.title}</div>
                       <div className="text-xs text-zinc-400 mt-0.5">
@@ -244,7 +216,7 @@ export function ProfilePageClient() {
                     </div>
                     <Link
                       href={`/learn/${diff.trackId}/${area.lesson.id}`}
-                      className="shrink-0 rounded-xl bg-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/15"
+                      className="btn-pixel btn-pixel--stone shrink-0 px-3 py-1.5 text-xs"
                     >
                       Wiederholen →
                     </Link>
@@ -256,9 +228,9 @@ export function ProfilePageClient() {
         </div>
       )}
 
-      {/* ── Badges ────────────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 className="text-base font-bold text-white mb-4">🏆 Abzeichen</h2>
+      {/* ── Abzeichen ─────────────────────────────────────────────────────── */}
+      <div className="block-card block-card--stone p-6">
+        <h2 className="font-pixel text-[10px] leading-relaxed text-white mb-4">🏆 Abzeichen</h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {TRACKS.map((track) => {
             const earned = badges[track.id];
@@ -266,14 +238,10 @@ export function ProfilePageClient() {
             return (
               <div
                 key={track.id}
-                className={`rounded-2xl border p-4 text-center transition-all ${
-                  earned
-                    ? `${colors.badge} shadow-lg`
-                    : "border-white/5 bg-white/3 opacity-40"
-                }`}
+                className={`inventory-slot text-center p-4 transition-all ${earned ? `inventory-slot--completed ${colors.badge}` : "opacity-40"}`}
               >
                 <div className="text-3xl mb-2">{track.emoji}</div>
-                <div className={`text-xs font-bold ${earned ? "" : "text-zinc-500"}`}>
+                <div className={`text-xs font-bold ${earned ? "text-white" : "text-zinc-500"}`}>
                   {track.title}
                 </div>
                 <div className="text-xs mt-0.5 opacity-70">
@@ -283,7 +251,7 @@ export function ProfilePageClient() {
                   <button
                     type="button"
                     onClick={() => setCertTrack(track)}
-                    className="mt-2 text-[10px] font-semibold underline underline-offset-2 opacity-80 hover:opacity-100"
+                    className="mt-2 text-[9px] font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 text-[#FFD700]"
                   >
                     📄 Zertifikat
                   </button>

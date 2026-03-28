@@ -31,13 +31,14 @@ function readProgress(profileId: string): StoredProgress {
   }
 }
 
-const TRACK_COLORS: Record<string, { bar: string; text: string }> = {
-  web:    { bar: "bg-indigo-500",  text: "text-indigo-300" },
-  js:     { bar: "bg-amber-500",   text: "text-amber-300" },
-  python: { bar: "bg-emerald-500", text: "text-emerald-300" },
-  ki:     { bar: "bg-violet-500",  text: "text-violet-300" },
-  sql:    { bar: "bg-sky-500",     text: "text-sky-300" },
-  react:  { bar: "bg-rose-500",    text: "text-rose-300" },
+// Minecraft-Farben pro Track
+const TRACK_COLORS: Record<string, { fillClass: string; text: string }> = {
+  web:    { fillClass: "hud-bar-fill--green",   text: "text-[#5D8A34]" },
+  js:     { fillClass: "hud-bar-fill--gold",    text: "text-[#FFD700]" },
+  python: { fillClass: "hud-bar-fill--gold",    text: "text-[#A0522D]" },
+  ki:     { fillClass: "hud-bar-fill--blue",    text: "text-[#00A2FF]" },
+  sql:    { fillClass: "hud-bar-fill",          text: "text-[#7F7F7F]" },
+  react:  { fillClass: "hud-bar-fill--blue",    text: "text-[#44F7E0]" },
 };
 
 export function ParentsDashboardClient() {
@@ -66,9 +67,9 @@ export function ParentsDashboardClient() {
 
   if (profiles.length === 0) {
     return (
-      <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+      <div className="block-card block-card--stone mt-10 p-8 text-center">
         <div className="text-4xl mb-3">👤</div>
-        <h2 className="text-base font-semibold text-white">Noch keine Profile</h2>
+        <h2 className="font-pixel text-[10px] leading-relaxed text-white">Noch keine Spieler</h2>
         <p className="mt-2 text-sm text-zinc-400">Dein Kind legt beim ersten Login automatisch ein Profil an.</p>
       </div>
     );
@@ -76,15 +77,15 @@ export function ParentsDashboardClient() {
 
   return (
     <div className="mt-10 space-y-6">
-      <h2 className="text-xl font-bold text-white">📊 Fortschritt aller Kinder</h2>
+      <h2 className="font-pixel text-xs leading-loose text-white">📊 Fortschritt aller Spieler</h2>
 
       {profileData.map(({ profile, progress, level, totalCompleted, totalLessons, pct, trackStats }) => (
-        <div key={profile.id} className="rounded-3xl border border-white/10 bg-white/5 p-6 space-y-5">
+        <div key={profile.id} className="block-card block-card--dirt p-6 space-y-5">
 
           {/* Header */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 text-xl font-bold text-white">
+              <div className="block-card block-card--grass flex h-12 w-12 shrink-0 items-center justify-center text-xl font-bold text-white">
                 {profile.name.charAt(0).toUpperCase()}
               </div>
               <div>
@@ -96,28 +97,31 @@ export function ParentsDashboardClient() {
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-2xl font-extrabold text-white">{totalCompleted}<span className="text-sm font-normal text-zinc-400">/{totalLessons}</span></div>
-                <div className="text-xs text-zinc-400">Quests abgeschlossen</div>
+                <div className="font-pixel text-lg leading-loose text-white">
+                  {totalCompleted}<span className="text-sm font-normal text-zinc-400">/{totalLessons}</span>
+                </div>
+                <div className="text-xs text-zinc-400">Missionen</div>
               </div>
+              {/* Circular progress — Gold statt Violet */}
               <div className="h-14 w-14 relative">
                 <svg viewBox="0 0 36 36" className="h-14 w-14 -rotate-90">
                   <circle cx="18" cy="18" r="15.9" fill="none" stroke="#27272a" strokeWidth="3" />
                   <circle
                     cx="18" cy="18" r="15.9" fill="none"
-                    stroke="#8b5cf6" strokeWidth="3"
+                    stroke="#FFD700" strokeWidth="3"
                     strokeDasharray={`${pct} ${100 - pct}`}
                     strokeLinecap="round"
                   />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">{pct}%</div>
+                <div className="absolute inset-0 flex items-center justify-center font-pixel text-[9px] leading-relaxed text-white">{pct}%</div>
               </div>
             </div>
           </div>
 
-          {/* Track progress bars */}
+          {/* Track-Fortschrittsbars (HUD-Stil) */}
           <div className="space-y-2">
             {trackStats.filter((t) => t.total > 0).map(({ track, done, total, pct: tPct }) => {
-              const colors = TRACK_COLORS[track.id] ?? { bar: "bg-zinc-500", text: "text-zinc-300" };
+              const colors = TRACK_COLORS[track.id] ?? { fillClass: "hud-bar-fill", text: "text-zinc-300" };
               return (
                 <div key={track.id} className="flex items-center gap-3">
                   <span className="text-sm w-5 text-center">{track.emoji}</span>
@@ -126,10 +130,10 @@ export function ParentsDashboardClient() {
                       <span className={`text-xs font-semibold ${colors.text}`}>{track.title}</span>
                       <span className="text-xs text-zinc-500">{done}/{total}</span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-white/10">
+                    <div className="hud-bar-track" style={{ height: "6px" }}>
                       <div
-                        className={`h-full rounded-full ${colors.bar} transition-all duration-500`}
-                        style={{ width: `${tPct}%` }}
+                        className={`hud-bar-fill ${colors.fillClass}`}
+                        style={{ width: `${tPct}%`, height: "100%" }}
                       />
                     </div>
                   </div>
@@ -138,16 +142,16 @@ export function ParentsDashboardClient() {
             })}
           </div>
 
-          {/* Last activity + link */}
+          {/* Letzte Aktivität + Link */}
           <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div className="text-xs text-zinc-500">
               {progress.lastCompletedDate
                 ? `Zuletzt aktiv: ${new Date(progress.lastCompletedDate).toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" })}`
-                : "Noch keine Quest abgeschlossen"}
+                : "Noch keine Mission abgeschlossen"}
             </div>
             <Link
               href="/profile"
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-white/10"
+              className="btn-pixel btn-pixel--blue px-3 py-1.5 text-xs"
             >
               Vollständiges Profil →
             </Link>

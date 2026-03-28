@@ -45,35 +45,33 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
 
   const modal = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl p-6">
+      <div className="block-card block-card--stone w-full max-w-sm p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="font-pixel text-[11px] leading-relaxed text-white">
             {tab === "signin" ? "🔑 Anmelden" : "🚀 Konto erstellen"}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-zinc-400 hover:bg-white/5 hover:text-white"
+            className="btn-pixel btn-pixel--stone px-2 py-1 text-xs"
           >
             ✕
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex rounded-xl border border-white/10 bg-white/5 p-1 mb-5">
+        <div className="flex gap-2 mb-5">
           {(["signin", "signup"] as const).map((t) => (
             <button
               key={t}
               type="button"
               onClick={() => { setTab(t); setError(null); setSuccess(null); }}
-              className={`flex-1 rounded-lg py-2 text-sm font-semibold transition-all ${
-                tab === t
-                  ? "bg-violet-600 text-white shadow"
-                  : "text-zinc-400 hover:text-white"
+              className={`inventory-slot flex-1 text-xs font-semibold transition-all ${
+                tab === t ? "inventory-slot--completed" : ""
               }`}
             >
               {t === "signin" ? "Anmelden" : "Registrieren"}
@@ -88,7 +86,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
             placeholder="E-Mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-violet-500/50"
+            className="crafting-panel w-full px-4 py-3 text-sm text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-[#44F7E0]/40 bg-transparent"
             onKeyDown={(e) => { if (e.key === "Enter") void handle(); }}
           />
           <input
@@ -96,20 +94,20 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
             placeholder="Passwort (min. 6 Zeichen)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-violet-500/50"
+            className="crafting-panel w-full px-4 py-3 text-sm text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-[#44F7E0]/40 bg-transparent"
             onKeyDown={(e) => { if (e.key === "Enter") void handle(); }}
           />
         </div>
 
         {/* Error / Success */}
         {error && (
-          <div className="mt-3 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">
-            {error}
+          <div className="block-card block-card--red mt-3 px-4 py-2 text-sm text-[#FF3E3E]">
+            ⚠️ {error}
           </div>
         )}
         {success && (
-          <div className="mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">
-            {success}
+          <div className="block-card block-card--grass mt-3 px-4 py-2 text-sm text-[#5D8A34]">
+            ✓ {success}
           </div>
         )}
 
@@ -118,9 +116,11 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
           type="button"
           onClick={() => void handle()}
           disabled={loading}
-          className="mt-5 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 text-sm font-bold text-white shadow-lg shadow-violet-500/30 hover:opacity-90 transition-opacity disabled:opacity-60"
+          className={`btn-pixel mt-5 w-full py-3 text-sm disabled:opacity-60 ${
+            tab === "signin" ? "btn-pixel--green" : "btn-pixel--blue"
+          }`}
         >
-          {loading ? "⏳ Bitte warten..." : tab === "signin" ? "Anmelden" : "Konto erstellen"}
+          {loading ? "⏳ Bitte warten..." : tab === "signin" ? "⚒️ Einloggen" : "🚀 Registrieren"}
         </button>
 
         <p className="mt-4 text-center text-xs text-zinc-500">

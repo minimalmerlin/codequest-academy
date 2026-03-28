@@ -13,6 +13,10 @@ import { getActiveProfileId } from "@/lib/profiles";
 import { useAdaptiveLearning } from "@/lib/adaptive";
 import { AdaptivePanel } from "@/components/AdaptivePanel";
 import { PracticeGenerator } from "@/components/PracticeGenerator";
+import { ConfettiCelebration } from "@/components/ConfettiCelebration";
+import { PaywallOverlay } from "@/components/PaywallOverlay";
+import { useSubscription } from "@/lib/subscription";
+import { playClick, playSuccess, playError } from "@/lib/sounds";
 
 type CheckState =
   | { status: "idle" }
@@ -35,7 +39,8 @@ function checkContains(code: string, check: Extract<ExerciseCheck, { kind: "cont
     : { ok: false as const, message: `Fehlt noch: ${missing.join(", ")}` };
 }
 
-export function LessonClient({ lesson }: { lesson: Lesson }) {
+export function LessonClient({ lesson, isFree = true }: { lesson: Lesson; isFree?: boolean }) {
+  const { isPremium, loading: subLoading } = useSubscription();
   const { completeLesson, isLessonCompleted } = useProgress();
   const alreadyDone = isLessonCompleted(lesson.id);
   const { getDifficulty } = useAdaptiveLearning();
@@ -45,6 +50,7 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
   const startedAtRef = useRef<number>(Date.now());
   const attemptCountRef = useRef<number>(0);
 
+  const [showConfetti, setShowConfetti] = useState(false);
   const [code, setCode] = useState(lesson.exercise.starterCode);
   const [runSignal, setRunSignal] = useState(0);
   const [lastJsLogs, setLastJsLogs] = useState<string[]>([]);
@@ -142,8 +148,12 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
       if (res.ok) {
         setCheckState({ status: "passed" });
         completeLesson(lesson);
+        playSuccess();
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 3500);
       } else {
         setCheckState({ status: "failed", message: res.message });
+        playError();
       }
       return;
     }
@@ -176,9 +186,13 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
       setCheckState({ status: "passed" });
       setPendingCheck(false);
       completeLesson(lesson);
+      playSuccess();
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3500);
     } else {
       setCheckState({ status: "failed", message: res.message });
       setPendingCheck(false);
+      playError();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -194,25 +208,28 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
     lastSqlDone,
   ]);
 
+  // Paywall: nicht-freie Lektion + kein Premium-Abo + Auth-Loading abgeschlossen
+  if (!isFree && !subLoading && !isPremium) {
+    return <PaywallOverlay />;
+  }
+
   return (
     <>
     <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
       <div className="space-y-6">
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <section className="block-card block-card--stone p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div className="text-xs font-semibold text-zinc-300">
+              <div className="font-pixel text-[8px] leading-loose text-zinc-400">
                 {lesson.minutes} min · {lesson.xp} XP
               </div>
-              <h1 className="mt-1 text-2xl font-semibold text-white">
+              <h1 className="mt-2 text-xl font-semibold text-white leading-snug">
                 {lesson.title}
               </h1>
               <p className="mt-2 text-sm text-zinc-300">{lesson.summary}</p>
             </div>
             {alreadyDone ? (
-              <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200">
-                Abgeschlossen
-              </span>
+              <span className="status-pill--done">✓ Gemeistert!</span>
             ) : null}
           </div>
           <div className="mt-4">
@@ -220,17 +237,17 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
-          <h2 className="text-base font-semibold text-white">
-            Übung: {lesson.exercise.title}
+        <section className="block-card block-card--wood p-5">
+          <h2 className="font-pixel text-[10px] leading-loose text-white">
+            ⚒️ Aufgabe: {lesson.exercise.title}
           </h2>
           <div className="mt-3">
             <Markdown md={lesson.exercise.instructionsMd} />
           </div>
           {lesson.exercise.hintMd ? (
-            <details className="mt-4 rounded-xl border border-white/10 bg-black/20 p-4">
-              <summary className="cursor-pointer text-sm font-semibold text-zinc-200">
-                Hinweis
+            <details className="mt-4 crafting-panel p-4">
+              <summary className="cursor-pointer font-pixel text-[9px] leading-loose text-[#44F7E0]">
+                💡 Tipp-Stein
               </summary>
               <div className="mt-3">
                 <Markdown md={lesson.exercise.hintMd} />
@@ -239,11 +256,11 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
           ) : null}
 
           {lesson.exercise.solutionCode ? (
-            <details className="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
-              <summary className="cursor-pointer text-sm font-semibold text-zinc-200">
-                Lösung anzeigen (für Eltern / später)
+            <details className="mt-3 crafting-panel p-4">
+              <summary className="cursor-pointer font-pixel text-[9px] leading-loose text-[#FFD700]">
+                📖 Rezept-Buch (für Eltern / später)
               </summary>
-              <pre className="mt-3 overflow-auto rounded-xl border border-white/10 bg-black/40 p-3 font-mono text-sm leading-6 text-zinc-50">
+              <pre className="mt-3 overflow-auto rounded bg-black/40 p-3 font-mono text-sm leading-6 text-zinc-50">
                 {lesson.exercise.solutionCode}
               </pre>
             </details>
@@ -260,10 +277,10 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
         />
 
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="text-xs text-zinc-300">
+          <div className="text-xs text-zinc-400">
             {expected ? (
               <span>
-                Erwartet: <span className="font-semibold">{expected}</span>
+                Erwartet: <span className="font-semibold text-zinc-200">{expected}</span>
               </span>
             ) : (
               <span>Check: Struktur prüfen</span>
@@ -272,38 +289,40 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-white/10"
+              className="btn-pixel btn-pixel--stone px-4 py-2.5"
+              onMouseDown={() => playClick()}
               onClick={run}
             >
-              Ausführen
+              ⚒️ Bauen!
             </button>
             <button
               type="button"
-              className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-400 disabled:opacity-60"
+              className="btn-pixel btn-pixel--gold px-4 py-2.5 disabled:opacity-40"
+              onMouseDown={() => playClick()}
               onClick={checkNow}
               disabled={alreadyDone}
             >
-              Check & XP
+              ⭐ Einreichen!
             </button>
           </div>
         </div>
 
         {checkState.status === "failed" ? (
-          <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-100">
-            {checkState.message}
+          <div className="block-card block-card--red p-4 text-sm text-zinc-100">
+            💥 Fehler im Code! {checkState.message}
           </div>
         ) : null}
         {checkState.status === "passed" ? (
-          <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-100">
-            Geschafft! Du bekommst {lesson.xp} XP. 🎉
+          <div className="block-card block-card--grass p-4 text-sm text-zinc-100 inventory-unlock">
+            🎉 Mission gemeistert! Du bekommst {lesson.xp} XP!
           </div>
         ) : null}
         {checkState.status === "passed" && lessonDifficulty && lessonDifficulty.label !== "leicht" ? (
           <PracticeGenerator lesson={lesson} difficulty={lessonDifficulty.label} />
         ) : null}
         {checkState.status === "running" ? (
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-zinc-200">
-            Prüfe gerade …
+          <div className="block-card block-card--stone p-4 text-sm text-zinc-200">
+            <span className="pixel-blink">⚒️</span> Prüfe gerade…
           </div>
         ) : null}
 
@@ -367,6 +386,7 @@ export function LessonClient({ lesson }: { lesson: Lesson }) {
       </div>
     </div>
     {checkState.status === "passed" ? <AdaptivePanel /> : null}
+    <ConfettiCelebration active={showConfetti} />
     </>
   );
 }

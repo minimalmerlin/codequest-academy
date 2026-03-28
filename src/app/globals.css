@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -7,6 +8,17 @@
     Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono-stack: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
+
+  /* Minecraft/Roblox Farbpalette */
+  --mc-grass:   #5D8A34;
+  --mc-dirt:    #8B6340;
+  --mc-stone:   #7F7F7F;
+  --mc-sky:     #87CEEB;
+  --mc-gold:    #FFD700;
+  --mc-diamond: #44F7E0;
+  --mc-red:     #FF3E3E;
+  --mc-blue:    #00A2FF;
+  --mc-wood:    #A0522D;
 }
 
 @theme inline {
@@ -14,6 +26,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans-stack);
   --font-mono: var(--font-mono-stack);
+  --font-pixel: 'Press Start 2P', monospace;
+  --color-mc-grass:   var(--mc-grass);
+  --color-mc-dirt:    var(--mc-dirt);
+  --color-mc-stone:   var(--mc-stone);
+  --color-mc-sky:     var(--mc-sky);
+  --color-mc-gold:    var(--mc-gold);
+  --color-mc-diamond: var(--mc-diamond);
+  --color-mc-red:     var(--mc-red);
+  --color-mc-blue:    var(--mc-blue);
+  --color-mc-wood:    var(--mc-wood);
 }
 
 body {
@@ -22,47 +44,290 @@ body {
   font-family: var(--font-sans);
 }
 
+/* ── PIXEL FONT ───────────────────────────────────────────── */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+  image-rendering: pixelated;
+}
+
+/* ── WORLD MAP BACKGROUND ─────────────────────────────────── */
+/* Ersetzt .hero-panel — Minecraft-Welt-Atmosphäre */
+.world-map-bg {
+  background:
+    radial-gradient(ellipse 800px 400px at 20% -10%, rgba(93, 138, 52, 0.25), transparent 55%),
+    radial-gradient(ellipse 600px 300px at 80% 15%,  rgba(68, 247, 224, 0.15), transparent 50%),
+    radial-gradient(ellipse 500px 300px at 50% 110%, rgba(255, 215, 0, 0.10), transparent 50%),
+    linear-gradient(180deg, #0d0d1a 0%, #0d1a2e 100%);
+}
+
+/* Legacy-Klasse für Rückwärtskompatibilität */
 .hero-panel {
   background:
-    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(124, 58, 237, 0.35), transparent 55%),
-    radial-gradient(ellipse 700px 400px at 85% 10%, rgba(233, 69, 96, 0.25), transparent 50%),
-    radial-gradient(ellipse 600px 350px at 50% 100%, rgba(16, 185, 129, 0.15), transparent 50%),
-    linear-gradient(180deg, #0d0d1a 0%, #0d0d1a 100%);
+    radial-gradient(ellipse 800px 400px at 20% -10%, rgba(93, 138, 52, 0.25), transparent 55%),
+    radial-gradient(ellipse 600px 300px at 80% 15%,  rgba(68, 247, 224, 0.15), transparent 50%),
+    radial-gradient(ellipse 500px 300px at 50% 110%, rgba(255, 215, 0, 0.10), transparent 50%),
+    linear-gradient(180deg, #0d0d1a 0%, #0d1a2e 100%);
 }
 
+/* ── CRAFTING PANEL (Code-Editor Container) ───────────────── */
+.crafting-panel {
+  background:
+    radial-gradient(800px 300px at 5% -5%, rgba(68, 247, 224, 0.08), transparent 60%),
+    linear-gradient(180deg, #0d1a0d 0%, #0d0d1a 100%);
+  border: 2px solid rgba(68, 247, 224, 0.2);
+  border-radius: 4px;
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.05),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.4),
+    4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Legacy code-panel */
 .code-panel {
   background:
-    radial-gradient(1200px 400px at 10% -10%, rgba(124, 58, 237, 0.22), transparent 60%),
-    radial-gradient(800px 300px at 80% 0%, rgba(16, 185, 129, 0.15), transparent 55%),
-    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    radial-gradient(800px 300px at 5% -5%, rgba(68, 247, 224, 0.08), transparent 60%),
+    linear-gradient(180deg, #0d1a0d 0%, #0d0d1a 100%);
 }
 
-/* Track-Farben */
+/* ── BLOCK CARD ───────────────────────────────────────────── */
+/*
+  3D-Block-Effekt: helle inset-Kante oben-links (Lichtseite),
+  dunkle inset-Kante unten-rechts (Schattenklante), Außen-Schatten.
+  Hover: block hebt sich an (translateY(-2px)).
+*/
+.block-card {
+  border-radius: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.18),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.45),
+    4px 4px 0 rgba(0, 0, 0, 0.6),
+    6px 6px 0 rgba(0, 0, 0, 0.3);
+  transition: box-shadow 80ms ease, transform 80ms ease;
+}
+
+@media (hover: hover) {
+  .block-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow:
+      inset 2px 2px 0 rgba(255, 255, 255, 0.22),
+      inset -2px -2px 0 rgba(0, 0, 0, 0.45),
+      6px 6px 0 rgba(0, 0, 0, 0.7),
+      8px 8px 0 rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Farb-Varianten */
+.block-card--grass {
+  background: linear-gradient(135deg, #3d6b22 0%, #2d4d18 100%);
+  border-color: #5D8A34;
+}
+.block-card--dirt {
+  background: linear-gradient(135deg, #6b4a2a 0%, #4d3320 100%);
+  border-color: #8B6340;
+}
+.block-card--stone {
+  background: linear-gradient(135deg, #3a3a3a 0%, #252525 100%);
+  border-color: #7F7F7F;
+}
+.block-card--gold {
+  background: linear-gradient(135deg, #b8880a 0%, #7a5a04 100%);
+  border-color: #FFD700;
+}
+.block-card--diamond {
+  background: linear-gradient(135deg, #0d6b6b 0%, #063f3f 100%);
+  border-color: #44F7E0;
+}
+.block-card--red {
+  background: linear-gradient(135deg, #7a1a1a 0%, #4d0a0a 100%);
+  border-color: #FF3E3E;
+}
+.block-card--blue {
+  background: linear-gradient(135deg, #0a4a7a 0%, #06304d 100%);
+  border-color: #00A2FF;
+}
+.block-card--wood {
+  background: linear-gradient(135deg, #5c3018 0%, #3d200f 100%);
+  border-color: #A0522D;
+}
+
+/* ── PIXEL BUTTON ─────────────────────────────────────────── */
+/*
+  3D-Block-Button: box-shadow simuliert Tiefe,
+  :active entfernt Schatten + translate(2px,2px) = gepresster Block.
+*/
+.btn-pixel {
+  border-radius: 2px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+    3px 3px 0 rgba(0, 0, 0, 0.7);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.8;
+  cursor: pointer;
+  transition: box-shadow 60ms ease, transform 60ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.btn-pixel:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    inset 1px 1px 0 rgba(0, 0, 0, 0.2),
+    0 0 0 rgba(0, 0, 0, 0);
+}
+
+.btn-pixel:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.btn-pixel--green {
+  background: linear-gradient(180deg, #4a7c2a 0%, #3a5e1e 100%);
+  color: #fff;
+  border-color: #2d4817;
+}
+.btn-pixel--gold {
+  background: linear-gradient(180deg, #c49a0a 0%, #8a6c07 100%);
+  color: #fff;
+  border-color: #5a4604;
+}
+.btn-pixel--red {
+  background: linear-gradient(180deg, #c4200a 0%, #8a1507 100%);
+  color: #fff;
+  border-color: #5a0a04;
+}
+.btn-pixel--blue {
+  background: linear-gradient(180deg, #0a6ac4 0%, #074a8a 100%);
+  color: #fff;
+  border-color: #043060;
+}
+.btn-pixel--stone {
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  color: #ddd;
+  border-color: #111;
+}
+.btn-pixel--diamond {
+  background: linear-gradient(180deg, #0d8080 0%, #065050 100%);
+  color: #9ff;
+  border-color: #033030;
+}
+
+/* ── GAME HUD BAR ─────────────────────────────────────────── */
+/* Minecraft-Style segmentierter Balken (Segment-Linien via repeating-linear-gradient) */
+.hud-bar-track {
+  height: 16px;
+  background: #1a1a1a;
+  border: 2px solid #333;
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hud-bar-fill {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 14px,
+    rgba(0, 0, 0, 0.2) 14px,
+    rgba(0, 0, 0, 0.2) 16px
+  );
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  animation: xp-fill 1s ease-out;
+}
+
+.hud-bar-fill--xp    { background-color: #7c3aed; }
+.hud-bar-fill--green { background-color: #5D8A34; }
+.hud-bar-fill--gold  { background-color: #FFD700; }
+.hud-bar-fill--blue  { background-color: #00A2FF; }
+.hud-bar-fill--red   { background-color: #FF3E3E; }
+
+/* ── INVENTORY SLOT ───────────────────────────────────────── */
+/* Minecraft-Inventar-Block-Optik für Lektionslisten */
+.inventory-slot {
+  border-radius: 2px;
+  border: 2px solid #555;
+  background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.5);
+  transition: border-color 80ms, box-shadow 80ms;
+}
+
+.inventory-slot--completed {
+  border-color: #5D8A34;
+  box-shadow:
+    inset 2px 2px 0 rgba(93, 138, 52, 0.3),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.5),
+    0 0 8px rgba(93, 138, 52, 0.2);
+}
+
+.inventory-slot:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .inventory-slot:hover {
+    border-color: #FFD700;
+    box-shadow:
+      inset 2px 2px 0 rgba(255, 215, 0, 0.15),
+      inset -2px -2px 0 rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ── STATUS PILLS ─────────────────────────────────────────── */
+.status-pill--done {
+  border-radius: 2px;
+  border: 2px solid #5D8A34;
+  background: rgba(93, 138, 52, 0.2);
+  color: #9ddb6a;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  padding: 2px 6px;
+  line-height: 1.8;
+  white-space: nowrap;
+}
+
+.status-pill--open {
+  border-radius: 2px;
+  border: 2px solid #555;
+  background: rgba(0, 0, 0, 0.3);
+  color: #888;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  padding: 2px 6px;
+  line-height: 1.8;
+  white-space: nowrap;
+}
+
+/* ── TRACK FARB-KLASSEN (legacy support) ──────────────────── */
 .track-web {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.05));
-  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #0a4a7a 0%, #06304d 100%);
+  border-color: #00A2FF;
 }
-.track-web:hover {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(99, 102, 241, 0.1));
-}
+.track-web:hover { filter: brightness(1.1); }
 
 .track-js {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
-  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #b8880a 0%, #7a5a04 100%);
+  border-color: #FFD700;
 }
-.track-js:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(245, 158, 11, 0.1));
-}
+.track-js:hover { filter: brightness(1.1); }
 
 .track-python {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
-  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #3d6b22 0%, #2d4d18 100%);
+  border-color: #5D8A34;
 }
-.track-python:hover {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.1));
-}
+.track-python:hover { filter: brightness(1.1); }
 
-/* XP-Bar Animation */
+/* ── ANIMATIONEN ──────────────────────────────────────────── */
 @keyframes xp-fill {
   from { width: 0%; }
 }
@@ -71,22 +336,136 @@ body {
   animation: xp-fill 1s ease-out;
 }
 
-/* Pulse für Buttons */
+/* Pixel-Blinken (Cursor-Stil) */
+@keyframes pixel-blink {
+  0%, 49% { opacity: 1; }
+  50%, 99% { opacity: 0; }
+}
+.pixel-blink { animation: pixel-blink 1s step-end infinite; }
+
+/* Hüpfen */
+@keyframes pixel-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+.pixel-bounce { animation: pixel-bounce 0.8s ease-in-out infinite; }
+
+/* Schweben */
+@keyframes pixel-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33%       { transform: translateY(-4px) rotate(-2deg); }
+  66%       { transform: translateY(-2px) rotate(2deg); }
+}
+.pixel-float { animation: pixel-float 3s ease-in-out infinite; }
+
+/* Schütteln (Fehler-Feedback) */
+@keyframes pixel-shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-3px); }
+  75%       { transform: translateX(3px); }
+}
+.pixel-shake { animation: pixel-shake 0.4s ease-in-out; }
+
+/* Inventar-Unlock */
+@keyframes inventory-unlock {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.inventory-unlock { animation: inventory-unlock 0.4s ease-out; }
+
+/* Sanftes Button-Pulsieren */
 @keyframes gentle-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
-  50%       { box-shadow: 0 0 0 8px rgba(124, 58, 237, 0); }
+  0%, 100% { box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.7), 0 0 0 0 rgba(93, 138, 52, 0.4); }
+  50%       { box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.7), 0 0 0 8px rgba(93, 138, 52, 0); }
 }
+.btn-pulse { animation: gentle-pulse 2s infinite; }
 
-.btn-pulse {
-  animation: gentle-pulse 2s infinite;
-}
-
-/* Stern-Glow für Badges */
+/* Stern/Badge-Glow */
 @keyframes star-glow {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.6)); }
-  50%       { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 1)); }
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6)); }
+  50%       { filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1)); }
+}
+.badge-glow { animation: star-glow 2s ease-in-out infinite; }
+
+/* ── MINECRAFT HINTERGRUND-ANIMATIONEN ────────────────────── */
+
+/* Steve von links ins Bild, schaut sich um, baut sich wieder raus */
+@keyframes steve-enter-left {
+  0%   { transform: translateX(-80px); opacity: 0; }
+  12%  { transform: translateX(0px);   opacity: 1; }
+  50%  { transform: translateX(0px);   opacity: 1; }
+  88%  { transform: translateX(0px);   opacity: 1; }
+  100% { transform: translateX(-80px); opacity: 0; }
 }
 
-.badge-glow {
-  animation: star-glow 2s ease-in-out infinite;
+@keyframes steve-enter-right {
+  0%   { transform: translateX(80px);  opacity: 0; }
+  12%  { transform: translateX(0px);   opacity: 1; }
+  50%  { transform: translateX(0px);   opacity: 1; }
+  88%  { transform: translateX(0px);   opacity: 1; }
+  100% { transform: translateX(80px);  opacity: 0; }
+}
+
+/* Steve-Kopf dreht sich (links-rechts gucken) */
+@keyframes steve-look {
+  0%   { transform: scaleX(1);  }
+  30%  { transform: scaleX(1);  }
+  40%  { transform: scaleX(-1); }
+  60%  { transform: scaleX(1);  }
+  70%  { transform: scaleX(-1); }
+  80%  { transform: scaleX(1);  }
+  100% { transform: scaleX(1);  }
+}
+
+/* Blöcke erscheinen kurz und verschwinden (abgebaut) */
+@keyframes blocks-break {
+  0%   { opacity: 1; transform: scale(1);    }
+  25%  { opacity: 1; transform: scale(1.15); }
+  35%  { opacity: 0; transform: scale(0.5);  }
+  100% { opacity: 0; transform: scale(0.5);  }
+}
+
+/* Ghast fliegt von links nach rechts */
+@keyframes ghast-fly-left {
+  0%   { transform: translateX(-100px); opacity: 0;    }
+  8%   { opacity: 0.55; }
+  90%  { opacity: 0.55; }
+  100% { transform: translateX(110vw);  opacity: 0;    }
+}
+
+@keyframes ghast-fly-right {
+  0%   { transform: translateX(100px);  opacity: 0;    }
+  8%   { opacity: 0.55; }
+  90%  { opacity: 0.55; }
+  100% { transform: translateX(-110vw); opacity: 0;    }
+}
+
+/* Ghast-Bob (Auf- und Abschweben) */
+@keyframes ghast-float {
+  0%, 100% { transform: translateY(0px) rotate(-3deg); }
+  50%       { transform: translateY(-14px) rotate(3deg); }
+}
+
+/* Enderman erscheint, bleibt kurz, verschwindet */
+@keyframes enderman-appear {
+  0%   { opacity: 0; transform: scale(0.3) translateY(20px); }
+  15%  { opacity: 1; transform: scale(1) translateY(0px);    }
+  75%  { opacity: 1; transform: scale(1) translateY(0px);    }
+  85%  { opacity: 1; transform: scale(1.1) translateY(-5px); }
+  100% { opacity: 0; transform: scale(0.2) translateY(30px); }
+}
+
+/* Luftkuss fliegt weg */
+@keyframes kiss-fly {
+  0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0.5); }
+  20%  { opacity: 1; transform: translateY(-8px) translateX(10px) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) translateX(40px) scale(1.8); }
+}
+
+/* ── KONFETTI ─────────────────────────────────────────────── */
+@keyframes confetti-fall {
+  0%   { transform: translateY(-20px) rotate(0deg);    opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg);  opacity: 0; }
 }

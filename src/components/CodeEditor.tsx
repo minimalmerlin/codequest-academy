@@ -45,14 +45,14 @@ export function CodeEditor({
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-3">
+    <div className="crafting-panel p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <div className="text-xs font-semibold text-zinc-200">
-          Editor · {language.toUpperCase()}
+        <div className="font-pixel text-[8px] leading-loose text-[#44F7E0]">
+          ⚒️ Crafting-Tisch · {language.toUpperCase()}
         </div>
         <button
           type="button"
-          className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-zinc-200 hover:bg-white/10"
+          className="btn-pixel btn-pixel--stone px-2 py-1"
           onClick={() => update(initialCode)}
         >
           Reset
@@ -76,7 +76,7 @@ export function CodeEditor({
           });
         }}
         spellCheck={false}
-        className="h-64 w-full resize-y rounded-xl bg-black/40 p-3 font-mono text-sm leading-6 text-zinc-50 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-indigo-500/50"
+        className="h-64 w-full resize-y bg-transparent p-3 font-mono text-sm leading-6 text-zinc-50 outline-none ring-1 ring-[#44F7E0]/20 focus:ring-2 focus:ring-[#44F7E0]/40"
       />
     </div>
   );

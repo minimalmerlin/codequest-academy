@@ -17,7 +17,6 @@ export function CertificateModal({ track, profileName, completedAt, onClose }: P
 
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Close on Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -32,7 +31,7 @@ export function CertificateModal({ track, profileName, completedAt, onClose }: P
 
   return (
     <>
-      {/* Print-only styles — injected into <head> via a style tag */}
+      {/* Print-only styles */}
       <style>{`
         @media print {
           body > *:not(#cq-certificate-root) { display: none !important; }
@@ -53,14 +52,14 @@ export function CertificateModal({ track, profileName, completedAt, onClose }: P
           <button
             type="button"
             onClick={print}
-            className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow hover:opacity-90"
+            className="btn-pixel btn-pixel--gold px-4 py-2 text-sm"
           >
-            📄 Als PDF speichern
+            🖨️ Drucken
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20"
+            className="btn-pixel btn-pixel--stone px-4 py-2 text-sm"
           >
             ✕ Schließen
           </button>
@@ -69,39 +68,42 @@ export function CertificateModal({ track, profileName, completedAt, onClose }: P
 
       {/* Certificate — rendered outside backdrop so it stays visible during print */}
       <div id="cq-certificate-root" className="pointer-events-none fixed inset-0 z-[60] flex items-center justify-center p-4">
-        <div className="cq-certificate pointer-events-auto w-full max-w-2xl rounded-3xl border-4 border-violet-500/60 bg-white shadow-2xl shadow-violet-500/30 overflow-hidden">
-          {/* Top banner */}
-          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 px-8 py-5 text-center">
-            <div className="text-3xl mb-1">🚀</div>
-            <div className="text-lg font-extrabold text-white tracking-wide">CodeQuest Academy</div>
-            <div className="text-sm text-violet-200 mt-0.5">Zertifikat über den Abschluss eines Lernpfads</div>
+        <div className="cq-certificate pointer-events-auto w-full max-w-2xl bg-white shadow-2xl overflow-hidden" style={{ border: "4px solid #FFD700" }}>
+          {/* Top banner — Grass green */}
+          <div className="px-8 py-5 text-center" style={{ background: "#5D8A34" }}>
+            <div className="text-3xl mb-1">⛏️</div>
+            <div className="font-pixel text-[10px] leading-relaxed text-white tracking-wide">CodeQuest Academy</div>
+            <div className="text-sm text-white/80 mt-1">Zertifikat über den Abschluss einer Welt</div>
           </div>
 
           {/* Body */}
           <div className="px-10 py-8 text-center">
             <p className="text-sm text-zinc-400 font-semibold uppercase tracking-widest">Hiermit wird bestätigt, dass</p>
             <h2 className="mt-2 text-4xl font-extrabold text-zinc-900 tracking-tight">{profileName}</h2>
-            <p className="mt-3 text-base text-zinc-600">den folgenden Lernpfad erfolgreich abgeschlossen hat:</p>
+            <p className="mt-3 text-base text-zinc-600">die folgende Welt erfolgreich gemeistert hat:</p>
 
-            <div className="mt-6 inline-flex flex-col items-center gap-2 rounded-2xl border-2 border-violet-200 bg-violet-50 px-8 py-5">
+            <div className="mt-6 inline-flex flex-col items-center gap-2 px-8 py-5" style={{ border: "2px solid #FFD700", background: "#fefce8" }}>
               <span className="text-5xl">{track.emoji}</span>
-              <span className="text-2xl font-extrabold text-violet-700">{track.title}</span>
-              <span className="text-sm text-violet-500">{track.lessons.length} Quests gemeistert</span>
+              <span className="font-pixel text-[10px] leading-relaxed text-zinc-800">{track.title}</span>
+              <span className="text-sm" style={{ color: "#5D8A34" }}>{track.lessons.length} Missionen gemeistert ✓</span>
             </div>
 
-            <p className="mt-6 text-sm text-zinc-400">Abgeschlossen am <span className="font-semibold text-zinc-600">{date}</span></p>
+            <p className="mt-6 text-sm text-zinc-400">
+              Gemeistert am{" "}
+              <span className="font-semibold text-zinc-600">{date}</span>
+            </p>
 
             {/* Decorative divider */}
             <div className="mt-6 flex items-center gap-4">
               <div className="flex-1 border-t border-zinc-200" />
-              <span className="text-zinc-300 text-lg">✦</span>
+              <span className="text-[#FFD700] text-lg">★</span>
               <div className="flex-1 border-t border-zinc-200" />
             </div>
 
             {/* Stars row */}
             <div className="mt-4 flex justify-center gap-1">
               {Array.from({ length: track.lessons.length }).map((_, i) => (
-                <span key={i} className="text-amber-400 text-xs">★</span>
+                <span key={i} className="text-xs" style={{ color: "#FFD700" }}>★</span>
               ))}
             </div>
 
@@ -109,9 +111,11 @@ export function CertificateModal({ track, profileName, completedAt, onClose }: P
           </div>
 
           {/* Bottom stripe */}
-          <div className="bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border-t border-violet-100 px-8 py-3 flex items-center justify-between">
-            <span className="text-xs text-zinc-400">🏆 Track abgeschlossen</span>
-            <span className="text-xs text-violet-500 font-semibold">{track.title} · {track.lessons.reduce((a, l) => a + l.xp, 0)} XP</span>
+          <div className="px-8 py-3 flex items-center justify-between" style={{ background: "rgba(93,138,52,0.08)", borderTop: "1px solid #e7f0e0" }}>
+            <span className="text-xs text-zinc-400">🏆 Welt abgeschlossen</span>
+            <span className="text-xs font-semibold" style={{ color: "#5D8A34" }}>
+              {track.title} · {track.lessons.reduce((a, l) => a + l.xp, 0)} XP
+            </span>
           </div>
         </div>
       </div>

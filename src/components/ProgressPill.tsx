@@ -9,17 +9,17 @@ export function ProgressPill() {
   return (
     <Link
       href="/dashboard"
-      className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-2 text-xs text-violet-200 hover:bg-violet-500/20 transition-colors"
+      className="inventory-slot inline-flex items-center gap-2 px-3 py-2 hover:border-[#FFD700] transition-colors"
       aria-label="Fortschritt anzeigen"
     >
-      <span className="text-base">⭐</span>
-      <span className="font-bold text-white">Lvl {level}</span>
-      <span className="text-violet-300 hidden sm:inline">·</span>
-      <span className="tabular-nums hidden sm:inline">{progress.xp} XP</span>
+      <span className="text-sm">🔷</span>
+      <span className="font-pixel text-[8px] leading-relaxed text-white">Lvl {level}</span>
+      <span className="text-zinc-500 hidden sm:inline">·</span>
+      <span className="font-pixel text-[8px] leading-relaxed tabular-nums text-[#FFD700] hidden sm:inline">{progress.xp} XP</span>
       {progress.streakDays > 0 && (
         <>
-          <span className="text-violet-300 hidden sm:inline">·</span>
-          <span className="hidden sm:inline">🔥 {progress.streakDays}</span>
+          <span className="text-zinc-500 hidden sm:inline">·</span>
+          <span className="hidden sm:inline text-xs">🔥 {progress.streakDays}</span>
         </>
       )}
     </Link>
