@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/lib/auth";
 import { useSubscription } from "@/lib/subscription";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const PRICE_MONTHLY = process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY ?? "";
